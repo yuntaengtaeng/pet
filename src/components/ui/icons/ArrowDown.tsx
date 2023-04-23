@@ -7,7 +7,7 @@ interface Props {
   style?: ViewStyle;
 }
 
-const ArrowLeft = (props: Props) => (
+const ArrowDown = (props: Props) => (
   <Svg
     width={props.size}
     height={props.size}
@@ -16,7 +16,7 @@ const ArrowLeft = (props: Props) => (
     style={props.style}
   >
     <Path
-      d="M15 5L9.66939 11.2191C9.2842 11.6684 9.2842 12.3316 9.66939 12.7809L15 19"
+      d="M5 9L11.2191 14.3306C11.6684 14.7158 12.3316 14.7158 12.7809 14.3306L19 9"
       stroke="#4D4C4C"
       stroke-width="1.5"
       stroke-linecap="round"
@@ -24,4 +24,4 @@ const ArrowLeft = (props: Props) => (
   </Svg>
 );
 
-export default ArrowLeft;
+export default ArrowDown;

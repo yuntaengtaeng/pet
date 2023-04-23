@@ -1,15 +1,14 @@
 import React from 'react';
 import { ViewStyle } from 'react-native';
 
-import Svg, { Path, Circle } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 
 interface Props {
   size: number;
-  color?: string;
   style?: ViewStyle;
 }
 
-const Search = (props: Props) => {
+const Burger = (props: Props) => {
   return (
     <Svg
       width={props.size}
@@ -18,28 +17,26 @@ const Search = (props: Props) => {
       fill="none"
       style={props.style}
     >
-      <Circle
-        cx="11"
-        cy="11"
-        r="8"
-        stroke={props.color}
+      <Path
+        d="M20 6L4 6"
+        stroke="#4D4C4C"
         stroke-width="1.5"
         stroke-linecap="round"
-        stroke-linejoin="round"
       />
       <Path
-        d="M16.5 16.958L21.5 21.958"
-        stroke={props.color}
+        d="M20 12L4 12"
+        stroke="#4D4C4C"
         stroke-width="1.5"
         stroke-linecap="round"
-        stroke-linejoin="round"
+      />
+      <Path
+        d="M20 18H4"
+        stroke="#4D4C4C"
+        stroke-width="1.5"
+        stroke-linecap="round"
       />
     </Svg>
   );
 };
 
-Search.defaultProps = {
-  color: '#717171',
-};
-
-export default Search;
+export default Burger;

@@ -1,18 +1,25 @@
 import * as React from 'react';
+import { ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
 interface Props {
-  width: number;
-  height: number;
+  size: number;
+  style?: ViewStyle;
 }
 
 const ArrowRight = (props: Props) => (
-  <Svg width={props.width} height={props.height} fill="none" viewBox="0 0 8 16">
+  <Svg
+    width={props.size}
+    height={props.size}
+    viewBox="0 0 24 24"
+    fill="none"
+    style={props.style}
+  >
     <Path
-      d="m1 15 5.33-6.219a1.2 1.2 0 0 0 0-1.562L1 1"
-      stroke="#717171"
-      strokeWidth={1.5}
-      strokeLinecap="round"
+      d="M9 5L14.3306 11.2191C14.7158 11.6684 14.7158 12.3316 14.3306 12.7809L9 19"
+      stroke="#4D4C4C"
+      stroke-width="1.5"
+      stroke-linecap="round"
     />
   </Svg>
 );
