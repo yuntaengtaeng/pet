@@ -1,15 +1,6 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet } from 'react-native';
-import {
-  neutral4,
-  neutral5,
-  primary100,
-  primary200,
-  primary600,
-  primary800,
-  primary900,
-  white,
-} from '../../../constants/color';
+import Color from '../../../constants/color';
 import TYPOS from '../typo';
 
 type Type = 'primary' | 'secondary';
@@ -64,27 +55,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   primaryLabel: {
-    color: white,
+    color: Color.white,
   },
   primary: {
-    backgroundColor: primary600,
+    backgroundColor: Color.primary600,
   },
   primaryPressed: {
-    backgroundColor: primary800,
+    backgroundColor: Color.primary800,
   },
   secondary: {
-    backgroundColor: primary100,
+    backgroundColor: Color.primary100,
   },
   secondaryPressed: {
-    backgroundColor: primary200,
+    backgroundColor: Color.primary200,
   },
   secondaryLabel: {
-    color: primary900,
+    color: Color.primary900,
   },
   disabled: {
-    backgroundColor: neutral5,
+    backgroundColor: Color.neutral5,
   },
   disabledLabel: {
-    color: neutral4,
+    color: Color.neutral4,
   },
 });
