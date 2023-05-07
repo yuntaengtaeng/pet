@@ -15,7 +15,7 @@ const ArrowUp = (props: Props) => {
       height={props.size}
       viewBox="0 0 24 24"
       fill="none"
-      style={style}
+      style={props.style}
     >
       <Path
         d="M5 15L11.2191 9.66939C11.6684 9.2842 12.3316 9.2842 12.7809 9.66939L19 15"

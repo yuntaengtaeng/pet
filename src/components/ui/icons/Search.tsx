@@ -2,10 +2,11 @@ import React from 'react';
 import { ViewStyle } from 'react-native';
 
 import Svg, { Path, Circle } from 'react-native-svg';
+import Color from '../../../constants/color';
 
 interface Props {
   size: number;
-  color?: string;
+  color?: Color;
   style?: ViewStyle;
 }
 
@@ -39,7 +40,7 @@ const Search = (props: Props) => {
 };
 
 Search.defaultProps = {
-  color: '#717171',
+  color: Color.neutral2,
 };
 
 export default Search;

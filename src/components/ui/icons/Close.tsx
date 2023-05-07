@@ -2,10 +2,12 @@ import React from 'react';
 import { ViewStyle } from 'react-native';
 
 import Svg, { Path } from 'react-native-svg';
+import Color from '../../../constants/color';
 
 interface Props {
   size: number;
   style?: ViewStyle;
+  color?: Color;
 }
 
 const Close = (props: Props) => {
@@ -19,20 +21,24 @@ const Close = (props: Props) => {
     >
       <Path
         d="M18 6L6 18"
-        stroke="#4D4C4C"
+        stroke={props.color}
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <Path
         d="M6 6L18 18"
-        stroke="#4D4C4C"
+        stroke={props.color}
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
     </Svg>
   );
+};
+
+Close.defaultProps = {
+  color: Color.neutral2,
 };
 
 export default Close;
