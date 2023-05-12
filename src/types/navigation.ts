@@ -8,4 +8,12 @@ export type RootStackParamList = {
     location: Location;
     address: string;
   };
+  BottomNavigation: undefined;
+};
+
+export type TabNavigatorParamList = {
+  Home: undefined;
+  MyPet: undefined;
+  PetMate: undefined;
+  PetVillage: undefined;
 };

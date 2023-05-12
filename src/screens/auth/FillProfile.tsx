@@ -34,6 +34,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
     };
 
     console.log(body);
+    navigation.reset({ routes: [{ name: 'BottomNavigation' }] });
   };
 
   return (

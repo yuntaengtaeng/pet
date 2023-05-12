@@ -8,6 +8,7 @@ import AddressRegistration from './src/screens/auth/AddressRegistration';
 import KaKaoLogin from './src/screens/auth/KaKaoLogin';
 import FillProfile from './src/screens/auth/FillProfile';
 import BottomNavigation from './src/screens/BottomNavigation';
+import EditProduct from './src/screens/EditProduct';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -33,6 +34,11 @@ const AppInner = () => {
         <Stack.Screen
           name="FillProfile"
           component={FillProfile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="BottomNavigation"
+          component={BottomNavigation}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
