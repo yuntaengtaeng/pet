@@ -1,38 +1,47 @@
 import React from 'react';
-import Checkbox from 'expo-checkbox';
-import { StyleSheet, View, Pressable } from 'react-native';
+import { StyleSheet, View, Pressable, ViewStyle } from 'react-native';
+import Check from './icons/Check';
 import Color from '../../constants/color';
-
-/*
-TODO : expo-checkbox 사용하는 것을 삭제하고 직접 구현하기
-- disabled color가 커스텀이 안되는 이슈
-*/
 
 interface Props {
   isChecked: boolean;
   disabled?: boolean;
   onValueChangeHandler?: (checked: boolean) => void;
   children?: React.ReactNode;
+  style?: ViewStyle;
 }
 
 const UiCheckbox = (props: Props) => {
-  const { isChecked, onValueChangeHandler, disabled = false, children } = props;
+  const { isChecked, disabled, onValueChangeHandler, children, style } = props;
 
-  const triggerCheckbox = () => {
+  const onPressedHandler = () => {
     if (onValueChangeHandler) {
       onValueChangeHandler(!isChecked);
     }
   };
 
+  const triggerCheckbox = () => {
+    if (!disabled) {
+      onPressedHandler();
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Checkbox
-        style={styles.checkbox}
-        value={isChecked}
-        onValueChange={onValueChangeHandler}
+    <View style={[styles.container, style]}>
+      <Pressable
         disabled={disabled}
-        color={isChecked ? Color.primary600 : undefined}
-      />
+        onPress={onPressedHandler}
+        style={[
+          styles.checkbox,
+          isChecked && styles.checked,
+          disabled && styles.disabled,
+          isChecked && disabled && styles.checkedAndDisabled,
+        ]}
+      >
+        {isChecked && (
+          <Check size={16} color={disabled ? Color.neutral3 : Color.white} />
+        )}
+      </Pressable>
       {children && (
         <Pressable style={styles.label} onPress={triggerCheckbox}>
           {children}
@@ -50,8 +59,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkbox: {
-    width: 24,
-    height: 24,
+    height: 25,
+    width: 25,
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: Color.neutral3,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checked: {
+    backgroundColor: Color.primary700,
+    borderColor: Color.primary700,
+  },
+  disabled: {
+    borderColor: Color.neutral3,
+    backgroundColor: Color.neutral3,
+  },
+  checkedAndDisabled: {
+    backgroundColor: Color.primary100,
+    borderColor: Color.primary100,
   },
   label: {
     marginLeft: 8,
