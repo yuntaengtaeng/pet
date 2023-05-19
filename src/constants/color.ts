@@ -5,6 +5,8 @@ const enum Color {
   neutral4 = '#ABBED1',
   neutral5 = '#F5F7FA',
 
+  black = '#212121',
+
   white = '#FFFFFF',
 
   primary900 = '#FD790D',
