@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar } from 'react-native';
 import AppInner from './AppInner';
 import { useFonts } from 'expo-font';
+import { RecoilRoot } from 'recoil';
 
 export default function App() {
   const [isFontsLoaded] = useFonts({
@@ -13,20 +13,9 @@ export default function App() {
     return null;
   }
 
-  console.log(process.env.API_URL);
-
   return (
-    <>
-      <StatusBar />
-      <SafeAreaView style={styles.container}>
-        <AppInner />
-      </SafeAreaView>
-    </>
+    <RecoilRoot>
+      <AppInner />
+    </RecoilRoot>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
