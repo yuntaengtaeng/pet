@@ -1,29 +1,35 @@
 import React from 'react';
-import { Pressable, Text, StyleSheet, View, ColorValue } from 'react-native';
+import {
+  Pressable,
+  Text,
+  StyleSheet,
+  View,
+  ColorValue,
+  ViewStyle,
+} from 'react-native';
 import TYPOS from './typo';
 import Color from '../../constants/color';
 
 interface Props {
   label: string;
-  onPressHanlder?: () => void;
+  onPressHandler?: () => void;
   isActive?: boolean;
+  style?: ViewStyle;
 }
 
 const Chip = (props: Props) => {
-  const { label, onPressHanlder, isActive = false } = props;
-
-  console.log(isActive ? Color.primary700 : Color.white);
-  console.log(label);
+  const { label, onPressHandler, isActive = false, style } = props;
 
   return (
     <Pressable
-      onPress={onPressHanlder}
+      onPress={onPressHandler}
       style={[
         styles.wrap,
         {
           borderColor: isActive ? Color.white : Color.primary700,
           backgroundColor: isActive ? Color.primary700 : Color.white,
         },
+        style,
       ]}
     >
       <Text
