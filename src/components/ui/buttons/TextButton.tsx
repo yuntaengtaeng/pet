@@ -7,14 +7,20 @@ type Type = 'primary' | 'secondary';
 
 interface Props {
   label: string;
-  buttonType: Type;
+  buttonType?: Type;
   width?: number;
   disabled?: boolean;
   onPressHandler?: () => void;
 }
 
 const TextButton = (props: Props) => {
-  const { label, width, buttonType, disabled, onPressHandler } = props;
+  const {
+    label,
+    width,
+    buttonType = 'primary',
+    disabled,
+    onPressHandler,
+  } = props;
 
   return (
     <Pressable
