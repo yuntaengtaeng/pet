@@ -14,6 +14,8 @@ export type KaKaoLoginScreenProps = StackScreenProps<
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 
 const KaKaoLogin = ({ navigation, route }: KaKaoLoginScreenProps) => {
+  const redirectUri = `${process.env.API_URL}/web/kakao`;
+
   const requestToken = async (code: string) => {
     try {
       const request_token_url = 'https://kauth.kakao.com/oauth/token';
@@ -24,7 +26,7 @@ const KaKaoLogin = ({ navigation, route }: KaKaoLoginScreenProps) => {
         params: {
           grant_type: 'authorization_code',
           client_id: process.env.REST_API_KEY,
-          redirect_uri: process.env.REDIRECT_URI,
+          redirect_uri: redirectUri,
           code,
         },
       });
@@ -69,7 +71,7 @@ const KaKaoLogin = ({ navigation, route }: KaKaoLoginScreenProps) => {
         <WebView
           style={{ flex: 1 }}
           source={{
-            uri: `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REST_API_KEY}&redirect_uri=${process.env.REDIRECT_URI}`,
+            uri: `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REST_API_KEY}&redirect_uri=${redirectUri}`,
           }}
           injectedJavaScript={INJECTED_JAVASCRIPT}
           javaScriptEnabled
