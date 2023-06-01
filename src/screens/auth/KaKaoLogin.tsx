@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import axios, { AxiosError } from 'axios';
@@ -31,19 +31,28 @@ const KaKaoLogin = ({ navigation, route }: KaKaoLoginScreenProps) => {
         },
       });
 
-      console.log(value.data);
-
       const result = await axios.get('https://kapi.kakao.com/v2/user/me', {
         headers: {
           Authorization: `Bearer ${value.data.access_token}`,
         },
       });
 
-      console.log(result.data);
-      /*
-        API 요청 후 페이지 이동 분기 처리 필요
-      */
-      navigation.replace('AddressRegistration');
+      const email = result.data.kakao_account.email;
+
+      const { data: loginResult } = await axios.post('/auth/login', {
+        email,
+      });
+
+      if (loginResult.isNewby) {
+        navigation.replace('AddressRegistration', { email });
+      } else {
+        /*
+        TODO: 가입이 되어 있는 유저 처리 로직 작성 필요
+        - recoil에 user 정보 set
+        - naviation을 이용하여 home으로 이동
+         navigation.reset({ routes: [{ name: 'BottomNavigation' }] });
+        */
+      }
     } catch (error) {
       const errorResponse = (error as AxiosError).response;
       console.log(errorResponse);
@@ -58,11 +67,6 @@ const KaKaoLogin = ({ navigation, route }: KaKaoLoginScreenProps) => {
       requestToken(requestCode);
     }
   };
-
-  //TEST를 위해 임시 작성 코드
-  useEffect(() => {
-    navigation.replace('AddressRegistration');
-  }, []);
 
   return (
     <>
