@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   title?: string;
+  rightContent?: React.ReactNode;
 }
 
 const Header = (props: Props) => {
@@ -23,6 +24,7 @@ const Header = (props: Props) => {
         <Close size={24} />
       </Pressable>
       <Text style={[TYPOS.headline3, styles.title]}>{title}</Text>
+      <View style={styles.rightContent}>{props.rightContent}</View>
     </View>
   );
 };
@@ -39,5 +41,8 @@ const styles = StyleSheet.create({
   },
   title: {
     marginLeft: 16,
+  },
+  rightContent: {
+    marginLeft: 'auto',
   },
 });
