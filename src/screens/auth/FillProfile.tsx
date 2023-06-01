@@ -1,14 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RootStackParamList } from '../../types/navigation';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  Pressable,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 import Container from '../../components/layout/Container';
 import TYPOS from '../../components/ui/typo';
 import AppBar from '../../components/ui/AppBar';
@@ -18,23 +11,83 @@ import UiCheckbox from '../../components/ui/UiCheckbox';
 import Color from '../../constants/color';
 import Camera from '../../components/ui/icons/Camera';
 
+import * as MediaLibrary from 'expo-media-library';
+import useDebounce from '../../hooks/useDebounce';
+import axios, { AxiosError } from 'axios';
+
 export type FillProfileScreenProps = StackScreenProps<
   RootStackParamList,
   'FillProfile'
 >;
 
 const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
+  const { location, address, email } = route.params;
+
   const [nickname, setNickname] = useState<string>('');
-  const [selectedPetType, setSelectedPetType] = useState<string>('');
+  const [selectedPetType, setSelectedPetType] = useState<'dog' | 'cat'>('dog');
+  const [photo, setPhoto] = useState<MediaLibrary.Asset | null>(null);
+  const debouncedValue = useDebounce<string>(nickname, 600);
+  const [errorLog, setErrorLog] = useState({
+    isError: false,
+    message: '',
+  });
 
-  const onSubmit = () => {
-    const body = {
-      nickname,
-      selectedPetType,
-    };
+  const checkDuplicateNickname = async () => {
+    try {
+      await axios.post('/auth/nickname', {
+        nickname,
+      });
 
-    console.log(body);
-    navigation.reset({ routes: [{ name: 'BottomNavigation' }] });
+      setErrorLog({ isError: false, message: '' });
+    } catch (error) {
+      const errorResponse = (error as AxiosError).response;
+
+      if (errorResponse) {
+        const { message } = errorResponse.data as { message: string };
+        setErrorLog({ isError: true, message });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedValue) {
+      checkDuplicateNickname();
+    }
+  }, [debouncedValue]);
+
+  const onSubmit = async () => {
+    if (!errorLog.isError) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('nikname', nickname);
+    formData.append('petType', selectedPetType);
+    formData.append(
+      'address',
+      JSON.stringify({
+        detail: address,
+        longitude: location.longitude,
+        latitude: location.latitude,
+      })
+    );
+
+    if (photo) {
+      formData.append('profileImage', {
+        uri: photo.uri,
+        type: 'image/jpeg',
+        name: 'photo.jpg',
+      } as any);
+    }
+
+    try {
+      const response = await axios.post('/user/profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    } catch (error) {}
   };
 
   return (
@@ -48,22 +101,40 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
             marginVertical: 32,
           }}
         >
-          <View style={{ position: 'relative' }}>
+          <Pressable
+            style={{ position: 'relative' }}
+            onPress={() => {
+              navigation.navigate('Gallery', {
+                limit: 1,
+                callback: (medias) => {
+                  const media = medias[0];
+                  setPhoto(media);
+                },
+              });
+            }}
+          >
             <Image
-              style={{ width: 80, height: 80 }}
-              source={require('../../../assets/img/placeholder.png')}
+              style={{ width: 80, height: 80, borderRadius: 80 }}
+              source={
+                photo
+                  ? { uri: photo.uri }
+                  : require('../../../assets/img/placeholder.png')
+              }
             />
             <Camera
               style={{ position: 'absolute', bottom: 0, right: 0 }}
-              width={24}
-              height={24}
+              size={24}
+              circleColor={Color.primary700}
+              color={Color.white}
             />
-          </View>
+          </Pressable>
         </View>
         <View>
           <InputField
             placeholder="닉네임"
             value={nickname}
+            isError={errorLog.isError}
+            errorMessage={errorLog.message}
             onChangeHandler={(value: string) => {
               setNickname(value);
             }}
@@ -86,13 +157,13 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
               style={[
                 styles.card,
                 {
-                  ...(selectedPetType === '강아지' && {
+                  ...(selectedPetType === 'dog' && {
                     borderColor: Color.primary600,
                   }),
                 },
               ]}
               onPress={() => {
-                setSelectedPetType('강아지');
+                setSelectedPetType('dog');
               }}
             >
               <Text>🐶</Text>
@@ -102,13 +173,13 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
               style={[
                 styles.card,
                 {
-                  ...(selectedPetType === '고양이' && {
+                  ...(selectedPetType === 'cat' && {
                     borderColor: Color.primary600,
                   }),
                 },
               ]}
               onPress={() => {
-                setSelectedPetType('고양이');
+                setSelectedPetType('cat');
               }}
             >
               <Text>😺</Text>
