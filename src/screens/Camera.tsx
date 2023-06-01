@@ -25,14 +25,14 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
   };
 
   const takePicture = async () => {
-    if (cameraRef.current) {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
-
-      if (status === 'granted') {
+    if (hasPermission) {
+      if (cameraRef.current) {
         const photo = await cameraRef.current.takePictureAsync();
         savePicture(photo);
       }
+    } else {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
     }
   };
 
@@ -55,6 +55,15 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
   };
 
   useEffect(() => {
+    const getCameraPermission = async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    };
+
+    getCameraPermission();
+  }, []);
+
+  useEffect(() => {
     return () => {
       callback();
     };
@@ -64,26 +73,32 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
     <>
       <Header title="사진 촬영" />
       <Container>
-        <Camera
-          style={{ flex: 1, position: 'relative' }}
-          ref={cameraRef}
-          type={type}
-        >
-          <View
-            style={{
-              position: 'absolute',
-              right: 16,
-              top: 16,
-            }}
-          >
-            <Pressable style={{}} onPress={changeType}>
-              <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                전환
-              </Text>
-            </Pressable>
-          </View>
-        </Camera>
-        <Button label="촬영" onPressHandler={takePicture} />
+        {hasPermission && (
+          <>
+            <Camera
+              style={{ flex: 1, position: 'relative' }}
+              ref={cameraRef}
+              type={type}
+            >
+              <View
+                style={{
+                  position: 'absolute',
+                  right: 16,
+                  top: 16,
+                }}
+              >
+                <Pressable style={{}} onPress={changeType}>
+                  <Text
+                    style={{ fontSize: 18, marginBottom: 10, color: 'white' }}
+                  >
+                    전환
+                  </Text>
+                </Pressable>
+              </View>
+            </Camera>
+            <Button label="촬영" onPressHandler={takePicture} />
+          </>
+        )}
       </Container>
     </>
     // <View style={{ flex: 1 }}>
