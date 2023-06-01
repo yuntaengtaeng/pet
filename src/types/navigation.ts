@@ -15,6 +15,9 @@ export type RootStackParamList = {
     limit: number;
     callback: (medias: MediaLibrary.Asset[]) => void;
   };
+  Camera: {
+    callback: () => void;
+  };
 };
 
 export type TabNavigatorParamList = {
