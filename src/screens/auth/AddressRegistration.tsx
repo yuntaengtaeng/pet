@@ -18,45 +18,43 @@ import * as Location from 'expo-location';
 import useDebounce from '../../hooks/useDebounce';
 import Color from '../../constants/color';
 import { Location as LocationType } from '../../types/interface';
+import axios from 'axios';
 
 export type AddressRegistrationScreenProps = StackScreenProps<
   RootStackParamList,
   'AddressRegistration'
 >;
 
-const data = [
-  { label: '서울 강남구 삼성1동', latitude: 37, longitude: 125 },
-  { label: '서울 강남구 삼성2동', latitude: 37, longitude: 125 },
-  { label: '서울 강남구 논현동', latitude: 37, longitude: 125 },
-  { label: '서울 강남구 논현2동', latitude: 37, longitude: 125 },
-  { label: '서울 강남구 청담동', latitude: 37, longitude: 125 },
-  { label: '서울 강남구 대치동', latitude: 37, longitude: 125 },
-  { label: '서울 강남구 대치2동', latitude: 37, longitude: 125 },
-  { label: '서울 도봉구 삼성1동', latitude: 37, longitude: 125 },
-  { label: '서울 도봉구 삼성2동', latitude: 37, longitude: 125 },
-  { label: '서울 도봉구 논현동', latitude: 37, longitude: 125 },
-  { label: '서울 도봉구 논현2동', latitude: 37, longitude: 125 },
-  { label: '서울 도봉구 청담동', latitude: 37, longitude: 125 },
-  { label: '서울 도봉구 대치동', latitude: 37, longitude: 125 },
-  { label: '서울 도봉구 대치2동', latitude: 37, longitude: 125 },
-];
+interface Address extends LocationType {
+  address: string;
+}
 
 const AddressRegistration = ({
   navigation,
   route,
 }: AddressRegistrationScreenProps) => {
-  const [location, setLocaion] = useState<LocationType>();
+  const [location, setLocaion] = useState<LocationType | null>(null);
+  const [nearbyAddressList, setNearbyAddressList] = useState<Address[]>([]);
+  const [searchAddressList, setSearchAddressList] = useState<Address[]>([]);
   const [search, setSearch] = useState<string>('');
   const [isPermissionError, setIsPermissionError] = useState<boolean>(false);
-  const debouncedValue = useDebounce<string>(search, 500);
+  const debouncedValue = useDebounce<string>(search, 600);
+  const { email } = route.params;
 
   useEffect(() => {
     const getLocation = async () => {
       try {
         const response = await Location.requestForegroundPermissionsAsync();
+        console.log('response');
         console.log(response);
+
+        //TODO 허용 시에만 요청하도록 변경
         const location = await Location.getCurrentPositionAsync();
-        console.log(location);
+
+        setLocaion({
+          longitude: location.coords.longitude,
+          latitude: location.coords.latitude,
+        });
       } catch (error) {
         setIsPermissionError(true);
         console.log(error);
@@ -66,7 +64,41 @@ const AddressRegistration = ({
     getLocation();
   }, []);
 
-  const renderItem = ({ item }: { item: any }) => {
+  const getNearbyAddress = async () => {
+    try {
+      const {
+        data: { data },
+      } = await axios.get(
+        `/address/nearby?longitude=${location?.longitude}&latitude=${location?.latitude}`
+      );
+
+      setNearbyAddressList(data);
+    } catch (error) {}
+  };
+
+  const getSearchAddress = async () => {
+    try {
+      const {
+        data: { data },
+      } = await axios.get(`/address?address=${search}`);
+
+      setSearchAddressList(data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (debouncedValue) {
+      getSearchAddress();
+    }
+  }, [debouncedValue]);
+
+  useEffect(() => {
+    if (location) {
+      getNearbyAddress();
+    }
+  }, [location]);
+
+  const renderItem = ({ item }: { item: Address }) => {
     return (
       <TouchableOpacity
         style={styles.card}
@@ -76,11 +108,12 @@ const AddressRegistration = ({
               latitude: item.latitude,
               longitude: item.latitude,
             },
-            address: item.label,
+            address: item.address,
+            email: email as string,
           });
         }}
       >
-        <Text style={TYPOS.body1}>{item.label}</Text>
+        <Text style={TYPOS.body1}>{item.address}</Text>
       </TouchableOpacity>
     );
   };
@@ -113,16 +146,23 @@ const AddressRegistration = ({
             contentContainerStyle={{ marginHorizontal: 16 }}
             ListHeaderComponent={
               <View>
-                <Text style={TYPOS.headline4}>주변 동네</Text>
+                <Text style={TYPOS.headline4}>
+                  {!!debouncedValue
+                    ? `'${debouncedValue}' 검색 결과`
+                    : '주변 동네'}
+                </Text>
               </View>
             }
-            data={data}
+            data={!!debouncedValue ? searchAddressList : nearbyAddressList}
             renderItem={renderItem}
-            keyExtractor={(item) => item.label}
+            keyExtractor={(item) => item.address}
             ListEmptyComponent={
-              <View>
-                <Text style={TYPOS.headline4}>
-                  검색 결과가 없습니다. 동네 이름을 다시 입력해주세요.
+              <View style={{ marginTop: 20, alignItems: 'center' }}>
+                <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
+                  검색 결과가 없습니다.
+                </Text>
+                <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
+                  동네 이름을 다시 입력해주세요.
                 </Text>
               </View>
             }
