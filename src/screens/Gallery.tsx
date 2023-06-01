@@ -9,6 +9,7 @@ import {
   Text,
 } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
+import useDidUpdate from '../hooks/useDidUpdate';
 
 import Header from '../components/ui/Header';
 import Color from '../constants/color';
@@ -32,16 +33,22 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
 
   const { limit, callback } = route.params;
 
-  //TODO : MEDIA 권한 요청
-  useEffect(() => {
-    const getLibraryPermission = async () => {
-      await MediaLibrary.requestPermissionsAsync();
-    };
+  const requestMediaLibraryPermissions = async () => {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
 
-    getLibraryPermission();
+    if (status !== 'granted') {
+      console.log('Media library permission denied');
+      return;
+    }
+
+    fetchPhotos();
+  };
+
+  useEffect(() => {
+    requestMediaLibraryPermissions();
   }, []);
 
-  useEffect(() => {
+  useDidUpdate(() => {
     if (!photos.length) {
       fetchPhotos();
     }
