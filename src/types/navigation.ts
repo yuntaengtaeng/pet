@@ -1,14 +1,20 @@
 import { Location } from './interface';
+import * as MediaLibrary from 'expo-media-library';
 
 export type RootStackParamList = {
   Onboarding: undefined;
-  AddressRegistration: undefined;
+  AddressRegistration: { email?: string };
   KaKaoLogin: undefined;
   FillProfile: {
     location: Location;
     address: string;
+    email: string;
   };
   BottomNavigation: undefined;
+  Gallery: {
+    limit: number;
+    callback: (medias: MediaLibrary.Asset[]) => void;
+  };
 };
 
 export type TabNavigatorParamList = {
