@@ -74,8 +74,9 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
     );
 
     if (photo) {
+      const { localUri } = await MediaLibrary.getAssetInfoAsync(photo);
       formData.append('profileImage', {
-        uri: photo.uri,
+        uri: localUri,
         type: 'image/jpeg',
         name: 'photo.jpg',
       } as any);
