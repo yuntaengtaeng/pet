@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
   FlatList,
   StyleSheet,
-  Pressable,
-  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -18,6 +16,8 @@ import * as Location from 'expo-location';
 import useDebounce from '../../hooks/useDebounce';
 import Color from '../../constants/color';
 import { Location as LocationType } from '../../types/interface';
+import { useRecoilState } from 'recoil';
+import { LoadingState } from '../../store/atoms';
 import axios from 'axios';
 
 export type AddressRegistrationScreenProps = StackScreenProps<
@@ -40,21 +40,31 @@ const AddressRegistration = ({
   const [isPermissionError, setIsPermissionError] = useState<boolean>(false);
   const debouncedValue = useDebounce<string>(search, 600);
   const { email } = route.params;
+  const timeStamp = useRef('');
+  const [isLoading, setIsLoading] = useRecoilState(LoadingState);
+  const headerToShow = (() => {
+    if (debouncedValue) {
+      return !!searchAddressList.length ? `'${debouncedValue}' 검색 결과` : '';
+    } else {
+      return '주변 동네';
+    }
+  })();
 
   useEffect(() => {
     const getLocation = async () => {
       try {
         const response = await Location.requestForegroundPermissionsAsync();
-        console.log('response');
-        console.log(response);
 
-        //TODO 허용 시에만 요청하도록 변경
-        const location = await Location.getCurrentPositionAsync();
+        if (response.status === 'granted') {
+          const location = await Location.getCurrentPositionAsync();
 
-        setLocaion({
-          longitude: location.coords.longitude,
-          latitude: location.coords.latitude,
-        });
+          setLocaion({
+            longitude: location.coords.longitude,
+            latitude: location.coords.latitude,
+          });
+        } else {
+          // 권한이 거부되었을 때 처리할 내용 추가
+        }
       } catch (error) {
         setIsPermissionError(true);
         console.log(error);
@@ -77,13 +87,19 @@ const AddressRegistration = ({
   };
 
   const getSearchAddress = async () => {
+    setIsLoading(true);
     try {
       const {
-        data: { data },
+        data: { data, dataTimestamp },
       } = await axios.get(`/address?address=${search}`);
-
-      setSearchAddressList(data);
-    } catch (error) {}
+      if (dataTimestamp > timeStamp.current) {
+        setSearchAddressList(data);
+        timeStamp.current = dataTimestamp;
+      }
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -136,9 +152,12 @@ const AddressRegistration = ({
           />
         </View>
         {isPermissionError && !debouncedValue ? (
-          <View>
-            <Text style={TYPOS.headline4}>
-              현재 위치를 파악할 수 없습니다. 내 동네를 검색하여 등록하세요.
+          <View style={{ alignItems: 'center', marginTop: 72 }}>
+            <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
+              현재 위치를 파악할 수 없습니다.
+            </Text>
+            <Text style={(TYPOS.body1, { color: Color.neutral2 })}>
+              내 동네를 검색하여 등록하세요.
             </Text>
           </View>
         ) : (
@@ -146,25 +165,25 @@ const AddressRegistration = ({
             contentContainerStyle={{ marginHorizontal: 16 }}
             ListHeaderComponent={
               <View>
-                <Text style={TYPOS.headline4}>
-                  {!!debouncedValue
-                    ? `'${debouncedValue}' 검색 결과`
-                    : '주변 동네'}
-                </Text>
+                <Text style={TYPOS.headline4}>{headerToShow}</Text>
               </View>
             }
             data={!!debouncedValue ? searchAddressList : nearbyAddressList}
             renderItem={renderItem}
             keyExtractor={(item) => item.address}
             ListEmptyComponent={
-              <View style={{ marginTop: 20, alignItems: 'center' }}>
-                <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
-                  검색 결과가 없습니다.
-                </Text>
-                <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
-                  동네 이름을 다시 입력해주세요.
-                </Text>
-              </View>
+              isLoading ? (
+                <></>
+              ) : (
+                <View style={{ marginTop: 20, alignItems: 'center' }}>
+                  <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
+                    검색 결과가 없습니다.
+                  </Text>
+                  <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
+                    동네 이름을 다시 입력해주세요.
+                  </Text>
+                </View>
+              )
             }
           />
         )}
