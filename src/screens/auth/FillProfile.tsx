@@ -56,7 +56,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
   }, [debouncedValue]);
 
   const onSubmit = async () => {
-    if (!errorLog.isError) {
+    if (errorLog.isError) {
       return;
     }
 
