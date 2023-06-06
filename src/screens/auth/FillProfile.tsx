@@ -62,7 +62,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
 
     const formData = new FormData();
     formData.append('email', email);
-    formData.append('nikname', nickname);
+    formData.append('nickname', nickname);
     formData.append('petType', selectedPetType);
     formData.append(
       'address',
