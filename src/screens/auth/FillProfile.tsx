@@ -31,6 +31,8 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
     isError: false,
     message: '',
   });
+  const [isChecked, setIsChecked] = useState(false);
+  const isAllConditionsMet = !!nickname && !!address && !errorLog.isError;
 
   const checkDuplicateNickname = async () => {
     try {
@@ -63,7 +65,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
     const formData = new FormData();
     formData.append('email', email);
     formData.append('nickname', nickname);
-    formData.append('petType', selectedPetType);
+    formData.append('petType', isChecked ? 'dog' : selectedPetType);
     formData.append(
       'address',
       JSON.stringify({
@@ -187,13 +189,31 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
               <Text style={TYPOS.body1}>고양이</Text>
             </Pressable>
           </View>
-          <UiCheckbox isChecked={false}>
+          <UiCheckbox
+            isChecked={isChecked}
+            onValueChangeHandler={(value) => {
+              setIsChecked(value);
+            }}
+          >
             <Text style={TYPOS.body2}>반려동물을 키우고 있지 않아요.</Text>
           </UiCheckbox>
         </View>
       </Container>
-      <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
-        <Button label="확인" buttonType="primary" onPressHandler={onSubmit} />
+      <View
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          marginHorizontal: 16,
+        }}
+      >
+        <Button
+          label="확인"
+          buttonType="primary"
+          onPressHandler={onSubmit}
+          disabled={!isAllConditionsMet}
+        />
       </View>
     </>
   );
