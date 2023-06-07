@@ -14,6 +14,9 @@ import Camera from '../../components/ui/icons/Camera';
 import * as MediaLibrary from 'expo-media-library';
 import useDebounce from '../../hooks/useDebounce';
 import axios, { AxiosError } from 'axios';
+import { User } from '../../types/interface';
+import { useSetRecoilState } from 'recoil';
+import { UserState, LoadingState } from '../../store/atoms';
 
 export type FillProfileScreenProps = StackScreenProps<
   RootStackParamList,
@@ -33,6 +36,8 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
   });
   const [isChecked, setIsChecked] = useState(false);
   const isAllConditionsMet = !!nickname && !!address && !errorLog.isError;
+  const setUser = useSetRecoilState(UserState);
+  const setIsLoading = useSetRecoilState(LoadingState);
 
   const checkDuplicateNickname = async () => {
     try {
@@ -84,13 +89,24 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
       } as any);
     }
 
+    setIsLoading(true);
+
     try {
-      const response = await axios.post('/user/profile', formData, {
+      const {
+        data: { data },
+      } = await axios.post<{ data: User }>('/user/profile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-    } catch (error) {}
+
+      setUser(data);
+      navigation.reset({ routes: [{ name: 'BottomNavigation' }] });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
