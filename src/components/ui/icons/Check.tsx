@@ -20,10 +20,11 @@ const Check = (props: Props) => {
       style={props.style}
     >
       <Path
-        d="M9 5L14.3306 11.2191C14.7158 11.6684 14.7158 12.3316 14.3306 12.7809L9 19"
+        d="M20 6L9 17L4 12"
         stroke={props.color}
         stroke-width="1.5"
         stroke-linecap="round"
+        stroke-linejoin="round"
       />
     </Svg>
   );
