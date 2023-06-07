@@ -5,6 +5,9 @@ import axios, { AxiosError } from 'axios';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
 import Header from '../../components/ui/Header';
+import { User } from '../../types/interface';
+import { useSetRecoilState } from 'recoil';
+import { UserState } from '../../store/atoms';
 
 export type KaKaoLoginScreenProps = StackScreenProps<
   RootStackParamList,
@@ -15,6 +18,7 @@ const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from
 
 const KaKaoLogin = ({ navigation, route }: KaKaoLoginScreenProps) => {
   const redirectUri = `${process.env.API_URL}/web/kakao`;
+  const setUser = useSetRecoilState(UserState);
 
   const requestToken = async (code: string) => {
     try {
@@ -39,19 +43,22 @@ const KaKaoLogin = ({ navigation, route }: KaKaoLoginScreenProps) => {
 
       const email = result.data.kakao_account.email;
 
-      const { data: loginResult } = await axios.post('/auth/login', {
+      const response = await axios.post('/auth/login', {
         email,
       });
 
-      if (loginResult.isNewby) {
+      /*
+      response status guide
+      - 200 : 기존 회원
+      - 202 : 신규 가입자
+      */
+
+      if (response.status === 200) {
+        const user: User = response.data.data;
+        setUser(user);
+        navigation.reset({ routes: [{ name: 'BottomNavigation' }] });
+      } else if (response.status === 202) {
         navigation.replace('AddressRegistration', { email });
-      } else {
-        /*
-        TODO: 가입이 되어 있는 유저 처리 로직 작성 필요
-        - recoil에 user 정보 set
-        - naviation을 이용하여 home으로 이동
-         navigation.reset({ routes: [{ name: 'BottomNavigation' }] });
-        */
       }
     } catch (error) {
       const errorResponse = (error as AxiosError).response;
