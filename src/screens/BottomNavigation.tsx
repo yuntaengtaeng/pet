@@ -34,28 +34,28 @@ const BottomNavigation = () => {
               return (
                 <Home
                   size={24}
-                  color={focused ? Color.neutral1 : Color.neutral1}
+                  color={focused ? Color.neutral1 : Color.neutral3}
                 />
               );
             case 'PetVillage':
               return (
                 <Location
                   size={24}
-                  color={focused ? Color.neutral1 : Color.neutral1}
+                  color={focused ? Color.neutral1 : Color.neutral3}
                 />
               );
             case 'PetMate':
               return (
                 <Users
                   size={24}
-                  color={focused ? Color.neutral1 : Color.neutral1}
+                  color={focused ? Color.neutral1 : Color.neutral3}
                 />
               );
             case 'MyPet':
               return (
                 <User
                   size={24}
-                  color={focused ? Color.neutral1 : Color.neutral1}
+                  color={focused ? Color.neutral1 : Color.neutral3}
                 />
               );
           }

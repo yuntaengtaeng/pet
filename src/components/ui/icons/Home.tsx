@@ -11,8 +11,6 @@ interface Props {
 }
 
 const Home = (props: Props) => {
-  console.log(props.color);
-
   return (
     <Svg
       width={props.size}
