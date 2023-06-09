@@ -29,7 +29,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
   const [nickname, setNickname] = useState<string>('');
   const [selectedPetType, setSelectedPetType] = useState<'dog' | 'cat'>('dog');
   const [photo, setPhoto] = useState<MediaLibrary.Asset | null>(null);
-  const debouncedValue = useDebounce<string>(nickname, 600);
+  const debouncedValue = useDebounce<string>(nickname, 300);
   const [errorLog, setErrorLog] = useState({
     isError: false,
     message: '',
