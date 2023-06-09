@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Color from '../constants/color';
 import TYPOS from '../components/ui/typo';
 
-import Search from '../components/ui/icons/Search';
+import Home from '../components/ui/icons/Home';
 import Location from '../components/ui/icons/Location';
 import User from '../components/ui/icons/User';
 import Users from '../components/ui/icons/Users';
@@ -32,7 +32,7 @@ const BottomNavigation = () => {
           switch (route.name) {
             case 'Home':
               return (
-                <Search
+                <Home
                   size={24}
                   color={focused ? Color.neutral1 : Color.neutral1}
                 />
