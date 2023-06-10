@@ -7,6 +7,8 @@ import {
   Dimensions,
   Pressable,
   Text,
+  AppState,
+  Linking,
 } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import useDidUpdate from '../hooks/useDidUpdate';
@@ -17,6 +19,8 @@ import TYPOS from '../components/ui/typo';
 import Camera from '../components/ui/icons/Camera';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
+import { useRecoilState } from 'recoil';
+import { LoadingState } from '../store/atoms';
 
 export type GalleryScreenProps = StackScreenProps<
   RootStackParamList,
@@ -25,7 +29,7 @@ export type GalleryScreenProps = StackScreenProps<
 
 const Gallery = ({ navigation, route }: GalleryScreenProps) => {
   const [photos, setPhotos] = useState<MediaLibrary.Asset[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useRecoilState(LoadingState);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [endCursor, setEndCursor] = useState<string | undefined>(undefined);
 
@@ -38,6 +42,7 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
 
     if (status !== 'granted') {
       console.log('Media library permission denied');
+      Linking.openSettings();
       return;
     }
 
@@ -59,6 +64,8 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
   };
 
   const fetchPhotos = async (cursor?: string | undefined) => {
+    setIsLoading(true);
+
     try {
       const {
         assets,
@@ -196,24 +203,20 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
           </Pressable>
         }
       />
-      {isLoading ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        <FlatList
-          data={[null, ...photos]}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={numColumns}
-          renderItem={({ item, index }) =>
-            item
-              ? renderPhotoItem({ item })
-              : index === 0
-              ? renderCameraButton()
-              : null
-          }
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.1}
-        />
-      )}
+      <FlatList
+        data={[null, ...photos]}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={numColumns}
+        renderItem={({ item, index }) =>
+          item
+            ? renderPhotoItem({ item })
+            : index === 0
+            ? renderCameraButton()
+            : null
+        }
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.1}
+      />
     </>
   );
 };
