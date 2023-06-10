@@ -27,7 +27,9 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
   const { location, address, email } = route.params;
 
   const [nickname, setNickname] = useState<string>('');
-  const [selectedPetType, setSelectedPetType] = useState<'dog' | 'cat'>('dog');
+  const [selectedPetType, setSelectedPetType] = useState<'dog' | 'cat' | ''>(
+    'dog'
+  );
   const [photo, setPhoto] = useState<MediaLibrary.Asset | null>(null);
   const debouncedValue = useDebounce<string>(nickname, 300);
   const [errorLog, setErrorLog] = useState({
@@ -35,7 +37,11 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
     message: '',
   });
   const [isChecked, setIsChecked] = useState(false);
-  const isAllConditionsMet = !!nickname && !!address && !errorLog.isError;
+  const isAllConditionsMet =
+    !!nickname &&
+    !!address &&
+    !errorLog.isError &&
+    (!!selectedPetType || isChecked);
   const setUser = useSetRecoilState(UserState);
   const setIsLoading = useSetRecoilState(LoadingState);
 
@@ -208,6 +214,10 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
           <UiCheckbox
             isChecked={isChecked}
             onValueChangeHandler={(value) => {
+              if (value) {
+                setSelectedPetType('');
+              }
+
               setIsChecked(value);
             }}
           >
