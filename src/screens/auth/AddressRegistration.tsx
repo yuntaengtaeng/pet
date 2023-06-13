@@ -19,6 +19,7 @@ import { Location as LocationType } from '../../types/interface';
 import { useRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
 import axios from 'axios';
+import Guide from '../../components/AddressRegistration/Guide';
 
 export type AddressRegistrationScreenProps = StackScreenProps<
   RootStackParamList,
@@ -38,6 +39,7 @@ const AddressRegistration = ({
   const [searchAddressList, setSearchAddressList] = useState<Address[]>([]);
   const [search, setSearch] = useState<string>('');
   const [isPermissionError, setIsPermissionError] = useState<boolean>(false);
+  const [isLoadingLocationInfo, setIsLoadingLocationInfo] = useState(true);
   const debouncedValue = useDebounce<string>(search, 600);
   const { email } = route.params;
   const timeStamp = useRef('');
@@ -63,6 +65,7 @@ const AddressRegistration = ({
             latitude: location.coords.latitude,
           });
         } else {
+          setIsLoadingLocationInfo(false);
           // 권한이 거부되었을 때 처리할 내용 추가
         }
       } catch (error) {
@@ -83,7 +86,10 @@ const AddressRegistration = ({
       );
 
       setNearbyAddressList(data);
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setIsLoadingLocationInfo(false);
+    }
   };
 
   const getSearchAddress = async () => {
@@ -134,6 +140,52 @@ const AddressRegistration = ({
     );
   };
 
+  const showBottomContent = (() => {
+    if (isLoadingLocationInfo) {
+      return (
+        <Guide
+          topText="주변 동네 정보를 불러오는 중입니다."
+          bottomText="잠시만 기다려주세요."
+        />
+      );
+    } else if (isPermissionError && !debouncedValue) {
+      return (
+        <Guide
+          topText="현재 위치를 파악할 수 없습니다."
+          bottomText="내 동네를 검색하여 등록하세요."
+        />
+      );
+    } else {
+      return (
+        <FlatList
+          contentContainerStyle={{ marginHorizontal: 16 }}
+          ListHeaderComponent={
+            <View>
+              <Text style={TYPOS.headline4}>{headerToShow}</Text>
+            </View>
+          }
+          data={!!debouncedValue ? searchAddressList : nearbyAddressList}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.address}
+          ListEmptyComponent={
+            isLoading ? (
+              <></>
+            ) : (
+              <View style={{ marginTop: 20, alignItems: 'center' }}>
+                <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
+                  검색 결과가 없습니다.
+                </Text>
+                <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
+                  동네 이름을 다시 입력해주세요.
+                </Text>
+              </View>
+            )
+          }
+        />
+      );
+    }
+  })();
+
   return (
     <>
       <Header />
@@ -151,42 +203,7 @@ const AddressRegistration = ({
             placeholder="동명(읍, 면)으로 검색 (ex. 신대방동)"
           />
         </View>
-        {isPermissionError && !debouncedValue ? (
-          <View style={{ alignItems: 'center', marginTop: 72 }}>
-            <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
-              현재 위치를 파악할 수 없습니다.
-            </Text>
-            <Text style={(TYPOS.body1, { color: Color.neutral2 })}>
-              내 동네를 검색하여 등록하세요.
-            </Text>
-          </View>
-        ) : (
-          <FlatList
-            contentContainerStyle={{ marginHorizontal: 16 }}
-            ListHeaderComponent={
-              <View>
-                <Text style={TYPOS.headline4}>{headerToShow}</Text>
-              </View>
-            }
-            data={!!debouncedValue ? searchAddressList : nearbyAddressList}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.address}
-            ListEmptyComponent={
-              isLoading ? (
-                <></>
-              ) : (
-                <View style={{ marginTop: 20, alignItems: 'center' }}>
-                  <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
-                    검색 결과가 없습니다.
-                  </Text>
-                  <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
-                    동네 이름을 다시 입력해주세요.
-                  </Text>
-                </View>
-              )
-            }
-          />
-        )}
+        {showBottomContent}
       </Container>
     </>
   );
