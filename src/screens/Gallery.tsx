@@ -3,11 +3,9 @@ import {
   View,
   FlatList,
   Image,
-  ActivityIndicator,
   Dimensions,
   Pressable,
   Text,
-  AppState,
   Linking,
 } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
@@ -21,6 +19,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
 import { useRecoilState } from 'recoil';
 import { LoadingState } from '../store/atoms';
+import Check from '../components/ui/icons/Check';
 
 export type GalleryScreenProps = StackScreenProps<
   RootStackParamList,
@@ -86,6 +85,16 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
     }
   };
 
+  const decideSelectedIndicator = (index: number) => {
+    if (limit === 1) {
+      return <Check size={16} color={Color.white} />;
+    } else {
+      return (
+        <Text style={[TYPOS.body3, { color: Color.white }]}>{index + 1}</Text>
+      );
+    }
+  };
+
   const renderPhotoItem: React.FC<{ item: MediaLibrary.Asset }> = ({
     item,
   }) => {
@@ -101,6 +110,11 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
       <Pressable
         style={{ width: itemWidth, aspectRatio: 1, position: 'relative' }}
         onPress={() => {
+          if (limit === 1) {
+            setSelectedPhtos([item]);
+            return;
+          }
+
           if (isSelected) {
             const clone = [...selectedPhtos];
             clone.splice(selectedIndex, 1);
@@ -131,11 +145,7 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
             alignItems: 'center',
           }}
         >
-          {isSelected && (
-            <Text style={[TYPOS.body3, { color: Color.white }]}>
-              {selectedIndex + 1}
-            </Text>
-          )}
+          {isSelected && decideSelectedIndicator(selectedIndex)}
         </View>
         <Image
           source={{ uri: item.uri }}
