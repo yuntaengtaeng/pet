@@ -101,31 +101,6 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
         )}
       </Container>
     </>
-    // <View style={{ flex: 1 }}>
-    //   <Camera style={{ flex: 1 }} ref={cameraRef} type={CameraType.front}>
-    //     <View
-    //       style={{
-    //         flex: 1,
-    //         backgroundColor: 'transparent',
-    //         flexDirection: 'row',
-    //       }}
-    //     >
-    //       <TouchableOpacity
-    //         style={{
-    //           flex: 0.1,
-    //           alignSelf: 'flex-end',
-    //           alignItems: 'center',
-    //           marginBottom: 16,
-    //         }}
-    //         onPress={takePicture}
-    //       >
-    //         <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-    //           Take Picture
-    //         </Text>
-    //       </TouchableOpacity>
-    //     </View>
-    //   </Camera>
-    // </View>
   );
 };
 export default CameraScreen;
