@@ -12,3 +12,5 @@ export interface User {
   accessToken: string;
   refreshToken: string;
 }
+
+export type PetType = 'dog' | 'cat';

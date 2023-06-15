@@ -17,6 +17,7 @@ import axios, { AxiosError } from 'axios';
 import { User } from '../../types/interface';
 import { useSetRecoilState } from 'recoil';
 import { UserState, LoadingState } from '../../store/atoms';
+import { PetType } from '../../types/interface';
 
 export type FillProfileScreenProps = StackScreenProps<
   RootStackParamList,
@@ -27,9 +28,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
   const { location, address, email } = route.params;
 
   const [nickname, setNickname] = useState<string>('');
-  const [selectedPetType, setSelectedPetType] = useState<'dog' | 'cat' | ''>(
-    'dog'
-  );
+  const [selectedPetType, setSelectedPetType] = useState<PetType | ''>('dog');
   const [photo, setPhoto] = useState<MediaLibrary.Asset | null>(null);
   const debouncedValue = useDebounce<string>(nickname, 300);
   const [errorLog, setErrorLog] = useState({
