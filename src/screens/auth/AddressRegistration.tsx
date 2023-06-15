@@ -128,7 +128,7 @@ const AddressRegistration = ({
           navigation.push('FillProfile', {
             location: {
               latitude: item.latitude,
-              longitude: item.latitude,
+              longitude: item.longitude,
             },
             address: item.address,
             email: email as string,
