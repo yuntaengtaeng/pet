@@ -7,7 +7,7 @@ export interface User {
   email: string;
   nickname: string;
   profileImage?: string;
-  petType: string;
+  petType: PetType;
   address: string;
   accessToken: string;
   refreshToken: string;
