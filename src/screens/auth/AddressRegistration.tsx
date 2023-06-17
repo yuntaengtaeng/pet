@@ -25,7 +25,7 @@ const AddressRegistration = ({
     navigation.push('FillProfile', {
       location,
       address,
-      email: email as string,
+      email: email,
     });
   };
 

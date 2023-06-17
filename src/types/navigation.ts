@@ -3,7 +3,7 @@ import * as MediaLibrary from 'expo-media-library';
 
 export type RootStackParamList = {
   Onboarding: undefined;
-  AddressRegistration: { email?: string };
+  AddressRegistration: { email: string };
   KaKaoLogin: undefined;
   FillProfile: {
     location: Location;
@@ -18,6 +18,7 @@ export type RootStackParamList = {
   Camera: {
     callback: () => void;
   };
+  EditProduct: undefined;
 };
 
 export type TabNavigatorParamList = {
