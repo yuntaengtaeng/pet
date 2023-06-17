@@ -10,7 +10,6 @@ import {
   KeyboardTypeOptions,
 } from 'react-native';
 import Color from '../../../constants/color';
-import Search from '../icons/Search';
 import Close from '../icons/Close';
 import TYPOS from '../typo';
 
