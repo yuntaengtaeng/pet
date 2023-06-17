@@ -25,7 +25,7 @@ interface Props {
   onSubmitEditingHandler?: () => void;
   keyboardType?: KeyboardTypeOptions;
   isPassword?: boolean;
-  isSearch?: boolean;
+  leftIcon?: (hasFocus: boolean) => React.ReactNode;
 }
 
 const InputField = (props: Props) => {
@@ -40,10 +40,12 @@ const InputField = (props: Props) => {
     onSubmitEditingHandler,
     keyboardType,
     isPassword,
-    isSearch,
+    leftIcon,
   } = props;
 
   const [hasFocus, setHasFocus] = useState(false);
+
+  const LeftIconElem = leftIcon && leftIcon(hasFocus);
 
   return (
     <View style={LayoutStyle}>
@@ -63,15 +65,7 @@ const InputField = (props: Props) => {
           },
         ]}
       >
-        {isSearch && (
-          <Search
-            size={24}
-            {...(hasFocus && { color: Color.primary700 })}
-            style={{
-              marginLeft: 16,
-            }}
-          />
-        )}
+        {LeftIconElem}
         <TextInput
           placeholder={placeholder}
           style={[
