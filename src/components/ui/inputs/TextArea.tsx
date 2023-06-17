@@ -7,10 +7,8 @@ import {
   ViewStyle,
   NativeSyntheticEvent,
   TextInputChangeEventData,
-  KeyboardTypeOptions,
 } from 'react-native';
 import Color from '../../../constants/color';
-import Search from '../icons/Search';
 import Close from '../icons/Close';
 import TYPOS from '../typo';
 
@@ -20,7 +18,7 @@ interface Props {
   value?: string;
   onChangeHandler?: (vatlue: string) => void;
   placeholder?: string;
-  LayoutStyle?: ViewStyle;
+  layoutStyle?: ViewStyle;
   disabled?: boolean;
   onSubmitEditingHandler?: () => void;
 }
@@ -32,7 +30,7 @@ const TextArea = (props: Props) => {
     value,
     onChangeHandler,
     placeholder,
-    LayoutStyle,
+    layoutStyle,
     disabled,
     onSubmitEditingHandler,
   } = props;
@@ -40,7 +38,7 @@ const TextArea = (props: Props) => {
   const [hasFocus, setHasFocus] = useState(false);
 
   return (
-    <View style={LayoutStyle}>
+    <View style={layoutStyle}>
       <View
         style={[
           styles.fieldContainer,
