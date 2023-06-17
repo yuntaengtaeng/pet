@@ -31,10 +31,11 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
   const [isLoading, setIsLoading] = useRecoilState(LoadingState);
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [endCursor, setEndCursor] = useState<string | undefined>(undefined);
+  const { limit, callback, selectedPhotoIds = [] } = route.params;
 
-  const [selectedPhtos, setSelectedPhtos] = useState<MediaLibrary.Asset[]>([]);
-
-  const { limit, callback } = route.params;
+  const [selectedPhtos, setSelectedPhtos] = useState<MediaLibrary.Asset[]>([
+    ...selectedPhotoIds,
+  ]);
 
   const requestMediaLibraryPermissions = async () => {
     const { status } = await MediaLibrary.requestPermissionsAsync();

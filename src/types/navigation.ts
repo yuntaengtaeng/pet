@@ -14,6 +14,7 @@ export type RootStackParamList = {
   Gallery: {
     limit: number;
     callback: (medias: MediaLibrary.Asset[]) => void;
+    selectedPhotoIds?: MediaLibrary.Asset[];
   };
   Camera: {
     callback: () => void;

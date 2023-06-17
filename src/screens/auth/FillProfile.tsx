@@ -134,6 +134,9 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
                   const media = medias[0];
                   setPhoto(media);
                 },
+                ...(photo && {
+                  selectedPhotoIds: [photo],
+                }),
               });
             }}
           >
