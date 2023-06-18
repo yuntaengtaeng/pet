@@ -19,7 +19,7 @@ interface Props {
   value?: string;
   onChangeHandler?: (vatlue: string) => void;
   placeholder?: string;
-  LayoutStyle?: ViewStyle;
+  layoutStyle?: ViewStyle;
   disabled?: boolean;
   onSubmitEditingHandler?: () => void;
   keyboardType?: KeyboardTypeOptions;
@@ -34,7 +34,7 @@ const InputField = (props: Props) => {
     value,
     onChangeHandler,
     placeholder,
-    LayoutStyle,
+    layoutStyle,
     disabled,
     onSubmitEditingHandler,
     keyboardType,
@@ -47,7 +47,7 @@ const InputField = (props: Props) => {
   const LeftIconElem = leftIcon && leftIcon(hasFocus);
 
   return (
-    <View style={LayoutStyle}>
+    <View style={layoutStyle}>
       <View
         style={[
           styles.fieldContainer,
