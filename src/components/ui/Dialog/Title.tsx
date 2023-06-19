@@ -7,7 +7,7 @@ interface Props {
   title: string;
 }
 
-const DialogTitle = (props: Props) => {
+const Title = (props: Props) => {
   const { title } = props;
 
   return (
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
     color: Color.neutral1,
   },
 });
-export default DialogTitle;
+export default Title;

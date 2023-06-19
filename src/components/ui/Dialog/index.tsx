@@ -1,6 +1,9 @@
 import React from 'react';
 import { Modal, View, StyleSheet, Pressable } from 'react-native';
 import Color from '../../../constants/color';
+import Title from './Title';
+import Content from './Content';
+import Buttons from './Buttons';
 
 interface Props {
   children: React.ReactNode;
@@ -29,6 +32,10 @@ const Dialog = (props: Props) => {
   );
 };
 
+Dialog.Title = Title;
+Dialog.Content = Content;
+Dialog.Buttons = Buttons;
+
 export default Dialog;
 
 const styles = StyleSheet.create({
@@ -43,6 +50,6 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: Color.white,
     width: '100%',
-    borderRadius: 20,
+    borderRadius: 4,
   },
 });

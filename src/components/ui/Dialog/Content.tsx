@@ -7,7 +7,7 @@ interface Props {
   content: string;
 }
 
-const DialogContent = (props: Props) => {
+const Content = (props: Props) => {
   const { content } = props;
   return (
     <View style={styles.container}>
@@ -16,7 +16,7 @@ const DialogContent = (props: Props) => {
   );
 };
 
-export default DialogContent;
+export default Content;
 
 const styles = StyleSheet.create({
   container: {
