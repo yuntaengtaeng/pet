@@ -1,16 +1,17 @@
 import React from 'react';
-import { Pressable, Text, StyleSheet } from 'react-native';
+import { Pressable, Text, StyleSheet, ViewStyle } from 'react-native';
 import Color from '../../../constants/color';
 import TYPOS from '../typo';
 
 type Type = 'primary' | 'secondary';
 
-interface Props {
+export interface Props {
   label: string;
   buttonType?: Type;
   width?: number;
   disabled?: boolean;
   onPressHandler?: () => void;
+  style?: ViewStyle;
 }
 
 const TextButton = (props: Props) => {
@@ -20,6 +21,7 @@ const TextButton = (props: Props) => {
     buttonType = 'primary',
     disabled,
     onPressHandler,
+    style,
   } = props;
 
   return (
@@ -38,6 +40,8 @@ const TextButton = (props: Props) => {
         disabled
           ? styles[`${buttonType}Disabled`]
           : styles[`${buttonType}${pressed ? 'Pressed' : ''}`],
+        ,
+        style,
       ]}
     >
       <Text
