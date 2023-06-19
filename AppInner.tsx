@@ -10,6 +10,7 @@ import FillProfile from './src/screens/auth/FillProfile';
 import BottomNavigation from './src/screens/BottomNavigation';
 import Gallery from './src/screens/Gallery';
 import Camera from './src/screens/Camera';
+import EditProduct from './src/screens/EditProduct';
 
 import Loading from './src/components/ui/Loading';
 import { LoadingState } from './src/store/atoms';
@@ -65,6 +66,11 @@ const AppInner = () => {
             <Stack.Screen
               name="Camera"
               component={Camera}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditProduct"
+              component={EditProduct}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
