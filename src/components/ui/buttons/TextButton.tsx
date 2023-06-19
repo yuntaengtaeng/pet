@@ -61,13 +61,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   primaryLabel: {
-    color: Color.white,
+    color: Color.primary900,
   },
   primary: {
-    backgroundColor: Color.primary600,
+    backgroundColor: Color.white,
   },
   primaryPressed: {
-    backgroundColor: Color.primary800,
+    backgroundColor: Color.primary50,
   },
   secondary: {
     backgroundColor: Color.white,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.primary50,
   },
   secondaryLabel: {
-    color: Color.primary900,
+    color: Color.neutral2,
   },
   primaryDisabled: {
     backgroundColor: Color.neutral5,
