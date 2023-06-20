@@ -1,6 +1,5 @@
 import { atom } from 'recoil';
 import { User } from '../types/interface';
-
 export const LoadingState = atom({
   key: 'LoadingState',
   default: false,
@@ -12,7 +11,7 @@ export const UserState = atom<User>({
     email: '',
     nickname: '',
     profileImage: '',
-    petType: '',
+    petType: 'dog',
     address: '',
     accessToken: '',
     refreshToken: '',
