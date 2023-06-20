@@ -9,13 +9,16 @@ import Button from '../components/ui/buttons/Button';
 import ChipContainer from '../components/ui/ChipContainer';
 import TextArea from '../components/ui/inputs/TextArea';
 import Dropdown from '../components/ui/dropdown/Dropdown';
-import { useRecoilValue } from 'recoil';
-import { UserState } from '../store/atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { LoadingState, UserState } from '../store/atoms';
 import * as MediaLibrary from 'expo-media-library';
 import { DOG_CATEGORY, CAT_CATEGORY } from '../constants/category';
 import PhotoSelector from '../components/editProduct/PhotoSelector';
 import Won from '../components/ui/icons/Won';
 import Color from '../constants/color';
+import axios from 'axios';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/navigation';
 
 interface Data {
   petType: '강아지' | '고양이' | '전체';
@@ -27,9 +30,15 @@ interface Data {
   productPrice: string;
 }
 
-const EditProduct = (): JSX.Element => {
+export type EditProductScreenProps = StackScreenProps<
+  RootStackParamList,
+  'EditProduct'
+>;
+
+const EditProduct = ({ navigation, route }: EditProductScreenProps) => {
   const user = useRecoilValue(UserState);
   const [category, setCategory] = useState<string[]>([]);
+  const setIsLoading = useSetRecoilState(LoadingState);
 
   const [data, updateData] = useReducer(
     (prev: Data, next: Partial<Data>) => {
@@ -50,6 +59,48 @@ const EditProduct = (): JSX.Element => {
     updateData({ category: '전체' });
     setCategory(data.petType === '강아지' ? DOG_CATEGORY : CAT_CATEGORY);
   }, [data.petType]);
+
+  const onSubmit = async () => {
+    const formData = new FormData();
+
+    formData.append('topCategory', data.petType);
+    formData.append('subCategory', data.category);
+    formData.append('title', data.productName);
+    formData.append('description', data.productDescription);
+    formData.append(
+      'price',
+      data.isFreeGiveaway ? '0' : data.productPrice.replace(/,/g, '')
+    );
+
+    if (data.images) {
+      for await (const photo of data.images) {
+        const { localUri } = await MediaLibrary.getAssetInfoAsync(photo);
+        formData.append('itemImages', {
+          uri: localUri,
+          type: 'image/jpeg',
+          name: 'photo.jpg',
+        } as any);
+      }
+    }
+
+    setIsLoading(true);
+
+    try {
+      const {
+        data: { data },
+      } = await axios.post('/board/used-item', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      navigation.pop();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -114,7 +165,6 @@ const EditProduct = (): JSX.Element => {
             }
             layoutStyle={{ marginTop: 16 }}
             onChangeHandler={(value: string) => {
-              console.log(value);
               updateData({ productPrice: value });
             }}
           />
@@ -133,7 +183,7 @@ const EditProduct = (): JSX.Element => {
         <Button
           label="등록하기"
           buttonType="primary"
-          onPressHandler={() => {}}
+          onPressHandler={onSubmit}
         />
       </View>
     </>
