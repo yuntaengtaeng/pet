@@ -27,12 +27,12 @@ export type DogCategory = DefaultCategory | '의류/산책용품';
 export type CatCategory = DefaultCategory | '캣타워/하우스';
 
 export interface Product {
-  id: 'string';
-  title: 'string';
-  price: 'string';
-  timeDelta: 'string';
-  image: 'string';
-  address: 'string';
+  id: string;
+  title: string;
+  price: string;
+  timeDelta: string;
+  image: string;
+  address: string;
   likeCount: number;
   chatCount: number;
   salesStatus: '판매중' | '예약중';
