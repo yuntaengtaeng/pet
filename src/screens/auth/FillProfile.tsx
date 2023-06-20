@@ -18,6 +18,7 @@ import { User } from '../../types/interface';
 import { useSetRecoilState } from 'recoil';
 import { UserState, LoadingState } from '../../store/atoms';
 import { PetType } from '../../types/interface';
+import useInputState from '../../hooks/useInputState';
 
 export type FillProfileScreenProps = StackScreenProps<
   RootStackParamList,
@@ -27,7 +28,7 @@ export type FillProfileScreenProps = StackScreenProps<
 const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
   const { location, address, email } = route.params;
 
-  const [nickname, setNickname] = useState<string>('');
+  const [nickname, setNickname] = useInputState('');
   const [selectedPetType, setSelectedPetType] = useState<PetType | ''>('dog');
   const [photo, setPhoto] = useState<MediaLibrary.Asset | null>(null);
   const debouncedValue = useDebounce<string>(nickname, 300);
@@ -162,9 +163,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
             value={nickname}
             isError={errorLog.isError}
             errorMessage={errorLog.message}
-            onChangeHandler={(value: string) => {
-              setNickname(value);
-            }}
+            onChangeHandler={setNickname}
           />
         </View>
         <View>

@@ -21,6 +21,7 @@ import { LoadingState } from '../../store/atoms';
 import axios from 'axios';
 import Guide from './Address/Guide';
 import Search from '../ui/icons/Search';
+import useInputState from '../../hooks/useInputState';
 
 interface Address extends LocationType {
   address: string;
@@ -40,7 +41,7 @@ const Address = ({ addressSelectHandler }: Props) => {
   const [location, setLocaion] = useState<LocationType | null>(null);
   const [nearbyAddressList, setNearbyAddressList] = useState<Address[]>([]);
   const [searchAddressList, setSearchAddressList] = useState<Address[]>([]);
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useInputState('');
   const [isPermissionError, setIsPermissionError] = useState<boolean>(false);
   const [isLoadingLocationInfo, setIsLoadingLocationInfo] = useState(true);
   const debouncedValue = useDebounce<string>(search, 600);
@@ -197,9 +198,7 @@ const Address = ({ addressSelectHandler }: Props) => {
             아래 목록에 없다면 검색해주세요.
           </Text>
           <InputField
-            onChangeHandler={(value: string) => {
-              setSearch(value);
-            }}
+            onChangeHandler={setSearch}
             placeholder="동명(읍, 면)으로 검색 (ex. 신대방동)"
             leftIcon={(hasFocus) => {
               return (
