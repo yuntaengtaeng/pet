@@ -101,14 +101,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     borderColor: Color.neutral3,
-    alignItems: 'center',
+    paddingVertical: 12,
   },
   input: {
     flex: 1,
     textAlign: 'left',
     height: '100%',
     backgroundColor: Color.white,
-    paddingHorizontal: 12,
+    marginHorizontal: 16,
     color: Color.neutral1,
   },
   errorInput: {
