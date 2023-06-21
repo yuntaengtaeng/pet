@@ -21,13 +21,12 @@ import { LoadingState, UserState } from '../../store/atoms';
 import { DogCategory, CatCategory, Product } from '../../types/interface';
 import { DOG_CATEGORY, CAT_CATEGORY } from '../../constants/category';
 import axios from 'axios';
+import useDidUpdate from '../../hooks/useDidUpdate';
 
 type HomeScreenProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabNavigatorParamList, 'Home'>,
   StackNavigationProp<RootStackParamList>
 >;
-
-const INIT_CATEGORY = '전체';
 
 const LIMIT = 20;
 
@@ -37,7 +36,7 @@ const Home = () => {
   type SelectedCategory = typeof isDog extends true ? DogCategory : CatCategory;
   const user = useRecoilValue(UserState);
   const [petType, setPetType] = useState<PetType>(user.petType);
-  const [category, setCategory] = useState<SelectedCategory>(INIT_CATEGORY);
+  const [category, setCategory] = useState<SelectedCategory>('전체');
   const [page, setPage] = useState(0);
   const [list, setList] = useState<Product[]>([]);
   const setLoading = useSetRecoilState(LoadingState);
@@ -46,10 +45,18 @@ const Home = () => {
     setPetType((prev) => (prev === 'dog' ? 'cat' : 'dog'));
   };
 
-  const requestProduct = async (isPageResetting?: boolean) => {
+  const requestProduct = async ({
+    isPageResetting,
+    initCategory,
+  }: {
+    isPageResetting?: boolean;
+    initCategory?: '전체';
+  } = {}) => {
+    const categoryValue = initCategory || category;
+
     const queryString = Object.entries({
       topCategory: { dog: '강아지', cat: '고양이' }[petType],
-      ...(category !== '전체' && { subCategory: category }),
+      ...(categoryValue !== '전체' && { subCategory: categoryValue }),
       limit: LIMIT,
       page: isPageResetting ? 0 : page,
     })
@@ -81,13 +88,22 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    requestProduct(true);
+  useDidUpdate(() => {
+    setCategory('전체');
+    requestProduct({ isPageResetting: true, initCategory: '전체' });
+  }, [petType]);
+
+  useDidUpdate(() => {
+    requestProduct({ isPageResetting: true });
   }, [category]);
 
   useEffect(() => {
-    setCategory(INIT_CATEGORY);
-  }, [petType]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      requestProduct();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>
