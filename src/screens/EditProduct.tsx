@@ -60,6 +60,12 @@ const EditProduct = ({ navigation, route }: EditProductScreenProps) => {
     setCategory(data.petType === '강아지' ? DOG_CATEGORY : CAT_CATEGORY);
   }, [data.petType]);
 
+  useEffect(() => {
+    if (data.isFreeGiveaway) {
+      updateData({ productPrice: '' });
+    }
+  }, [data.isFreeGiveaway]);
+
   const onSubmit = async () => {
     const formData = new FormData();
 
