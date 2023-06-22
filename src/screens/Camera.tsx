@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Pressable, AppState } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import Header from '../components/ui/Header';
@@ -7,6 +7,8 @@ import Container from '../components/layout/Container';
 import Button from '../components/ui/buttons/Button';
 import { RootStackParamList } from '../types/navigation';
 import { StackScreenProps } from '@react-navigation/stack';
+import ArrowSwap from '../components/ui/icons/ArrowSwap';
+import Color from '../constants/color';
 
 export type CameraScreenProps = StackScreenProps<RootStackParamList, 'Camera'>;
 
@@ -88,11 +90,7 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
                 }}
               >
                 <Pressable style={{}} onPress={changeType}>
-                  <Text
-                    style={{ fontSize: 18, marginBottom: 10, color: 'white' }}
-                  >
-                    전환
-                  </Text>
+                  <ArrowSwap size={36} color={Color.white} />
                 </Pressable>
               </View>
             </Camera>
