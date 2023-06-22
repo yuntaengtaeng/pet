@@ -17,7 +17,7 @@ export type PetType = 'dog' | 'cat';
 
 export type DefaultCategory =
   | '전체'
-  | '사료&간식'
+  | '사료/간식'
   | '영양제'
   | '배변/미용'
   | '장난감'

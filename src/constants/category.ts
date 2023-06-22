@@ -2,7 +2,7 @@ import { DogCategory, CatCategory } from '../types/interface';
 
 export const DOG_CATEGORY: DogCategory[] = [
   '전체',
-  '사료&간식',
+  '사료/간식',
   '영양제',
   '배변/미용',
   '장난감',
@@ -12,7 +12,7 @@ export const DOG_CATEGORY: DogCategory[] = [
 
 export const CAT_CATEGORY: CatCategory[] = [
   '전체',
-  '사료&간식',
+  '사료/간식',
   '영양제',
   '배변/미용',
   '장난감',
