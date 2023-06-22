@@ -68,6 +68,12 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
     }
   }, [debouncedValue]);
 
+  useEffect(() => {
+    if (selectedPetType) {
+      setIsChecked(false);
+    }
+  }, [selectedPetType]);
+
   const onSubmit = async () => {
     if (errorLog.isError) {
       return;
