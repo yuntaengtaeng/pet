@@ -20,6 +20,8 @@ import { RootStackParamList } from '../types/navigation';
 import { useRecoilState } from 'recoil';
 import { LoadingState } from '../store/atoms';
 import Check from '../components/ui/icons/Check';
+import useModal from '../hooks/useModal';
+import Dialog from '../components/ui/Dialog';
 
 export type GalleryScreenProps = StackScreenProps<
   RootStackParamList,
@@ -32,6 +34,8 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [endCursor, setEndCursor] = useState<string | undefined>(undefined);
   const { limit, callback, selectedPhotoIds = [] } = route.params;
+
+  const { isVisible, openModal, closeModal } = useModal();
 
   const [selectedPhtos, setSelectedPhtos] = useState<MediaLibrary.Asset[]>([
     ...selectedPhotoIds,
@@ -125,6 +129,8 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
               const clone = [...selectedPhtos];
               clone.push(item);
               setSelectedPhtos(clone);
+            } else {
+              openModal();
             }
           }
         }}
@@ -228,6 +234,21 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.1}
       />
+      <Dialog isOpened={isVisible}>
+        <Dialog.Content
+          content={`사진은 최대 ${limit}장만 선택할 수 있습니다.`}
+        />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '확인',
+              onPressHandler: () => {
+                closeModal();
+              },
+            },
+          ]}
+        />
+      </Dialog>
     </>
   );
 };
