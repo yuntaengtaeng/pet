@@ -99,11 +99,11 @@ const Home = () => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      requestProduct();
+      requestProduct({ isPageResetting: true });
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, category]);
 
   return (
     <>
