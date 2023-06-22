@@ -7,11 +7,11 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import Color from '../../../constants/color';
 import useModal from '../../../hooks/useModal';
 import ListValue from './ListValue';
-import { ScrollView } from 'react-native-gesture-handler';
 import SHADOWS from '../shadow';
 
 interface Props {
