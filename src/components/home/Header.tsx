@@ -39,10 +39,14 @@ const Header = ({ petType, togglePetType }: Props) => {
   };
 
   useEffect(() => {
+    if (!isVisible) {
+      return;
+    }
+
     addressTextRef.current?.measure((_x, _y, _width, height, pageX, pageY) => {
       setDropdownTop(pageY + height + 8);
     });
-  }, [addressTextRef.current]);
+  }, [isVisible]);
 
   return (
     <View
