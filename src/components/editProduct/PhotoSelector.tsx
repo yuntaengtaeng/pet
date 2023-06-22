@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Pressable, Text, Image, StyleSheet, Modal } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Pressable, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import Camera from '../ui/icons/Camera';
 import TYPOS from '../ui/typo';
 import Color from '../../constants/color';
@@ -55,7 +54,10 @@ const PhotoSelector = ({ selectedPhotos, updatePhotos }: Props) => {
         >{`${selectedPhotos.length}/${LIMIT}`}</Text>
       </Pressable>
       {selectedPhotos.map((photo) => (
-        <View key={photo.id} style={[styles.box, { position: 'relative' }]}>
+        <Pressable
+          key={photo.id}
+          style={[styles.box, { position: 'relative' }]}
+        >
           <Image
             source={{ uri: photo.uri }}
             style={{ flex: 1, resizeMode: 'cover' }}
@@ -87,7 +89,7 @@ const PhotoSelector = ({ selectedPhotos, updatePhotos }: Props) => {
           >
             <Close size={20} color={Color.white} />
           </Pressable>
-        </View>
+        </Pressable>
       ))}
     </ScrollView>
   );
