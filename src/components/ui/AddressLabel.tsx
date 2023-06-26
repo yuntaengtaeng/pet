@@ -8,9 +8,10 @@ import Close from './icons/Close';
 interface Props {
   address: string;
   isSelected?: boolean;
+  onClosePressHandler?: () => void;
 }
 
-const AddressLabel = ({ address, isSelected }: Props) => {
+const AddressLabel = ({ address, isSelected, onClosePressHandler }: Props) => {
   return (
     <View
       style={[
@@ -32,7 +33,7 @@ const AddressLabel = ({ address, isSelected }: Props) => {
       >
         {address}
       </Text>
-      <Pressable>
+      <Pressable onPress={onClosePressHandler}>
         <Close size={24} color={isSelected ? Color.primary700 : Color.black} />
       </Pressable>
     </View>
