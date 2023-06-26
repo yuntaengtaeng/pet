@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Pressable } from 'react-native';
+import { View, Pressable, Image, Text } from 'react-native';
 import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import Header from '../components/ui/Header';
@@ -9,6 +9,7 @@ import { RootStackParamList } from '../types/navigation';
 import { StackScreenProps } from '@react-navigation/stack';
 import ArrowSwap from '../components/ui/icons/ArrowSwap';
 import Color from '../constants/color';
+import TYPOS from '../components/ui/typo';
 
 export type CameraScreenProps = StackScreenProps<RootStackParamList, 'Camera'>;
 
@@ -16,6 +17,7 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
   const cameraRef = useRef<Camera | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [type, setType] = useState<CameraType>(CameraType.front);
+  const [photo, setPhoto] = useState<CameraCapturedPicture | null>(null);
   const { callback } = route.params;
 
   const changeType = () => {
@@ -30,7 +32,7 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
     if (hasPermission) {
       if (cameraRef.current) {
         const photo = await cameraRef.current.takePictureAsync();
-        savePicture(photo);
+        setPhoto(photo);
       }
     } else {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -38,22 +40,27 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
     }
   };
 
-  const savePicture = async (photo: CameraCapturedPicture) => {
-    const { status } = await MediaLibrary.requestPermissionsAsync();
+  const savePicture = async () => {
+    if (photo) {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
 
-    if (status === 'granted') {
-      const asset = await MediaLibrary.createAssetAsync(photo.uri);
-      MediaLibrary.createAlbumAsync('Camera', asset, false)
-        .then(() => {
-          console.log('Photo saved to camera roll');
-        })
-        .catch((error) => {
-          console.log(
+      if (status === 'granted') {
+        const asset = await MediaLibrary.createAssetAsync(photo.uri);
+        retakePicture();
+        try {
+          await MediaLibrary.createAlbumAsync('Camera', asset, false);
+        } catch (error) {
+          console.error(
             'An error occurred while saving the photo to camera roll:',
             error
           );
-        });
+        }
+      }
     }
+  };
+
+  const retakePicture = () => {
+    setPhoto(null);
   };
 
   useEffect(() => {
@@ -77,24 +84,61 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
       <Container>
         {hasPermission && (
           <>
-            <Camera
-              style={{ flex: 1, position: 'relative' }}
-              ref={cameraRef}
-              type={type}
-            >
-              <View
-                style={{
-                  position: 'absolute',
-                  right: 16,
-                  top: 16,
-                }}
-              >
-                <Pressable style={{}} onPress={changeType}>
-                  <ArrowSwap size={36} color={Color.white} />
-                </Pressable>
-              </View>
-            </Camera>
-            <Button label="촬영" onPressHandler={takePicture} />
+            {!photo ? (
+              <>
+                <Camera
+                  style={{ flex: 1, position: 'relative' }}
+                  ref={cameraRef}
+                  type={type}
+                >
+                  <View
+                    style={{
+                      position: 'absolute',
+                      right: 16,
+                      top: 16,
+                    }}
+                  >
+                    <Pressable style={{}} onPress={changeType}>
+                      <ArrowSwap size={36} color={Color.white} />
+                    </Pressable>
+                  </View>
+                </Camera>
+                <Button label="촬영" onPressHandler={takePicture} />
+              </>
+            ) : (
+              <>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={{ uri: photo.uri }}
+                    style={{ flex: 1, width: '100%' }}
+                    resizeMode="contain"
+                  />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: '100%',
+                      justifyContent: 'space-between',
+                      // alignContent: 'space-between',
+                      marginTop: 16,
+                      paddingHorizontal: 16,
+                    }}
+                  >
+                    <Pressable onPress={retakePicture}>
+                      <Text style={TYPOS.headline3}>다시 찍기</Text>
+                    </Pressable>
+                    <Pressable onPress={savePicture}>
+                      <Text style={TYPOS.headline3}>저장</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </>
+            )}
           </>
         )}
       </Container>
