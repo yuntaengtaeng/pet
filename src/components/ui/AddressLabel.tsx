@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { Text, Pressable, ViewStyle } from 'react-native';
 import SHADOWS from './shadow';
 import TYPOS from './typo';
 import Color from '../../constants/color';
@@ -9,11 +9,20 @@ interface Props {
   address: string;
   isSelected?: boolean;
   onClosePressHandler?: () => void;
+  onPressHandler?: () => void;
+  style?: ViewStyle;
 }
 
-const AddressLabel = ({ address, isSelected, onClosePressHandler }: Props) => {
+const AddressLabel = ({
+  address,
+  isSelected,
+  onClosePressHandler,
+  onPressHandler,
+  style,
+}: Props) => {
   return (
-    <View
+    <Pressable
+      onPress={onPressHandler}
       style={[
         SHADOWS.shadow4,
         {
@@ -23,6 +32,7 @@ const AddressLabel = ({ address, isSelected, onClosePressHandler }: Props) => {
           justifyContent: 'space-between',
           backgroundColor: isSelected ? Color.primary50 : Color.white,
         },
+        style,
       ]}
     >
       <Text
@@ -36,7 +46,7 @@ const AddressLabel = ({ address, isSelected, onClosePressHandler }: Props) => {
       <Pressable onPress={onClosePressHandler}>
         <Close size={24} color={isSelected ? Color.primary700 : Color.black} />
       </Pressable>
-    </View>
+    </Pressable>
   );
 };
 
