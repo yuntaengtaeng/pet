@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -13,139 +13,194 @@ import Color from '../../constants/color';
 import TYPOS from '../ui/typo';
 import Alarm from '../ui/icons/Alarm';
 import Search from '../ui/icons/Search';
-import { useRecoilValue } from 'recoil';
-import { UserState } from '../../store/atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { LoadingState, UserState } from '../../store/atoms';
 import ArrowDown from '../ui/icons/ArrowDown';
 import ArrowUp from '../ui/icons/ArrowUp';
 import ArrowSwap from '../ui/icons/ArrowSwap';
-import { PetType } from '../../types/interface';
 import useModal from '../../hooks/useModal';
 import SHADOWS from '../ui/shadow';
+import { UserAddress } from '../../types/interface';
+import axios from 'axios';
+import { HomeDispatchContext } from './HomeDispatchContext';
+import { HomeStateContext } from './HomeStateContext';
 
-interface Props {
-  petType: PetType;
-  togglePetType: () => void;
-}
-
-const Header = ({ petType, togglePetType }: Props) => {
+const Header = () => {
   const { address } = useRecoilValue(UserState);
   const { isVisible, openModal, closeModal } = useModal();
   const [dropdownTop, setDropdownTop] = useState(0);
+  const [userAddress, setUserAddress] = useState<UserAddress[]>([]);
 
+  const setIsLoading = useSetRecoilState(LoadingState);
+
+  const showBottomSheet = useRef<boolean>(false);
   const addressTextRef = useRef<Text | null>(null);
+
+  const petType = useContext(HomeStateContext);
+  const dispatch = useContext(HomeDispatchContext);
 
   const openModalHandler = () => {
     openModal();
   };
 
+  const getUserAddress = async () => {
+    setIsLoading(true);
+
+    try {
+      const {
+        data: { addressInfoList },
+      } = await axios.get<{ addressInfoList: UserAddress[] }>(
+        '/user/addresses'
+      );
+      setUserAddress(addressInfoList);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
+    let timer: string | number | NodeJS.Timeout | undefined;
+
     if (!isVisible) {
+      setUserAddress([]);
+      if (showBottomSheet.current) {
+        timer = setTimeout(() => {
+          dispatch?.bottomSheetController.open();
+        }, 300);
+      }
+
       return;
     }
 
     addressTextRef.current?.measure((_x, _y, _width, height, pageX, pageY) => {
       setDropdownTop(pageY + height + 8);
     });
+
+    getUserAddress();
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [isVisible]);
 
   return (
-    <View
-      style={{
-        height: 56,
-        paddingHorizontal: 16,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: Color.white,
-      }}
-    >
-      <TouchableOpacity
-        activeOpacity={1}
-        hitSlop={{ top: 30, left: 30, bottom: 30, right: 30 }}
-        onPress={togglePetType}
-        style={styles.pressable}
-      >
-        <Text style={TYPOS.headline1}>{petType === 'dog' ? '🐶' : '😺'}</Text>
-        <View style={styles.absoluteContainer}>
-          <ArrowSwap size={16} color={Color.white} />
-        </View>
-      </TouchableOpacity>
+    <>
       <View
         style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
+          height: 56,
+          paddingHorizontal: 16,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           alignItems: 'center',
+          backgroundColor: Color.white,
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text
-            style={[TYPOS.headline3]}
-            onPress={openModalHandler}
-            ref={addressTextRef}
-          >
-            {address}
-          </Text>
-          {isVisible ? (
-            <ArrowUp size={16} style={{ marginLeft: 4 }} />
-          ) : (
-            <ArrowDown size={16} style={{ marginLeft: 4 }} />
-          )}
-        </View>
-        <Modal visible={isVisible} transparent animationType="fade">
-          <TouchableWithoutFeedback onPress={closeModal}>
-            <View
-              style={[
-                {
-                  flex: 1,
-                  top: dropdownTop,
-                  left: 0,
-                  right: 0,
-                  alignItems: 'center',
-                },
-                SHADOWS.shadow4,
-              ]}
+        <TouchableOpacity
+          activeOpacity={1}
+          hitSlop={{ top: 30, left: 30, bottom: 30, right: 30 }}
+          onPress={dispatch?.togglePetType}
+          style={styles.pressable}
+        >
+          <Text style={TYPOS.headline1}>{petType === 'dog' ? '🐶' : '😺'}</Text>
+          <View style={styles.absoluteContainer}>
+            <ArrowSwap size={16} color={Color.white} />
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            alignItems: 'center',
+          }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text
+              style={[TYPOS.headline3]}
+              onPress={openModalHandler}
+              ref={addressTextRef}
             >
-              <Pressable
-                onPress={() => {}}
-                style={{
-                  width: 146,
-                  borderRadius: 8,
-                  backgroundColor: Color.white,
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
+              {address}
+            </Text>
+            {isVisible ? (
+              <ArrowUp size={16} style={{ marginLeft: 4 }} />
+            ) : (
+              <ArrowDown size={16} style={{ marginLeft: 4 }} />
+            )}
+          </View>
+          <Modal visible={isVisible} transparent animationType="fade">
+            <TouchableWithoutFeedback
+              onPress={() => {
+                showBottomSheet.current = false;
+                closeModal();
+              }}
+            >
+              <View
+                style={[
+                  {
+                    flex: 1,
+                    top: dropdownTop,
+                    left: 0,
+                    right: 0,
+                    alignItems: 'center',
+                    backgroundColor: 'transparent',
+                  },
+                  SHADOWS.shadow4,
+                ]}
               >
-                <Pressable>
-                  <Text
-                    style={[
-                      TYPOS.body1,
-                      { color: Color.neutral1, paddingVertical: 12 },
-                    ]}
+                <Pressable
+                  onPress={() => {}}
+                  style={{
+                    width: 146,
+                    borderRadius: 8,
+                    backgroundColor: Color.white,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  {userAddress.map((address) => (
+                    <Pressable key={address.id}>
+                      <Text
+                        style={[
+                          TYPOS.body1,
+                          {
+                            color: address.isLastSelected
+                              ? Color.primary700
+                              : Color.neutral1,
+                            paddingVertical: 12,
+                          },
+                        ]}
+                      >
+                        {address.address}
+                      </Text>
+                    </Pressable>
+                  ))}
+                  <Pressable
+                    onPress={() => {
+                      closeModal();
+                      showBottomSheet.current = true;
+                    }}
                   >
-                    신림동
-                  </Text>
+                    <Text
+                      style={[
+                        TYPOS.body1,
+                        { color: Color.neutral1, paddingVertical: 12 },
+                      ]}
+                    >
+                      내 동네 설정
+                    </Text>
+                  </Pressable>
                 </Pressable>
-                <Pressable>
-                  <Text
-                    style={[
-                      TYPOS.body1,
-                      { color: Color.neutral1, paddingVertical: 12 },
-                    ]}
-                  >
-                    내 동네 설정
-                  </Text>
-                </Pressable>
-              </Pressable>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
+              </View>
+            </TouchableWithoutFeedback>
+          </Modal>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Alarm size={24} />
+          <Search size={24} />
+        </View>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Alarm size={24} />
-        <Search size={24} />
-      </View>
-    </View>
+    </>
   );
 };
 
