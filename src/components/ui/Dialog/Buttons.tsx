@@ -12,7 +12,11 @@ const Buttons = ({ buttons }: Props) => {
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
       {buttons.map((button) => (
-        <TextButton {...button} key={button.label} style={{ marginLeft: 8 }} />
+        <TextButton
+          {...button}
+          key={button.label}
+          style={{ marginLeft: 8, paddingHorizontal: 8 }}
+        />
       ))}
     </View>
   );
