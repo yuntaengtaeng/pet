@@ -37,3 +37,9 @@ export interface Product {
   chatCount: number;
   salesStatus: '판매중' | '예약중';
 }
+
+export interface UserAddress {
+  id: string;
+  address: string;
+  isLastSelected?: boolean;
+}
