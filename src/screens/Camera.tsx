@@ -16,7 +16,7 @@ export type CameraScreenProps = StackScreenProps<RootStackParamList, 'Camera'>;
 const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
   const cameraRef = useRef<Camera | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [type, setType] = useState<CameraType>(CameraType.front);
+  const [type, setType] = useState<CameraType>(CameraType.back);
   const [photo, setPhoto] = useState<CameraCapturedPicture | null>(null);
   const { callback } = route.params;
 
