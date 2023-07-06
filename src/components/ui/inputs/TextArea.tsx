@@ -19,6 +19,7 @@ interface Props {
   onChangeHandler?: (vatlue: string) => void;
   placeholder?: string;
   layoutStyle?: ViewStyle;
+  fieldStyle?: ViewStyle;
   disabled?: boolean;
   onSubmitEditingHandler?: () => void;
 }
@@ -31,6 +32,7 @@ const TextArea = (props: Props) => {
     onChangeHandler,
     placeholder,
     layoutStyle,
+    fieldStyle,
     disabled,
     onSubmitEditingHandler,
   } = props;
@@ -53,6 +55,7 @@ const TextArea = (props: Props) => {
               borderColor: Color.neutral4,
             }),
           },
+          fieldStyle,
         ]}
       >
         <TextInput
@@ -96,7 +99,6 @@ export default TextArea;
 
 const styles = StyleSheet.create({
   fieldContainer: {
-    height: 112,
     flexDirection: 'row',
     borderRadius: 4,
     borderWidth: 1,
