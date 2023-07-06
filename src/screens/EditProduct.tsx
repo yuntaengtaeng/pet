@@ -56,8 +56,10 @@ const EditProduct = ({ navigation, route }: EditProductScreenProps) => {
   );
 
   useEffect(() => {
-    updateData({ category: '전체' });
-    setCategory(data.petType === '강아지' ? DOG_CATEGORY : CAT_CATEGORY);
+    updateData({ category: '' });
+    const categories = data.petType === '강아지' ? DOG_CATEGORY : CAT_CATEGORY;
+    categories.shift();
+    setCategory(categories);
   }, [data.petType]);
 
   useEffect(() => {
@@ -129,6 +131,7 @@ const EditProduct = ({ navigation, route }: EditProductScreenProps) => {
             list={category}
             layoutStyle={{ marginTop: 24 }}
             selectedLabel={data.category}
+            placeholder="카테고리"
             onLabelClickHandler={(label) => {
               updateData({ category: label });
             }}
