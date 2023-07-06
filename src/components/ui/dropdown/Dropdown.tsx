@@ -20,6 +20,7 @@ interface Props {
   selectedLabel?: string;
   layoutStyle?: ViewStyle;
   disabled?: boolean;
+  placeholder?: string;
 }
 
 const FULL_HEIGHT = Dimensions.get('window').height;
@@ -31,6 +32,7 @@ const Dropdown = ({
   onLabelClickHandler,
   layoutStyle,
   disabled,
+  placeholder,
 }: Props) => {
   const { isVisible, openModal, closeModal } = useModal();
   const [dropdownTop, setDropdownTop] = useState(0);
@@ -83,7 +85,14 @@ const Dropdown = ({
           },
         ]}
       >
-        <ListValue label={selectedLabel} />
+        <ListValue
+          label={selectedLabel}
+          {...(!selectedLabel &&
+            placeholder && {
+              disabled: true,
+              label: placeholder,
+            })}
+        />
       </TouchableOpacity>
       <Modal visible={isVisible} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={closeModal}>
