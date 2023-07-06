@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { View, Text } from 'react-native';
-import Container from '../components/layout/Container';
+import ScrollContainer from '../components/layout/ScrollContainer';
 import Header from '../components/ui/Header';
 import InputField from '../components/ui/inputs/InputField';
 import UiCheckbox from '../components/ui/UiCheckbox';
@@ -111,7 +111,7 @@ const EditProduct = ({ navigation, route }: EditProductScreenProps) => {
   return (
     <>
       <Header title="중고거래 등록" />
-      <Container style={{ paddingHorizontal: 16 }}>
+      <ScrollContainer style={{ paddingHorizontal: 16 }}>
         <View>
           <ChipContainer
             chipStyle={{ marginRight: 8 }}
@@ -185,7 +185,7 @@ const EditProduct = ({ navigation, route }: EditProductScreenProps) => {
             <Text style={TYPOS.body2}>무료나눔</Text>
           </UiCheckbox>
         </View>
-      </Container>
+      </ScrollContainer>
       <View style={{ paddingHorizontal: 16 }}>
         <Button
           label="등록하기"
