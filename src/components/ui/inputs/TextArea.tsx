@@ -68,6 +68,10 @@ const TextArea = (props: Props) => {
                 color: Color.neutral4,
               }),
             },
+            TYPOS.body1,
+            {
+              lineHeight: undefined,
+            },
           ]}
           value={value}
           editable={!disabled}

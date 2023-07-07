@@ -74,6 +74,10 @@ const InputField = (props: Props) => {
                 color: Color.neutral4,
               }),
             },
+            TYPOS.body1,
+            {
+              lineHeight: undefined,
+            },
           ]}
           value={value}
           editable={!disabled}
@@ -120,10 +124,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
+    paddingHorizontal: 16,
     flex: 1,
     textAlign: 'left',
     backgroundColor: Color.white,
-    paddingHorizontal: 12,
     color: Color.neutral1,
   },
   errorInput: {
