@@ -9,7 +9,7 @@ import { HomeDispatchContext } from './HomeDispatchContext';
 import { UserAddress } from '../../types/interface';
 import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
-import { LoadingState } from '../../store/atoms';
+import { LoadingState, UserState } from '../../store/atoms';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
@@ -22,6 +22,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
   const dispatch = useContext(HomeDispatchContext);
   const setIsLoading = useSetRecoilState(LoadingState);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const setUser = useSetRecoilState(UserState);
 
   const [userAddressSettings, setUserAddressSettings] = useState<UserAddress[]>(
     []
@@ -47,7 +48,15 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
     setIsLoading(true);
 
     try {
-      const { data } = await axios.patch(`/user/addresses/${id}`);
+      const {
+        data: { addressInfoList, pickAddress },
+      } = await axios.patch<{
+        addressInfoList: UserAddress[];
+        pickAddress: string;
+      }>(`/user/addresses/${id}`);
+
+      setUserAddressSettings(addressInfoList);
+      setUser((prev) => ({ ...prev, address: pickAddress }));
     } finally {
       setIsLoading(false);
     }
@@ -57,7 +66,13 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
     setIsLoading(true);
 
     try {
-      const { data } = await axios.delete(`/user/addresses/${id}`);
+      const {
+        data: { addressInfoList },
+      } = await axios.delete<{ addressInfoList: UserAddress[] }>(
+        `/user/addresses/${id}`
+      );
+
+      setUserAddressSettings(addressInfoList);
     } catch (error) {
       console.log(error);
     } finally {
