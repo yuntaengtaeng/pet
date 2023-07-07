@@ -5,9 +5,9 @@ import Container from '../layout/Container';
 import ChipContainer from '../ui/ChipContainer';
 import ProductCard from '../ui/ProductCard';
 import axios from 'axios';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useDidUpdate from '../../hooks/useDidUpdate';
-import { LoadingState } from '../../store/atoms';
+import { LoadingState, UserState } from '../../store/atoms';
 import {
   DogCategory,
   CatCategory,
@@ -23,6 +23,7 @@ const LIMIT = 20;
 
 const ProductList = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const user = useRecoilValue(UserState);
 
   const isDog: boolean = true;
   type SelectedCategory = typeof isDog extends true ? DogCategory : CatCategory;
@@ -92,6 +93,10 @@ const ProductList = () => {
 
     return unsubscribe;
   }, [navigation, category]);
+
+  useDidUpdate(() => {
+    requestProduct({ isPageResetting: true });
+  }, [user.address]);
 
   return (
     <Container>
