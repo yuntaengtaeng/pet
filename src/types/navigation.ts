@@ -20,6 +20,7 @@ export type RootStackParamList = {
     callback: () => void;
   };
   EditProduct: undefined;
+  AddressModify: undefined;
 };
 
 export type TabNavigatorParamList = {
