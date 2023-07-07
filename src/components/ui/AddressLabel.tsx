@@ -24,13 +24,10 @@ const AddressLabel = ({
     <Pressable
       onPress={onPressHandler}
       style={[
-        SHADOWS.shadow4,
         {
-          padding: 16,
-          borderRadius: 4,
+          paddingVertical: 16,
           flexDirection: 'row',
           justifyContent: 'space-between',
-          backgroundColor: isSelected ? Color.primary50 : Color.white,
         },
         style,
       ]}
