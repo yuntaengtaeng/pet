@@ -10,6 +10,9 @@ import { UserAddress } from '../../types/interface';
 import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../types/navigation';
 
 interface Props {
   isVisibleBottomSheet: boolean;
@@ -18,6 +21,7 @@ interface Props {
 const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
   const dispatch = useContext(HomeDispatchContext);
   const setIsLoading = useSetRecoilState(LoadingState);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [userAddressSettings, setUserAddressSettings] = useState<UserAddress[]>(
     []
@@ -81,7 +85,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
       >
         <View
           style={{
-            paddingHorizontal: 16,
+            paddingHorizontal: 24,
             width: '100%',
             height: '100%',
           }}
@@ -106,30 +110,31 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
                 }}
               />
             ))}
-            <Pressable
-              style={{
-                padding: 16,
-                borderWidth: 1,
-                borderColor: Color.neutral2,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 24,
-              }}
-            >
-              <Plus
-                size={24}
-                color={Color.neutral2}
-                style={{ marginRight: 8 }}
-              />
-              <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
-                추가하기
-              </Text>
-            </Pressable>
+            {userAddressSettings.length < 2 && (
+              <Pressable
+                onPress={() => {
+                  dispatch?.bottomSheetController.close();
+                  navigation.navigate('AddressModify');
+                }}
+                style={[
+                  {
+                    paddingVertical: 16,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  },
+                ]}
+              >
+                <Text style={[TYPOS.body1, { color: Color.black }]}>
+                  추가하기
+                </Text>
+                <Plus size={24} color={Color.black} />
+              </Pressable>
+            )}
+
             <Text
               style={[
                 TYPOS.body1,
-                { color: Color.neutral2, textAlign: 'center' },
+                { color: Color.neutral2, textAlign: 'center', marginTop: 32 },
               ]}
             >
               최대 2개까지 설정할 수 있어요.
