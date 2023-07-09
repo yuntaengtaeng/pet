@@ -1,6 +1,7 @@
 import AppInner from './AppInner';
 import { useFonts } from 'expo-font';
 import { RecoilRoot } from 'recoil';
+import { ToastProvider } from './src/components/ui/toast/ToastProvider';
 
 export default function App() {
   const [isFontsLoaded] = useFonts({
@@ -15,7 +16,9 @@ export default function App() {
 
   return (
     <RecoilRoot>
-      <AppInner />
+      <ToastProvider>
+        <AppInner />
+      </ToastProvider>
     </RecoilRoot>
   );
 }
