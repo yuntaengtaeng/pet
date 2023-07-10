@@ -3,6 +3,7 @@ import { Animated } from 'react-native';
 import { Text, StyleSheet } from 'react-native';
 import Color from '../../../constants/color';
 import TYPOS from '../typo';
+import SHADOWS from '../shadow';
 
 const ToastMessage = ({ message }: { message: string }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -26,7 +27,9 @@ const ToastMessage = ({ message }: { message: string }) => {
   }, [fadeAnim]);
 
   return (
-    <Animated.View style={[styles.toastContainer, { opacity: fadeAnim }]}>
+    <Animated.View
+      style={[styles.toastContainer, { opacity: fadeAnim }, SHADOWS.shadow4]}
+    >
       <Text style={[TYPOS.body2, { color: Color.white }]}>{message}</Text>
     </Animated.View>
   );
