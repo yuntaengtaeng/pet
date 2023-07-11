@@ -8,7 +8,6 @@ import Color from '../constants/color';
 import TYPOS from '../components/ui/typo';
 
 import Home from '../components/ui/icons/Home';
-import Location from '../components/ui/icons/Location';
 import User from '../components/ui/icons/User';
 import Users from '../components/ui/icons/Users';
 
@@ -37,13 +36,6 @@ const BottomNavigation = () => {
                   color={focused ? Color.neutral1 : Color.neutral3}
                 />
               );
-            case 'PetVillage':
-              return (
-                <Location
-                  size={24}
-                  color={focused ? Color.neutral1 : Color.neutral3}
-                />
-              );
             case 'PetMate':
               return (
                 <Users
@@ -66,11 +58,6 @@ const BottomNavigation = () => {
         name="Home"
         component={BottomTab.Home}
         options={{ headerShown: false, tabBarLabel: '홈' }}
-      />
-      <Tab.Screen
-        name="PetVillage"
-        component={BottomTab.PetVillage}
-        options={{ headerShown: false, tabBarLabel: '펫빌리지' }}
       />
       <Tab.Screen
         name="PetMate"
