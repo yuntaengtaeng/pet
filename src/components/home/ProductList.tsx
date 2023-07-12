@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { ScrollView, FlatList } from 'react-native';
 import { DOG_CATEGORY, CAT_CATEGORY } from '../../constants/category';
 import Container from '../layout/Container';
@@ -18,6 +18,8 @@ import { HomeStateContext } from './HomeStateContext';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
+import EmptyList from './EmptyList';
+import FixedWriteButton from './FixedWriteButton';
 
 const LIMIT = 20;
 
@@ -34,6 +36,8 @@ const ProductList = () => {
   const [page, setPage] = useState(0);
   const [list, setList] = useState<Product[]>([]);
 
+  const isRequestList = useRef(false);
+
   const requestProduct = async ({
     isPageResetting,
     initCategory,
@@ -41,6 +45,10 @@ const ProductList = () => {
     isPageResetting?: boolean;
     initCategory?: '전체';
   } = {}) => {
+    if (isRequestList.current) {
+      return;
+    }
+
     const categoryValue = initCategory || category;
 
     const queryString = Object.entries({
@@ -53,6 +61,7 @@ const ProductList = () => {
       .join('&');
 
     setLoading(true);
+    isRequestList.current = true;
 
     try {
       const {
@@ -74,6 +83,7 @@ const ProductList = () => {
       console.log(error);
     } finally {
       setLoading(false);
+      isRequestList.current = false;
     }
   };
 
@@ -99,53 +109,60 @@ const ProductList = () => {
   }, [user.address]);
 
   return (
-    <Container>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        horizontal={true}
-        style={{
-          marginTop: 32,
-          marginHorizontal: 16,
-          marginBottom: 24,
-        }}
-      >
-        <ChipContainer
-          containerStyle={{
-            flexDirection: 'row',
-            height: 40,
+    <>
+      <Container>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+          style={{
+            marginTop: 32,
+            marginHorizontal: 16,
+            marginBottom: 24,
           }}
-          labels={isDog ? DOG_CATEGORY : CAT_CATEGORY}
-          selectedLabel={category}
-          type="single"
-          chipStyle={{ marginRight: 8 }}
-          onSelectedHandler={(label: string) => {
-            if (label) {
-              setCategory(label as SelectedCategory);
-            }
-          }}
-        />
-      </ScrollView>
-      <FlatList
-        style={{
-          height: '100%',
-        }}
-        onEndReached={() => {
-          requestProduct();
-        }}
-        data={list}
-        onEndReachedThreshold={0.8}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <ProductCard
-            key={item.id}
-            {...item}
-            onPressHandler={() => {
-              //TODO : 상세 이동 등록하기
+        >
+          <ChipContainer
+            containerStyle={{
+              flexDirection: 'row',
+              height: 40,
+            }}
+            labels={isDog ? DOG_CATEGORY : CAT_CATEGORY}
+            selectedLabel={category}
+            type="single"
+            chipStyle={{ marginRight: 8 }}
+            onSelectedHandler={(label: string) => {
+              if (label) {
+                setCategory(label as SelectedCategory);
+              }
             }}
           />
-        )}
-      />
-    </Container>
+        </ScrollView>
+        <FlatList
+          style={{
+            height: '100%',
+          }}
+          onEndReached={() => {
+            requestProduct();
+          }}
+          contentContainerStyle={{ flexGrow: 1 }}
+          data={list}
+          ListEmptyComponent={<EmptyList />}
+          onEndReachedThreshold={0.8}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <ProductCard
+              key={item.id}
+              {...item}
+              onPressHandler={() => {
+                navigation.navigate('ProductDetail', {
+                  id: item.id,
+                });
+              }}
+            />
+          )}
+        />
+      </Container>
+      {list.length > 0 && <FixedWriteButton />}
+    </>
   );
 };
 
