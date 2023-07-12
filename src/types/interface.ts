@@ -43,3 +43,21 @@ export interface UserAddress {
   address: string;
   isLastSelected?: boolean;
 }
+
+export interface ProductDetail {
+  sellerNickname: string;
+  title: string;
+  address: string;
+  price: number;
+  subCategory: string;
+  timeDelta: string;
+  description: string;
+  likeCount: number;
+  chatCount: number;
+  viewCount: number;
+  salesStatus: '판매중' | '예약중';
+  images: string[];
+  sellerProfileImage?: string;
+  isLike: boolean;
+  isMe?: boolean;
+}
