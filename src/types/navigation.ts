@@ -21,6 +21,9 @@ export type RootStackParamList = {
   };
   EditProduct: undefined;
   AddressModify: undefined;
+  ProductDetail: {
+    id: string;
+  };
 };
 
 export type TabNavigatorParamList = {

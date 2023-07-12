@@ -12,6 +12,7 @@ import Gallery from './src/screens/Gallery';
 import Camera from './src/screens/Camera';
 import EditProduct from './src/screens/EditProduct';
 import AddressModify from './src/screens/AddressModify';
+import ProductDetail from './src/screens/ProductDetail';
 
 import Loading from './src/components/ui/Loading';
 import { LoadingState, UserState } from './src/store/atoms';
@@ -139,6 +140,11 @@ const AppInner = () => {
             <Stack.Screen
               name="AddressModify"
               component={AddressModify}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ProductDetail"
+              component={ProductDetail}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
