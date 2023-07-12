@@ -13,6 +13,7 @@ interface Props extends Product {
 const ProductCard = (props: Props) => {
   return (
     <Pressable
+      onPress={props.onPressHandler}
       style={{
         flexDirection: 'row',
         padding: 16,
