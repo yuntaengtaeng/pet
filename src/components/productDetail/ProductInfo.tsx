@@ -17,6 +17,16 @@ const ProductInfo = ({
   salesStatus,
   price,
 }: Props) => {
+  const salesStatusColor = (() => {
+    if (salesStatus === '예약중') {
+      return Color.warning;
+    } else if (salesStatus === '거래완료') {
+      return Color.neutral2;
+    } else if (salesStatus === '판매중') {
+      return Color.success;
+    }
+  })();
+
   return (
     <View>
       <View style={{ flexDirection: 'row', marginBottom: 8 }}>
@@ -43,7 +53,7 @@ const ProductInfo = ({
         <Text style={[TYPOS.headline2, { color: Color.black }]}>
           {price.toLocaleString()}원
         </Text>
-        <Text style={[TYPOS.headline2, { color: Color.success }]}>
+        <Text style={[TYPOS.headline2, { color: salesStatusColor }]}>
           {salesStatus}
         </Text>
       </View>
