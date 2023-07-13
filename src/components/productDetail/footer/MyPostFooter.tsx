@@ -2,9 +2,12 @@ import React from 'react';
 import { View } from 'react-native';
 import Button from '../../ui/buttons/Button';
 import Color from '../../../constants/color';
-import useModal from '../../../hooks/useModal';
 
-const MyPostFooter = () => {
+interface Props {
+  onStatusChangeHandler: () => void;
+}
+
+const MyPostFooter = ({ onStatusChangeHandler }: Props) => {
   return (
     <View
       style={{
@@ -15,7 +18,7 @@ const MyPostFooter = () => {
       }}
     >
       <View style={{ flex: 1 }}>
-        <Button label="상태변경" />
+        <Button label="상태변경" onPressHandler={onStatusChangeHandler} />
       </View>
       <View style={{ paddingLeft: 16 }} />
       <View style={{ flex: 1 }}>
