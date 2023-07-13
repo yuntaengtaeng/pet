@@ -1,10 +1,16 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Color from '../../../constants/color';
 import Button from '../../ui/buttons/Button';
 import Favorite from '../../ui/icons/Favorite';
+import FillFavorite from '../../ui/icons/FillFavorite';
+import { ProductDetail } from '../../../types/interface';
 
-const OtherPostFooter = () => {
+type Props = Pick<ProductDetail, 'isLike'> & {
+  onLikeChangeHandler: () => void;
+};
+
+const OtherPostFooter = ({ onLikeChangeHandler, isLike }: Props) => {
   return (
     <View
       style={{
@@ -15,7 +21,13 @@ const OtherPostFooter = () => {
         alignItems: 'center',
       }}
     >
-      <Favorite size={32} />
+      <Pressable onPress={onLikeChangeHandler}>
+        {isLike ? (
+          <FillFavorite size={32} color={Color.primary900} />
+        ) : (
+          <Favorite size={32} color={Color.neutral1} />
+        )}
+      </Pressable>
       <View style={{ paddingLeft: 24 }} />
       <View style={{ flex: 1 }}>
         <Button label="채팅하기" />
