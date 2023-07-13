@@ -26,6 +26,8 @@ export type DefaultCategory =
 export type DogCategory = DefaultCategory | '의류/산책용품';
 export type CatCategory = DefaultCategory | '캣타워/하우스';
 
+export type ProductStatus = '판매중' | '예약중' | '판매완료';
+
 export interface Product {
   id: string;
   title: string;
@@ -35,7 +37,7 @@ export interface Product {
   address: string;
   likeCount: number;
   chatCount: number;
-  salesStatus: '판매중' | '예약중';
+  salesStatus: ProductStatus;
 }
 
 export interface UserAddress {
@@ -55,7 +57,7 @@ export interface ProductDetail {
   likeCount: number;
   chatCount: number;
   viewCount: number;
-  salesStatus: '판매중' | '예약중';
+  salesStatus: ProductStatus;
   images: string[];
   sellerProfileImage?: string;
   isLike: boolean;
