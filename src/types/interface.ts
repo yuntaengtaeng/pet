@@ -63,3 +63,10 @@ export interface ProductDetail {
   isLike: boolean;
   isMe?: boolean;
 }
+
+export interface EtcProduct {
+  id: string;
+  title: string;
+  price: number;
+  image: string;
+}
