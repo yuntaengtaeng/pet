@@ -12,7 +12,11 @@ import Dropdown from '../components/ui/dropdown/Dropdown';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { LoadingState, UserState } from '../store/atoms';
 import * as MediaLibrary from 'expo-media-library';
-import { DOG_CATEGORY, CAT_CATEGORY } from '../constants/category';
+import {
+  DOG_CATEGORY,
+  CAT_CATEGORY,
+  DEFAULT_CATEGORY,
+} from '../constants/category';
 import PhotoSelector from '../components/editProduct/PhotoSelector';
 import Won from '../components/ui/icons/Won';
 import Color from '../constants/color';
@@ -57,7 +61,16 @@ const EditProduct = ({ navigation, route }: EditProductScreenProps) => {
 
   useEffect(() => {
     updateData({ category: '' });
-    const categories = data.petType === '강아지' ? DOG_CATEGORY : CAT_CATEGORY;
+    const categories = (() => {
+      switch (data.petType) {
+        case '강아지':
+          return [...DOG_CATEGORY];
+        case '고양이':
+          return [...CAT_CATEGORY];
+        case '전체':
+          return [...DEFAULT_CATEGORY];
+      }
+    })();
     categories.shift();
     setCategory(categories);
   }, [data.petType]);
