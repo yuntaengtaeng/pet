@@ -27,11 +27,13 @@ const ProductList = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const user = useRecoilValue(UserState);
 
-  const isDog: boolean = true;
+  const petType = useContext(HomeStateContext) as PetType;
+
+  // const isDog: boolean = petType === 'dog';
+  const isDog = true;
   type SelectedCategory = typeof isDog extends true ? DogCategory : CatCategory;
   const setLoading = useSetRecoilState(LoadingState);
 
-  const petType = useContext(HomeStateContext) as PetType;
   const [category, setCategory] = useState<SelectedCategory>('전체');
   const [page, setPage] = useState(0);
   const [list, setList] = useState<Product[]>([]);
