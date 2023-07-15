@@ -1,4 +1,13 @@
-import { DogCategory, CatCategory } from '../types/interface';
+import { DogCategory, CatCategory, DefaultCategory } from '../types/interface';
+
+export const DEFAULT_CATEGORY: DefaultCategory[] = [
+  '전체',
+  '사료/간식',
+  '영양제',
+  '배변/미용',
+  '장난감',
+  '기타',
+];
 
 export const DOG_CATEGORY: DogCategory[] = [
   '전체',
