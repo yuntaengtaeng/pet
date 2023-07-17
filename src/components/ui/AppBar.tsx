@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   title?: string;
+  leftContent?: React.ReactNode;
+  rightContent?: React.ReactNode;
 }
 
 const AppBar = (props: Props) => {
@@ -23,7 +25,11 @@ const AppBar = (props: Props) => {
       <Pressable onPress={onBackButtonHandler}>
         <ArrowLeft size={24} />
       </Pressable>
+      {props.leftContent && (
+        <View style={styles.leftContent}>{props.leftContent}</View>
+      )}
       <Text style={[TYPOS.headline3, styles.title]}>{title}</Text>
+      <View style={styles.rightContent}>{props.rightContent}</View>
     </View>
   );
 };
@@ -38,7 +44,13 @@ const styles = StyleSheet.create({
     backgroundColor: Color.white,
     paddingHorizontal: 16,
   },
+  leftContent: {
+    marginLeft: 16,
+  },
   title: {
     marginLeft: 16,
+  },
+  rightContent: {
+    marginLeft: 'auto',
   },
 });
