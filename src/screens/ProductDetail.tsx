@@ -37,8 +37,6 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
         usedItemBoardInfo: ProductDetailType;
       }>(`/board/used-item/${id}`);
 
-      console.log(usedItemBoardInfo);
-
       setData(usedItemBoardInfo);
     };
 
@@ -54,7 +52,7 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
       const {
         data: { salesStatus },
       } = await axios.patch<{ salesStatus: ProductStatus }>(
-        `/board/used-item/${id}/status`,
+        `/board/used-item/status/${id}`,
         {
           salesStatus: status,
         }
