@@ -18,6 +18,10 @@ import useModal from '../hooks/useModal';
 import BottomSheet from '../components/ui/BottomSheet';
 import TYPOS from '../components/ui/typo';
 import { ProductStatus } from '../types/interface';
+import EtcProductList from '../components/productDetail/ EtcProductList';
+import Share from '../components/ui/icons/Share';
+import Burger from '../components/ui/icons/Burger';
+import Home from '../components/ui/icons/Home';
 
 export type ProductDetailProps = StackScreenProps<
   RootStackParamList,
@@ -85,7 +89,27 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
 
   return (
     <>
-      <AppBar />
+      <AppBar
+        leftContent={
+          <Pressable
+            onPress={() => {
+              navigation.navigate('BottomNavigation');
+            }}
+          >
+            <Home size={24} color={Color.black} />
+          </Pressable>
+        }
+        rightContent={
+          <View style={{ flexDirection: 'row' }}>
+            <Pressable style={{ marginRight: 8 }}>
+              <Share size={24} color={Color.black} />
+            </Pressable>
+            <Pressable>
+              <Burger size={24} color={Color.black} />
+            </Pressable>
+          </View>
+        }
+      />
       <ScrollContainer>
         <Profile
           sellerProfileImage={data.sellerProfileImage}
@@ -124,6 +148,11 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
             }}
           />
         </View>
+        <EtcProductList
+          isMe={data.isMe}
+          boardId={id}
+          sellerNickname={data.sellerNickname}
+        />
       </ScrollContainer>
       {data.isMe ? (
         <MyPostFooter onStatusChangeHandler={openModal} />
