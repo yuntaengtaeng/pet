@@ -27,13 +27,11 @@ const EtcProductList = ({ isMe, boardId, sellerNickname }: Props) => {
           isMe ? 'similar' : 'other'
         }-posts/${boardId}`;
 
-        console.log(URL);
 
         const { data } = await axios.get(URL);
         const res =
           data[isMe ? 'similarUsedItemBoardList' : 'otherUsedItemBoardList'];
 
-        console.log(res);
         setList(res);
       } catch (error) {}
     };
