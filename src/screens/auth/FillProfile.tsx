@@ -19,6 +19,9 @@ import { useSetRecoilState } from 'recoil';
 import { UserState, LoadingState } from '../../store/atoms';
 import { PetType } from '../../types/interface';
 import useInputState from '../../hooks/useInputState';
+import useModal from '../../hooks/useModal';
+import BottomSheet from '../../components/ui/BottomSheet';
+import ListValue from '../../components/ui/dropdown/ListValue';
 
 export type FillProfileScreenProps = StackScreenProps<
   RootStackParamList,
@@ -44,6 +47,8 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
     (!!selectedPetType || isChecked);
   const setUser = useSetRecoilState(UserState);
   const setIsLoading = useSetRecoilState(LoadingState);
+
+  const { isVisible, openModal, closeModal } = useModal();
 
   const checkDuplicateNickname = async () => {
     try {
@@ -135,16 +140,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
           <Pressable
             style={{ position: 'relative' }}
             onPress={() => {
-              navigation.navigate('Gallery', {
-                limit: 1,
-                callback: (medias) => {
-                  const media = medias[0];
-                  setPhoto(media);
-                },
-                ...(photo && {
-                  selectedPhotoIds: [photo],
-                }),
-              });
+              openModal();
             }}
           >
             <Image
@@ -248,6 +244,62 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
           disabled={!isAllConditionsMet}
         />
       </View>
+      <BottomSheet
+        isOpened={isVisible}
+        onClose={() => {
+          closeModal();
+        }}
+        height={310}
+      >
+        <View
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <View style={{ paddingVertical: 24, paddingHorizontal: 16 }}>
+            <Text style={[TYPOS.headline3, { color: Color.black }]}>
+              프로필 이미지 변경
+            </Text>
+          </View>
+          <View>
+            <Pressable
+              style={{ padding: 16 }}
+              onPress={() => {
+                closeModal();
+                navigation.navigate('Gallery', {
+                  limit: 1,
+                  callback: (medias) => {
+                    const media = medias[0];
+                    setPhoto(media);
+                  },
+                  ...(photo && {
+                    selectedPhotoIds: [photo],
+                  }),
+                });
+              }}
+            >
+              <Text style={[TYPOS.body1, { color: Color.black }]}>
+                앨범에서 선택
+              </Text>
+            </Pressable>
+            <Pressable
+              style={{ padding: 16 }}
+              onPress={() => {
+                closeModal();
+                setPhoto(null);
+              }}
+            >
+              <Text style={[TYPOS.body1, { color: Color.black }]}>
+                기본이미지로 변경
+              </Text>
+            </Pressable>
+          </View>
+          <View style={{ marginHorizontal: 16, marginTop: 24 }}>
+            <Button label="닫기" onPressHandler={closeModal} />
+          </View>
+        </View>
+      </BottomSheet>
     </>
   );
 };
