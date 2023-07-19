@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  Pressable,
+  Modal,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import ScrollContainer from '../components/layout/ScrollContainer';
 import AppBar from '../components/ui/AppBar';
 import Profile from '../components/productDetail/Profile';
@@ -22,6 +28,8 @@ import EtcProductList from '../components/productDetail/ EtcProductList';
 import Share from '../components/ui/icons/Share';
 import Burger from '../components/ui/icons/Burger';
 import Home from '../components/ui/icons/Home';
+import SHADOWS from '../components/ui/shadow';
+import Dialog from '../components/ui/Dialog';
 
 export type ProductDetailProps = StackScreenProps<
   RootStackParamList,
@@ -32,6 +40,18 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
   const { id } = route.params;
   const [data, setData] = useState<ProductDetailType | null>(null);
   const { isVisible, closeModal, openModal } = useModal();
+  const [dropdownTop, setDropdownTop] = useState(0);
+  const burgerRef = useRef<View | null>(null);
+  const {
+    isVisible: isVisibleDropdown,
+    closeModal: closeDropdown,
+    openModal: openDropdown,
+  } = useModal();
+  const {
+    isVisible: isVisibleDeleteModal,
+    closeModal: closeDeleteModel,
+    openModal: openDeleteModal,
+  } = useModal();
 
   useEffect(() => {
     const fetch = async () => {
@@ -46,6 +66,20 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
 
     fetch();
   }, [id]);
+
+  useEffect(() => {
+    if (!isVisibleDropdown) {
+      return;
+    }
+
+    console.log(132);
+
+    burgerRef.current?.measure((_x, _y, _width, height, pageX, pageY) => {
+      console.log(13123);
+      console.log(pageY);
+      setDropdownTop(pageY + height + 8);
+    });
+  }, [isVisibleDropdown]);
 
   if (!data) {
     return null;
@@ -85,6 +119,13 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
     }
   };
 
+  const removePost = async () => {
+    try {
+      await axios.delete(`/board/used-item/${id}`);
+      navigation.pop();
+    } catch (error) {}
+  };
+
   const STATUS_MAP: ProductStatus[] = ['판매중', '예약중', '거래완료'];
 
   return (
@@ -104,9 +145,63 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
             <Pressable style={{ marginRight: 8 }}>
               <Share size={24} color={Color.black} />
             </Pressable>
-            <Pressable>
+            <Pressable onPress={openDropdown} ref={burgerRef}>
               <Burger size={24} color={Color.black} />
             </Pressable>
+            <Modal visible={isVisibleDropdown} transparent animationType="fade">
+              <TouchableWithoutFeedback onPress={closeDropdown}>
+                <View
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    alignItems: 'center',
+                  }}
+                >
+                  <View
+                    style={[
+                      {
+                        width: 146,
+                        position: 'absolute',
+                        zIndex: 10,
+                        top: dropdownTop,
+                        borderRadius: 8,
+                        right: 16,
+                        backgroundColor: Color.white,
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      },
+                      SHADOWS.shadow4,
+                    ]}
+                  >
+                    <Pressable onPress={() => {}}>
+                      <Text
+                        style={[
+                          TYPOS.body1,
+                          { color: Color.neutral1, paddingVertical: 12 },
+                        ]}
+                      >
+                        글 수정하기
+                      </Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => {
+                        closeDropdown();
+                        openDeleteModal();
+                      }}
+                    >
+                      <Text
+                        style={[
+                          TYPOS.body1,
+                          { color: Color.neutral1, paddingVertical: 12 },
+                        ]}
+                      >
+                        삭제
+                      </Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </Modal>
           </View>
         }
       />
@@ -194,6 +289,23 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
           ))}
         </View>
       </BottomSheet>
+      <Dialog isOpened={isVisibleDeleteModal}>
+        <Dialog.Content content="게시글을 삭제할까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '삭제',
+              onPressHandler: () => {
+                removePost();
+              },
+            },
+            {
+              label: '닫기',
+              onPressHandler: closeDeleteModel,
+            },
+          ]}
+        />
+      </Dialog>
     </>
   );
 };
