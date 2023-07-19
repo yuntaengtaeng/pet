@@ -141,68 +141,82 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
           </Pressable>
         }
         rightContent={
-          <View style={{ flexDirection: 'row' }}>
-            <Pressable style={{ marginRight: 8 }}>
-              <Share size={24} color={Color.black} />
-            </Pressable>
-            <Pressable onPress={openDropdown} ref={burgerRef}>
-              <Burger size={24} color={Color.black} />
-            </Pressable>
-            <Modal visible={isVisibleDropdown} transparent animationType="fade">
-              <TouchableWithoutFeedback onPress={closeDropdown}>
-                <View
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    alignItems: 'center',
-                  }}
-                >
-                  <View
-                    style={[
-                      {
-                        width: 146,
-                        position: 'absolute',
-                        zIndex: 10,
-                        top: dropdownTop,
-                        borderRadius: 8,
-                        right: 16,
-                        backgroundColor: Color.white,
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                      },
-                      SHADOWS.shadow4,
-                    ]}
+          <>
+            <View style={{ flexDirection: 'row' }}>
+              <Pressable>
+                <Share size={24} color={Color.black} />
+              </Pressable>
+              {data.isMe && (
+                <>
+                  <Pressable
+                    onPress={openDropdown}
+                    ref={burgerRef}
+                    style={{ marginLeft: 8 }}
                   >
-                    <Pressable onPress={() => {}}>
-                      <Text
-                        style={[
-                          TYPOS.body1,
-                          { color: Color.neutral1, paddingVertical: 12 },
-                        ]}
+                    <Burger size={24} color={Color.black} />
+                  </Pressable>
+                  <Modal
+                    visible={isVisibleDropdown}
+                    transparent
+                    animationType="fade"
+                  >
+                    <TouchableWithoutFeedback onPress={closeDropdown}>
+                      <View
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          alignItems: 'center',
+                        }}
                       >
-                        글 수정하기
-                      </Text>
-                    </Pressable>
-                    <Pressable
-                      onPress={() => {
-                        closeDropdown();
-                        openDeleteModal();
-                      }}
-                    >
-                      <Text
-                        style={[
-                          TYPOS.body1,
-                          { color: Color.neutral1, paddingVertical: 12 },
-                        ]}
-                      >
-                        삭제
-                      </Text>
-                    </Pressable>
-                  </View>
-                </View>
-              </TouchableWithoutFeedback>
-            </Modal>
-          </View>
+                        <View
+                          style={[
+                            {
+                              width: 146,
+                              position: 'absolute',
+                              zIndex: 10,
+                              top: dropdownTop,
+                              borderRadius: 8,
+                              right: 16,
+                              backgroundColor: Color.white,
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            },
+                            SHADOWS.shadow4,
+                          ]}
+                        >
+                          <Pressable onPress={() => {}}>
+                            <Text
+                              style={[
+                                TYPOS.body1,
+                                { color: Color.neutral1, paddingVertical: 12 },
+                              ]}
+                            >
+                              글 수정하기
+                            </Text>
+                          </Pressable>
+                          <Pressable
+                            onPress={() => {
+                              closeDropdown();
+                              openDeleteModal();
+                            }}
+                          >
+                            <Text
+                              style={[
+                                TYPOS.body1,
+                                { color: Color.neutral1, paddingVertical: 12 },
+                              ]}
+                            >
+                              삭제
+                            </Text>
+                          </Pressable>
+                        </View>
+                      </View>
+                    </TouchableWithoutFeedback>
+                  </Modal>
+                </>
+              )}
+            </View>
+          </>
         }
       />
       <ScrollContainer>
