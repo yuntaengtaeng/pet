@@ -39,6 +39,8 @@ const Header = () => {
   const petType = useContext(HomeStateContext);
   const dispatch = useContext(HomeDispatchContext);
 
+  const setUser = useSetRecoilState(UserState);
+
   const openModalHandler = () => {
     openModal();
   };
@@ -82,6 +84,24 @@ const Header = () => {
       clearTimeout(timer);
     };
   }, [isVisible]);
+
+  const selectAddress = async (id: string) => {
+    setIsLoading(true);
+
+    try {
+      const {
+        data: { addressInfoList, pickAddress },
+      } = await axios.patch<{
+        addressInfoList: UserAddress[];
+        pickAddress: string;
+      }>(`/user/addresses/${id}`);
+
+      setUserAddress(addressInfoList);
+      setUser((prev) => ({ ...prev, address: pickAddress }));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -159,7 +179,12 @@ const Header = () => {
                   }}
                 >
                   {userAddress.map((address) => (
-                    <Pressable key={address.id}>
+                    <Pressable
+                      key={address.id}
+                      onPress={() => {
+                        selectAddress(address.id);
+                      }}
+                    >
                       <Text
                         style={[
                           TYPOS.body1,
