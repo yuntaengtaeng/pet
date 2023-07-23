@@ -1,9 +1,9 @@
 const enum Color {
-  neutral1 = '#4D4D4D',
-  neutral2 = '#717171',
-  neutral3 = '#89939E',
-  neutral4 = '#ABBED1',
-  neutral5 = '#F5F7FA',
+  neutral1 = '#4D4C4C',
+  neutral2 = '#807F7E',
+  neutral3 = '#B3B1B0',
+  neutral4 = '#E5E4E3',
+  neutral5 = '#F8F8F8',
 
   black = '#212121',
 
@@ -21,15 +21,15 @@ const enum Color {
   primary50 = '#fef9e2',
 
   success = '#1B6E53',
-  successBg = '#EDF9F0',
+  successBg = '#F1FBF8',
 
   warning = '#FFA826',
-  warningBg = '#FFF4EC',
+  warningBg = '#FFF8EC',
 
   info = '#2E5AAC',
   infoBg = '#EEF2FA',
 
-  error = '#E73B2F',
+  error = '#E01507',
   errorBg = '#FFF1F0',
 }
 
