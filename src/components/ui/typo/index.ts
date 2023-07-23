@@ -14,7 +14,7 @@ const TYPOS = StyleSheet.create({
     fontFamily: 'Pretendard_SemiBold',
   },
   headline3: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
     lineHeight: 24,
     fontFamily: 'Pretendard_SemiBold',

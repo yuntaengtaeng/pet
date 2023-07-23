@@ -20,20 +20,20 @@ Headline1.storyName = 'Headline 1';
 export const Headline2 = () => <Text style={TYPOS.headline2}>headline2</Text>;
 Headline2.storyName = 'Headline 2';
 
-/** fontSize: 16, fontWeight: '600', lineHeight: 24, fontFamily: 'Pretendard_SemiBold', */
+/** fontSize: 18, fontWeight: '600', lineHeight: 24, fontFamily: 'Pretendard_SemiBold', */
 export const Headline3 = () => <Text style={TYPOS.headline3}>headline3</Text>;
-Headline3.storyName = 'Headline 2';
+Headline3.storyName = 'Headline 3';
 
 /** fontSize: 16, fontWeight: '600', lineHeight: 20, fontFamily: 'Pretendard_SemiBold', */
 export const Headline4 = () => <Text style={TYPOS.headline4}>headline4</Text>;
-Headline4.storyName = 'Headline 2';
+Headline4.storyName = 'Headline 4';
 
 /** fontSize: 16, fontWeight: '400', lineHeight: 24, fontFamily: 'Pretendard_Regular', */
 export const Body1 = () => <Text style={TYPOS.body1}>body1</Text>;
 Body1.storyName = 'body 1';
 
 /** fontSize: 14, fontWeight: '400', lineHeight: 20, fontFamily: 'Pretendard_Regular', */
-export const Body2 = () => <Text style={TYPOS.body1}>body2</Text>;
+export const Body2 = () => <Text style={TYPOS.body2}>body2</Text>;
 Body2.storyName = 'body 2';
 
 /** fontSize: 12, fontWeight: '400', lineHeight: 16, fontFamily: 'Pretendard_Regular', */
