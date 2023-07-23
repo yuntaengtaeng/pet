@@ -11,7 +11,7 @@ const Content = (props: Props) => {
   const { content } = props;
   return (
     <View style={styles.container}>
-      <Text style={[styles.content, TYPOS.body2]}>{content}</Text>
+      <Text style={[styles.content, TYPOS.body1]}>{content}</Text>
     </View>
   );
 };
