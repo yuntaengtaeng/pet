@@ -59,12 +59,13 @@ const styles = StyleSheet.create({
     height: 52,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 4,
   },
   primaryLabel: {
     color: Color.white,
   },
   primary: {
-    backgroundColor: Color.primary600,
+    backgroundColor: Color.primary700,
   },
   primaryPressed: {
     backgroundColor: Color.primary800,
@@ -79,9 +80,9 @@ const styles = StyleSheet.create({
     color: Color.primary900,
   },
   disabled: {
-    backgroundColor: Color.neutral5,
+    backgroundColor: Color.neutral4,
   },
   disabledLabel: {
-    color: Color.neutral4,
+    color: Color.neutral3,
   },
 });
