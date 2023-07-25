@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 5,
   },
   primaryLabel: {
     color: Color.primary900,
@@ -83,12 +84,12 @@ const styles = StyleSheet.create({
     color: Color.neutral2,
   },
   primaryDisabled: {
-    backgroundColor: Color.neutral5,
+    backgroundColor: Color.neutral4,
   },
   secondaryDisabled: {
     backgroundColor: Color.white,
   },
   disabledLabel: {
-    color: Color.neutral4,
+    color: Color.neutral3,
   },
 });
