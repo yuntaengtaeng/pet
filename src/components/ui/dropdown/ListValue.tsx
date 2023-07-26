@@ -13,7 +13,7 @@ interface Props {
 const ListValue = ({ label, isActive, disabled, onClickHandler }: Props) => {
   const getTextColor = () => {
     if (disabled) {
-      return Color.neutral4;
+      return Color.neutral3;
     } else if (isActive) {
       return Color.primary700;
     } else {
