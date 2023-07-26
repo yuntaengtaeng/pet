@@ -193,7 +193,7 @@ const Address = ({ addressSelectHandler }: Props) => {
       <Header />
       <Container>
         <View style={styles.fixed}>
-          <Text style={TYPOS.headline1}>우리 동네를 선택해주세요.</Text>
+          <Text style={TYPOS.headline1}>내 동네를 선택해주세요.</Text>
           <Text style={[TYPOS.body1, styles.fixedCenterItem]}>
             아래 목록에 없다면 검색해주세요.
           </Text>
@@ -223,7 +223,9 @@ export default Address;
 
 const styles = StyleSheet.create({
   fixed: {
-    margin: 16,
+    marginTop: 16,
+    marginBottom: 32,
+    marginHorizontal: 16,
   },
   fixedCenterItem: {
     marginTop: 8,
