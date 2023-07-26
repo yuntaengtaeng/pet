@@ -95,7 +95,17 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
       return <Check size={16} color={Color.white} />;
     } else {
       return (
-        <Text style={[TYPOS.body3, { color: Color.white }]}>{index + 1}</Text>
+        <Text
+          style={[
+            TYPOS.body3,
+            {
+              lineHeight: undefined,
+              color: Color.white,
+            },
+          ]}
+        >
+          {index + 1}
+        </Text>
       );
     }
   };
@@ -113,7 +123,14 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
 
     return (
       <Pressable
-        style={{ width: itemWidth, aspectRatio: 1, position: 'relative' }}
+        style={{
+          width: itemWidth,
+          height: itemWidth,
+          aspectRatio: 1,
+          position: 'relative',
+          borderWidth: 2,
+          borderColor: isSelected ? Color.primary700 : Color.white,
+        }}
         onPress={() => {
           if (limit === 1) {
             setSelectedPhtos([item]);
