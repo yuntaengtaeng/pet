@@ -16,7 +16,7 @@ interface Props {
   isError?: boolean;
   errorMessage?: string;
   value?: string;
-  onChangeHandler?: (vatlue: string) => void;
+  onChangeHandler?: (value: string) => void;
   placeholder?: string;
   layoutStyle?: ViewStyle;
   fieldStyle?: ViewStyle;
@@ -75,9 +75,9 @@ const TextArea = (props: Props) => {
           ]}
           value={value}
           editable={!disabled}
-          onChange={(evnet: NativeSyntheticEvent<TextInputChangeEventData>) => {
+          onChange={(event: NativeSyntheticEvent<TextInputChangeEventData>) => {
             if (onChangeHandler) {
-              onChangeHandler(evnet.nativeEvent.text);
+              onChangeHandler(event.nativeEvent.text);
             }
           }}
           onFocus={() => {
