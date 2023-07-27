@@ -194,8 +194,8 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
                 setSelectedPetType('dog');
               }}
             >
-              <Text>🐶</Text>
-              <Text style={TYPOS.body1}>강아지</Text>
+              <Text style={TYPOS.headline1}>🐶</Text>
+              <Text style={[TYPOS.body1, { color: Color.black }]}>강아지</Text>
             </Pressable>
             <Pressable
               style={[
@@ -210,8 +210,8 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
                 setSelectedPetType('cat');
               }}
             >
-              <Text>😺</Text>
-              <Text style={TYPOS.body1}>고양이</Text>
+              <Text style={TYPOS.headline1}>😺</Text>
+              <Text style={[TYPOS.body1, { color: Color.black }]}>고양이</Text>
             </Pressable>
           </View>
           <UiCheckbox
@@ -318,5 +318,6 @@ const styles = StyleSheet.create({
     borderColor: Color.neutral4,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 4,
   },
 });
