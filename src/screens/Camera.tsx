@@ -4,12 +4,12 @@ import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import Header from '../components/ui/Header';
 import Container from '../components/layout/Container';
-import Button from '../components/ui/buttons/Button';
 import { RootStackParamList } from '../types/navigation';
 import { StackScreenProps } from '@react-navigation/stack';
 import ArrowSwap from '../components/ui/icons/ArrowSwap';
 import Color from '../constants/color';
 import TYPOS from '../components/ui/typo';
+import Swap from '../components/ui/icons/Swap';
 
 export type CameraScreenProps = StackScreenProps<RootStackParamList, 'Camera'>;
 
@@ -97,13 +97,72 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
                       right: 16,
                       top: 16,
                     }}
-                  >
-                    <Pressable style={{}} onPress={changeType}>
-                      <ArrowSwap size={36} color={Color.white} />
-                    </Pressable>
-                  </View>
+                  ></View>
                 </Camera>
-                <Button label="촬영" onPressHandler={takePicture} />
+                <View
+                  style={{
+                    height: 160,
+                    backgroundColor: Color.black,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    paddingHorizontal: 24,
+                  }}
+                >
+                  <Pressable
+                    style={{ marginRight: 'auto' }}
+                    onPress={() => {
+                      navigation.pop();
+                    }}
+                  >
+                    <Text
+                      style={[
+                        TYPOS.medium,
+                        {
+                          color: Color.neutral2,
+                          paddingHorizontal: 14,
+                          paddingVertical: 8,
+                        },
+                      ]}
+                    >
+                      취소
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 80,
+                      backgroundColor: Color.primary700,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onPress={takePicture}
+                  >
+                    <View
+                      style={{
+                        borderColor: Color.black,
+                        borderWidth: 8,
+                        width: 62,
+                        height: 62,
+                        borderRadius: 62,
+                      }}
+                    ></View>
+                  </Pressable>
+                  <Pressable
+                    onPress={changeType}
+                    style={{
+                      width: 54,
+                      height: 54,
+                      borderRadius: 54,
+                      backgroundColor: Color.neutral1,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginLeft: 'auto',
+                    }}
+                  >
+                    <Swap size={24} color={Color.white} />
+                  </Pressable>
+                </View>
               </>
             ) : (
               <>
@@ -124,7 +183,6 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
                       flexDirection: 'row',
                       width: '100%',
                       justifyContent: 'space-between',
-                      // alignContent: 'space-between',
                       marginTop: 16,
                       paddingHorizontal: 16,
                     }}
