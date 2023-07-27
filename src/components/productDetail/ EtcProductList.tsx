@@ -25,8 +25,7 @@ const EtcProductList = ({ isMe, boardId, sellerNickname }: Props) => {
       try {
         const URL = `/board/used-item/${
           isMe ? 'similar' : 'other'
-        }-posts/${boardId}`;
-
+        }-posts/${boardId}${isMe ? '' : `?limit=${6}`}`;
 
         const { data } = await axios.get(URL);
         const res =
