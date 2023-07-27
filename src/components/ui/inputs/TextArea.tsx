@@ -87,6 +87,7 @@ const TextArea = (props: Props) => {
             setHasFocus(false);
           }}
           onSubmitEditing={onSubmitEditingHandler}
+          placeholderTextColor={Color.neutral2}
         />
       </View>
       {isError && !!errorMessage && (

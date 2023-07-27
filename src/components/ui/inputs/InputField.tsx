@@ -100,6 +100,7 @@ const InputField = (props: Props) => {
               ? 'done'
               : 'default'
           }
+          placeholderTextColor={Color.neutral2}
         />
       </View>
       {isError && !!errorMessage && (
