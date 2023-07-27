@@ -24,8 +24,8 @@ const ListValue = ({ label, isActive, disabled, onClickHandler }: Props) => {
   return (
     <Pressable
       style={{
-        paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingHorizontal: 24,
+        paddingVertical: 16,
       }}
       disabled={disabled}
       onPress={() => {
