@@ -17,7 +17,9 @@ const EmptyList = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 16 }}>
       <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-        <Text style={[{ color: Color.neutral2 }, TYPOS.headline2]}>
+        <Text
+          style={[{ color: Color.neutral2, marginBottom: 8 }, TYPOS.headline2]}
+        >
           아직 등록된 상품이 없어요.
         </Text>
         <Text style={[{ color: Color.neutral2 }, TYPOS.body1]}>
