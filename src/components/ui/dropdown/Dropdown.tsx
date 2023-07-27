@@ -8,11 +8,13 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   ScrollView,
+  Text,
 } from 'react-native';
 import Color from '../../../constants/color';
 import useModal from '../../../hooks/useModal';
 import ListValue from './ListValue';
 import SHADOWS from '../shadow';
+import TYPOS from '../typo';
 
 interface Props {
   list: string[];
@@ -85,14 +87,17 @@ const Dropdown = ({
           },
         ]}
       >
-        <ListValue
-          label={selectedLabel}
-          {...(!selectedLabel &&
-            placeholder && {
-              disabled: true,
-              label: placeholder,
-            })}
-        />
+        <Text
+          style={[
+            {
+              paddingHorizontal: 16,
+              color: selectedLabel ? Color.neutral1 : Color.neutral2,
+            },
+            TYPOS.body1,
+          ]}
+        >
+          {selectedLabel ? selectedLabel : placeholder}
+        </Text>
       </TouchableOpacity>
       <Modal visible={isVisible} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={closeModal}>
