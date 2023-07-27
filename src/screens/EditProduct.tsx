@@ -167,6 +167,9 @@ const EditProduct = ({ navigation, route }: EditProductScreenProps) => {
             placeholder="상품 설명을 작성해주세요."
             layoutStyle={{ marginTop: 24 }}
             fieldStyle={{ minHeight: 112 }}
+            onChangeHandler={(value: string) => {
+              updateData({ productDescription: value });
+            }}
           />
           <InputField
             leftIcon={() => (
