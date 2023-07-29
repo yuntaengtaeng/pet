@@ -61,7 +61,15 @@ const EtcProductList = ({ isMe, boardId, sellerNickname }: Props) => {
         </Text>
 
         {!isMe && (
-          <Pressable style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Pressable
+            style={{ flexDirection: 'row', alignItems: 'center' }}
+            onPress={() => {
+              navigation.push('UserProductList', {
+                id: boardId,
+                name: sellerNickname,
+              });
+            }}
+          >
             <Text style={[TYPOS.small, { color: Color.neutral2 }]}>
               모두보기
             </Text>
