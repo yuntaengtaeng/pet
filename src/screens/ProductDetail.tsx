@@ -24,7 +24,7 @@ import useModal from '../hooks/useModal';
 import BottomSheet from '../components/ui/BottomSheet';
 import TYPOS from '../components/ui/typo';
 import { ProductStatus } from '../types/interface';
-import EtcProductList from '../components/productDetail/ EtcProductList';
+import EtcProductList from '../components/productDetail/EtcProductList';
 import Share from '../components/ui/icons/Share';
 import Burger from '../components/ui/icons/Burger';
 import Home from '../components/ui/icons/Home';
