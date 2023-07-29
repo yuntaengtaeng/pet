@@ -24,6 +24,10 @@ export type RootStackParamList = {
   ProductDetail: {
     id: string;
   };
+  UserProductList: {
+    id: string;
+    name: string;
+  };
 };
 
 export type TabNavigatorParamList = {

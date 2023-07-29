@@ -20,6 +20,7 @@ import { LoadingState, UserState } from './src/store/atoms';
 import axios from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { StatusBar, SafeAreaView, StyleSheet } from 'react-native';
+import UserProductList from './src/screens/UserProductList';
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -145,6 +146,11 @@ const AppInner = () => {
             <Stack.Screen
               name="ProductDetail"
               component={ProductDetail}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="UserProductList"
+              component={UserProductList}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
