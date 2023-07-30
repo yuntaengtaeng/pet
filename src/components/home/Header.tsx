@@ -24,6 +24,7 @@ import { UserAddress } from '../../types/interface';
 import axios from 'axios';
 import { HomeDispatchContext } from './HomeDispatchContext';
 import { HomeStateContext } from './HomeStateContext';
+import ListValue from '../ui/dropdown/ListValue';
 
 const Header = () => {
   const { address } = useRecoilValue(UserState);
@@ -175,46 +176,25 @@ const Header = () => {
                     borderRadius: 8,
                     backgroundColor: Color.white,
                     flexDirection: 'column',
-                    alignItems: 'center',
                   }}
                 >
                   {userAddress.map((address) => (
-                    <Pressable
+                    <ListValue
+                      label={address.address}
                       key={address.id}
-                      onPress={() => {
+                      isActive={address.isLastSelected}
+                      onClickHandler={() => {
                         selectAddress(address.id);
                       }}
-                    >
-                      <Text
-                        style={[
-                          TYPOS.body1,
-                          {
-                            color: address.isLastSelected
-                              ? Color.primary700
-                              : Color.neutral1,
-                            paddingVertical: 12,
-                          },
-                        ]}
-                      >
-                        {address.address}
-                      </Text>
-                    </Pressable>
+                    />
                   ))}
-                  <Pressable
-                    onPress={() => {
+                  <ListValue
+                    label="내 동네 설정"
+                    onClickHandler={() => {
                       closeModal();
                       showBottomSheet.current = true;
                     }}
-                  >
-                    <Text
-                      style={[
-                        TYPOS.body1,
-                        { color: Color.neutral1, paddingVertical: 12 },
-                      ]}
-                    >
-                      내 동네 설정
-                    </Text>
-                  </Pressable>
+                  />
                 </Pressable>
               </View>
             </TouchableWithoutFeedback>
