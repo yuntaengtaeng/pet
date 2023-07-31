@@ -72,11 +72,7 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
       return;
     }
 
-    console.log(132);
-
     burgerRef.current?.measure((_x, _y, _width, height, pageX, pageY) => {
-      console.log(13123);
-      console.log(pageY);
       setDropdownTop(pageY + height + 8);
     });
   }, [isVisibleDropdown]);
@@ -184,7 +180,14 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
                             SHADOWS.shadow4,
                           ]}
                         >
-                          <Pressable onPress={() => {}}>
+                          <Pressable
+                            onPress={() => {
+                              closeDropdown();
+                              navigation.navigate('ModifyProduct', {
+                                id,
+                              });
+                            }}
+                          >
                             <Text
                               style={[
                                 TYPOS.body1,
