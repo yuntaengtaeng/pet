@@ -28,6 +28,9 @@ export type RootStackParamList = {
     id: string;
     name: string;
   };
+  ModifyProduct: {
+    id: string;
+  };
 };
 
 export type TabNavigatorParamList = {

@@ -21,6 +21,7 @@ import axios from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { StatusBar, SafeAreaView, StyleSheet } from 'react-native';
 import UserProductList from './src/screens/UserProductList';
+import ModifyProduct from './src/screens/ModifyProduct';
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -151,6 +152,11 @@ const AppInner = () => {
             <Stack.Screen
               name="UserProductList"
               component={UserProductList}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ModifyProduct"
+              component={ModifyProduct}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
