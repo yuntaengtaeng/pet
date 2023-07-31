@@ -30,6 +30,7 @@ import Burger from '../components/ui/icons/Burger';
 import Home from '../components/ui/icons/Home';
 import SHADOWS from '../components/ui/shadow';
 import Dialog from '../components/ui/Dialog';
+import ListValue from '../components/ui/dropdown/ListValue';
 
 export type ProductDetailProps = StackScreenProps<
   RootStackParamList,
@@ -175,43 +176,26 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
                               right: 16,
                               backgroundColor: Color.white,
                               flexDirection: 'column',
-                              alignItems: 'center',
                             },
                             SHADOWS.shadow4,
                           ]}
                         >
-                          <Pressable
-                            onPress={() => {
+                          <ListValue
+                            label="글 수정하기"
+                            onClickHandler={() => {
                               closeDropdown();
                               navigation.navigate('ModifyProduct', {
                                 id,
                               });
                             }}
-                          >
-                            <Text
-                              style={[
-                                TYPOS.body1,
-                                { color: Color.neutral1, paddingVertical: 12 },
-                              ]}
-                            >
-                              글 수정하기
-                            </Text>
-                          </Pressable>
-                          <Pressable
-                            onPress={() => {
+                          />
+                          <ListValue
+                            label="삭제"
+                            onClickHandler={() => {
                               closeDropdown();
                               openDeleteModal();
                             }}
-                          >
-                            <Text
-                              style={[
-                                TYPOS.body1,
-                                { color: Color.neutral1, paddingVertical: 12 },
-                              ]}
-                            >
-                              삭제
-                            </Text>
-                          </Pressable>
+                          />
                         </View>
                       </View>
                     </TouchableWithoutFeedback>
