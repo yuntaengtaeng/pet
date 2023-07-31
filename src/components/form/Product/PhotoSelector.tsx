@@ -1,23 +1,41 @@
 import React from 'react';
-import { Pressable, Text, Image, StyleSheet, ScrollView } from 'react-native';
-import Camera from '../ui/icons/Camera';
-import TYPOS from '../ui/typo';
-import Color from '../../constants/color';
+import * as MediaLibrary from 'expo-media-library';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../types/navigation';
-import * as MediaLibrary from 'expo-media-library';
-import Close from '../ui/icons/Close';
+import { ScrollView, Pressable, Text, StyleSheet, Image } from 'react-native';
+import Color from '../../../constants/color';
+import { RootStackParamList } from '../../../types/navigation';
+import Close from '../../ui/icons/Close';
+import TYPOS from '../../ui/typo';
+import Camera from '../../ui/icons/Camera';
 
 const LIMIT = 5;
 
-interface Props {
-  selectedPhotos: MediaLibrary.Asset[];
-  updatePhotos: (photos: MediaLibrary.Asset[]) => void;
+interface SaveImageType {
+  uri: string;
+  id: string;
 }
 
-const PhotoSelector = ({ selectedPhotos, updatePhotos }: Props) => {
+export type ImageType = SaveImageType | MediaLibrary.Asset;
+interface Props {
+  selectedPhotos: ImageType[];
+  updatePhotos: (photos: ImageType[]) => void;
+  deletePhoto: (id: string) => void;
+}
+
+const checkMediaAssetType = (data: MediaLibrary.Asset | ImageType) => {
+  return 'filename' in data;
+};
+
+const PhotoSelector = ({
+  selectedPhotos,
+  updatePhotos,
+  deletePhoto,
+}: Props) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const selectedAssetPhotos = selectedPhotos.filter((value) =>
+    checkMediaAssetType(value)
+  ) as MediaLibrary.Asset[];
 
   return (
     <ScrollView
@@ -41,9 +59,14 @@ const PhotoSelector = ({ selectedPhotos, updatePhotos }: Props) => {
         onPress={() => {
           navigation.push('Gallery', {
             limit: LIMIT,
-            selectedPhotoIds: selectedPhotos,
+            selectedPhotoIds: selectedAssetPhotos,
             callback: (medias) => {
-              updatePhotos(medias);
+              const selectedIds = selectedPhotos.map((photo) => photo.id);
+
+              const excludeDuplicatesMedias = medias.filter(
+                (media) => !selectedIds.includes(media.id)
+              );
+              updatePhotos(excludeDuplicatesMedias);
             },
           });
         }}
@@ -65,15 +88,7 @@ const PhotoSelector = ({ selectedPhotos, updatePhotos }: Props) => {
 
           <Pressable
             onPress={() => {
-              const clone = [...selectedPhotos];
-              const findIndex = clone.findIndex(
-                (clone) => clone.id === photo.id
-              );
-
-              if (findIndex !== -1) {
-                clone.splice(findIndex, 1);
-              }
-              updatePhotos(clone);
+              deletePhoto(photo.id);
             }}
             style={{
               width: 24,
