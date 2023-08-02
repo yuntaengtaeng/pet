@@ -10,7 +10,6 @@ import {
   PanResponder,
 } from 'react-native';
 import Color from '../../constants/color';
-import TYPOS from './typo';
 
 interface BottomSheetProps {
   isOpened: boolean;
@@ -18,6 +17,10 @@ interface BottomSheetProps {
   children: React.ReactNode;
   height: number;
 }
+
+/*
+  TODO : BottomSheet를 Modal이 아닌 다른 방법으로 만드는 방법 고려
+*/
 
 const BottomSheet = ({
   isOpened,
