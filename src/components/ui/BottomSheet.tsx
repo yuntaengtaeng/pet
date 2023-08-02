@@ -18,10 +18,6 @@ interface BottomSheetProps {
   height: number;
 }
 
-/*
-  TODO : BottomSheet를 Modal이 아닌 다른 방법으로 만드는 방법 고려
-*/
-
 const BottomSheet = ({
   isOpened,
   onClose,

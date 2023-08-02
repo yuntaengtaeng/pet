@@ -13,22 +13,51 @@ import { LoadingState, UserState } from '../../store/atoms';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
-import { ToastDispatchContext } from '../ui/toast/ToastProvider';
+import ToastMessage from '../ui/toast/ToastMessage';
 
 interface Props {
   isVisibleBottomSheet: boolean;
 }
+
+/*
+  legacy
+  
+  Modal 위에서 Toast를 띄울 수 없는 상황으로 ToastContainer의 기능을 사용하지 않고
+  직접 ToastMessage 컴포넌트를 Modal 내부에서 랜더링 시키도록 구현
+*/
 
 const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
   const dispatch = useContext(HomeDispatchContext);
   const setIsLoading = useSetRecoilState(LoadingState);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const setUser = useSetRecoilState(UserState);
-  const toastDispatch = useContext(ToastDispatchContext);
 
   const [userAddressSettings, setUserAddressSettings] = useState<UserAddress[]>(
     []
   );
+
+  const [toastState, setToastState] = useState({
+    isVisible: false,
+    message: '',
+  });
+
+  const showToastMessage = (message: string) => {
+    setToastState({
+      isVisible: true,
+      message,
+    });
+
+    const timer = setTimeout(() => {
+      setToastState({
+        isVisible: false,
+        message: '',
+      });
+    }, 3000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  };
 
   const getUserAddressSettings = async () => {
     setIsLoading(true);
@@ -57,13 +86,9 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
         pickAddress: string;
       }>(`/user/addresses/${address.id}`);
 
-      // dispatch?.bottomSheetController.close();
-
       setUserAddressSettings(addressInfoList);
       setUser((prev) => ({ ...prev, address: pickAddress }));
-      toastDispatch?.showToastMessage(
-        `‘${address.address}’으로 변경되었습니다.`
-      );
+      showToastMessage(`‘${address.address}’으로 변경되었습니다.`);
     } finally {
       setIsLoading(false);
     }
@@ -71,7 +96,8 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
 
   const deleteAddress = async (address: UserAddress) => {
     if (userAddressSettings.length === 1) {
-      toastDispatch?.showToastMessage('동네는 최소 1개 이상 선택해야합니다.');
+      showToastMessage('동네는 최소 1개 이상 선택해야합니다.');
+      return;
     }
 
     setIsLoading(true);
@@ -84,7 +110,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
       );
 
       setUserAddressSettings(addressInfoList);
-      toastDispatch?.showToastMessage(`‘${address.address}’이 삭제되었습니다.`);
+      showToastMessage(`‘${address.address}’이 삭제되었습니다.`);
     } catch (error) {
       console.log(error);
     } finally {
@@ -168,6 +194,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
             </Text>
           </View>
         </View>
+        {toastState.isVisible && <ToastMessage message={toastState.message} />}
       </BottomSheet>
     </>
   );
