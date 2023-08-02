@@ -6,6 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import axios, { AxiosError } from 'axios';
 import { RootStackParamList } from '../../types/navigation';
 import * as Location from 'expo-location';
+import { ToastDispatchContext } from '../ui/toast/ToastProvider';
 
 interface Props {
   isLocationVerificationPopupVisible: boolean;
@@ -15,6 +16,7 @@ const LocationVerificationPopup = ({
   isLocationVerificationPopupVisible,
 }: Props) => {
   const dispatch = useContext(HomeDispatchContext);
+  const toastDispatch = useContext(ToastDispatchContext);
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const moveEdit = async () => {
@@ -48,6 +50,10 @@ const LocationVerificationPopup = ({
       const { data } = await axios.post('/auth/local-area', {
         ...response,
       });
+
+      toastDispatch?.showToastMessage(
+        `‘${data.verifiedLocalArea}’ 동네 인증이 완료!`
+      );
 
       moveEdit();
     } catch (error) {

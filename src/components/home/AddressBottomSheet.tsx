@@ -13,6 +13,7 @@ import { LoadingState, UserState } from '../../store/atoms';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
+import { ToastDispatchContext } from '../ui/toast/ToastProvider';
 
 interface Props {
   isVisibleBottomSheet: boolean;
@@ -23,6 +24,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
   const setIsLoading = useSetRecoilState(LoadingState);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const setUser = useSetRecoilState(UserState);
+  const toastDispatch = useContext(ToastDispatchContext);
 
   const [userAddressSettings, setUserAddressSettings] = useState<UserAddress[]>(
     []
@@ -44,7 +46,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
     }
   };
 
-  const selectAddress = async (id: string) => {
+  const selectAddress = async (address: UserAddress) => {
     setIsLoading(true);
 
     try {
@@ -53,26 +55,36 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
       } = await axios.patch<{
         addressInfoList: UserAddress[];
         pickAddress: string;
-      }>(`/user/addresses/${id}`);
+      }>(`/user/addresses/${address.id}`);
+
+      // dispatch?.bottomSheetController.close();
 
       setUserAddressSettings(addressInfoList);
       setUser((prev) => ({ ...prev, address: pickAddress }));
+      toastDispatch?.showToastMessage(
+        `‘${address.address}’으로 변경되었습니다.`
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const deleteAddress = async (id: string) => {
+  const deleteAddress = async (address: UserAddress) => {
+    if (userAddressSettings.length === 1) {
+      toastDispatch?.showToastMessage('동네는 최소 1개 이상 선택해야합니다.');
+    }
+
     setIsLoading(true);
 
     try {
       const {
         data: { addressInfoList },
       } = await axios.delete<{ addressInfoList: UserAddress[] }>(
-        `/user/addresses/${id}`
+        `/user/addresses/${address.id}`
       );
 
       setUserAddressSettings(addressInfoList);
+      toastDispatch?.showToastMessage(`‘${address.address}’이 삭제되었습니다.`);
     } catch (error) {
       console.log(error);
     } finally {
@@ -118,10 +130,10 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
                 address={address.address}
                 style={{ marginBottom: 16 }}
                 onPressHandler={() => {
-                  selectAddress(address.id);
+                  selectAddress(address);
                 }}
                 onClosePressHandler={() => {
-                  deleteAddress(address.id);
+                  deleteAddress(address);
                 }}
               />
             ))}

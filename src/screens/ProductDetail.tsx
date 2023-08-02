@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -31,6 +31,7 @@ import Home from '../components/ui/icons/Home';
 import SHADOWS from '../components/ui/shadow';
 import Dialog from '../components/ui/Dialog';
 import ListValue from '../components/ui/dropdown/ListValue';
+import { ToastDispatchContext } from '../components/ui/toast/ToastProvider';
 
 export type ProductDetailProps = StackScreenProps<
   RootStackParamList,
@@ -53,6 +54,8 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
     closeModal: closeDeleteModel,
     openModal: openDeleteModal,
   } = useModal();
+
+  const toastDispatch = useContext(ToastDispatchContext);
 
   useEffect(() => {
     const fetch = async () => {
@@ -111,6 +114,10 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
 
       const clone = { ...data };
       setData({ ...clone, isLike, likeCount });
+
+      if (!data.isLike) {
+        toastDispatch?.showToastMessage('관심물품에 추가됐어요.');
+      }
     } catch (error) {
       console.log(error);
     }

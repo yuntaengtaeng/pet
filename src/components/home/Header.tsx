@@ -25,6 +25,7 @@ import axios from 'axios';
 import { HomeDispatchContext } from './HomeDispatchContext';
 import { HomeStateContext } from './HomeStateContext';
 import ListValue from '../ui/dropdown/ListValue';
+import { ToastDispatchContext } from '../ui/toast/ToastProvider';
 
 const Header = () => {
   const { address } = useRecoilValue(UserState);
@@ -41,6 +42,7 @@ const Header = () => {
   const dispatch = useContext(HomeDispatchContext);
 
   const setUser = useSetRecoilState(UserState);
+  const toastDispatch = useContext(ToastDispatchContext);
 
   const openModalHandler = () => {
     openModal();
@@ -86,7 +88,7 @@ const Header = () => {
     };
   }, [isVisible]);
 
-  const selectAddress = async (id: string) => {
+  const selectAddress = async (address: UserAddress) => {
     setIsLoading(true);
 
     try {
@@ -95,9 +97,13 @@ const Header = () => {
       } = await axios.patch<{
         addressInfoList: UserAddress[];
         pickAddress: string;
-      }>(`/user/addresses/${id}`);
+      }>(`/user/addresses/${address.id}`);
 
       setUserAddress(addressInfoList);
+
+      toastDispatch?.showToastMessage(
+        `‘${address.address}’으로 변경되었습니다.`
+      );
       setUser((prev) => ({ ...prev, address: pickAddress }));
     } finally {
       setIsLoading(false);
@@ -184,7 +190,7 @@ const Header = () => {
                       key={address.id}
                       isActive={address.isLastSelected}
                       onClickHandler={() => {
-                        selectAddress(address.id);
+                        selectAddress(address);
                       }}
                     />
                   ))}
