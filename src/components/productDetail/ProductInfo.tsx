@@ -50,9 +50,7 @@ const ProductInfo = ({
         </Text>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={[TYPOS.headline2, { color: Color.black }]}>
-          {price.toLocaleString()}원
-        </Text>
+        <Text style={[TYPOS.headline2, { color: Color.black }]}>{price}</Text>
         <Text style={[TYPOS.headline2, { color: salesStatusColor }]}>
           {salesStatus}
         </Text>
