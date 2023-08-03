@@ -18,6 +18,8 @@ import TYPOS from '../ui/typo';
 import UiCheckbox from '../ui/UiCheckbox';
 import PhotoSelector, { ImageType } from './Product/PhotoSelector';
 import Button from '../ui/buttons/Button';
+import useModal from '../../hooks/useModal';
+import Dialog from '../ui/Dialog';
 
 export interface Data {
   petType: '강아지' | '고양이' | '전체';
@@ -37,6 +39,8 @@ interface Props {
 const Product = ({ initValue, onSubmitHandler }: Props) => {
   const user = useRecoilValue(UserState);
   const [category, setCategory] = useState<string[]>([]);
+  const [unfilledItems, setUnfilledItems] = useState<string[]>([]);
+  const { isVisible, openModal, closeModal } = useModal();
 
   const [data, updateData] = useReducer(
     (prev: Data, next: Partial<Data>) => {
@@ -86,6 +90,32 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
   }, [data.isFreeGiveaway]);
 
   const onSubmit = () => {
+    const tempUnfilledItems: string[] = [];
+
+    if (!data.category) {
+      tempUnfilledItems.push('카테고리');
+    }
+
+    if (!data.productName) {
+      tempUnfilledItems.push('상품명');
+    }
+
+    if (!data.productDescription) {
+      tempUnfilledItems.push('내용');
+    }
+
+    const hasPrice = !!data.productPrice || data.isFreeGiveaway;
+
+    if (!hasPrice) {
+      tempUnfilledItems.push('가격');
+    }
+
+    if (tempUnfilledItems.length) {
+      setUnfilledItems(tempUnfilledItems);
+      openModal();
+      return;
+    }
+
     onSubmitHandler(data);
   };
 
@@ -186,6 +216,19 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
           onPressHandler={onSubmit}
         />
       </View>
+      <Dialog isOpened={isVisible}>
+        <Dialog.Content
+          content={`${unfilledItems.join(', ')}은 필수로 입력해주세요.`}
+        />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '확인',
+              onPressHandler: closeModal,
+            },
+          ]}
+        />
+      </Dialog>
     </>
   );
 };
