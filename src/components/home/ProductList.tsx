@@ -29,8 +29,7 @@ const ProductList = () => {
 
   const petType = useContext(HomeStateContext) as PetType;
 
-  // const isDog: boolean = petType === 'dog';
-  const isDog = true;
+  const isDog: boolean = petType === 'dog';
   type SelectedCategory = typeof isDog extends true ? DogCategory : CatCategory;
   const setLoading = useSetRecoilState(LoadingState);
 
