@@ -74,7 +74,7 @@ const ProductCard = (props: Props) => {
           style={[TYPOS.body3, { marginBottom: 4 }]}
         >{`${props.address} · ${props.timeDelta}`}</Text>
         <Text style={[TYPOS.headline4, { color: Color.primary900 }]}>
-          {props.price.toLocaleString() + '원'}
+          {props.price}
         </Text>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <View style={{ flexDirection: 'row' }}>
