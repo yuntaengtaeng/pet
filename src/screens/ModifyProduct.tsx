@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Header from '../components/ui/Header';
 import { RootStackParamList } from '../types/navigation';
-import { ProductDetail as ProductDetailType } from '../types/interface';
+import {
+  ProductDetail as ProductDetailType,
+  ProductModifyData,
+} from '../types/interface';
 import Product, { Data } from '../components/form/Product';
 import * as MediaLibrary from 'expo-media-library';
 import { useSetRecoilState } from 'recoil';
@@ -23,13 +26,13 @@ const ModifyProduct = ({ navigation, route }: ModifyProductProps) => {
   useEffect(() => {
     const fetch = async () => {
       const {
-        data: { usedItemBoardInfo },
-      } = await axios.get<{
-        usedItemBoardInfo: ProductDetailType;
-      }>(`/board/used-item/${id}`);
+        data: { editUsedItemBoardInfo },
+      } = await axios.get<{ editUsedItemBoardInfo: ProductModifyData }>(
+        `/board/used-item/edit/${id}`
+      );
 
-      const { title, subCategory, images, description, price } =
-        usedItemBoardInfo;
+      const { title, subCategory, topCategory, images, description, price } =
+        editUsedItemBoardInfo;
 
       const transformedImages = images.map((image) => {
         const split = image.split('/');
@@ -42,13 +45,13 @@ const ModifyProduct = ({ navigation, route }: ModifyProductProps) => {
       });
 
       setInitValue({
-        petType: '강아지',
+        petType: topCategory,
         category: subCategory,
         productName: title,
         images: transformedImages,
         productDescription: description,
         productPrice: String(price),
-        isFreeGiveaway: false,
+        isFreeGiveaway: !price,
       });
     };
 

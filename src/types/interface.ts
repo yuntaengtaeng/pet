@@ -64,6 +64,16 @@ export interface ProductDetail {
   isMe?: boolean;
 }
 
+export interface ProductModifyData {
+  id: string;
+  topCategory: '전체' | '강아지' | '고양이';
+  subCategory: string;
+  title: string;
+  images: string[];
+  description: string;
+  price: number;
+}
+
 export interface EtcProduct {
   id: string;
   title: string;
