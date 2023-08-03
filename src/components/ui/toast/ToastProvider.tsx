@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import ToastMessage from './ToastMessage';
+import useToastState from '../../../hooks/useToastState';
 
 // 필요한 타입들을 미리 선언
 
@@ -29,28 +30,7 @@ export const ToastDispatchContext = createContext<ToastDispatch | null>(null);
 const ToastStateContext = createContext<State | null>(null);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
-  const [toastState, setToastState] = useState({
-    isVisible: false,
-    message: '',
-  });
-
-  const showToastMessage = (message: string) => {
-    setToastState({
-      isVisible: true,
-      message,
-    });
-
-    const timer = setTimeout(() => {
-      setToastState({
-        isVisible: false,
-        message: '',
-      });
-    }, 3000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  };
+  const [toastState, showToastMessage] = useToastState();
 
   const dispatch = {
     showToastMessage,

@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
 import ToastMessage from '../ui/toast/ToastMessage';
+import useToastState from '../../hooks/useToastState';
 
 interface Props {
   isVisibleBottomSheet: boolean;
@@ -36,28 +37,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
     []
   );
 
-  const [toastState, setToastState] = useState({
-    isVisible: false,
-    message: '',
-  });
-
-  const showToastMessage = (message: string) => {
-    setToastState({
-      isVisible: true,
-      message,
-    });
-
-    const timer = setTimeout(() => {
-      setToastState({
-        isVisible: false,
-        message: '',
-      });
-    }, 3000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  };
+  const [toastState, showToastMessage] = useToastState();
 
   const getUserAddressSettings = async () => {
     setIsLoading(true);
