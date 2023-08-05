@@ -1,3 +1,6 @@
+import { ViewStyle } from 'react-native';
+import Color from '../constants/color';
+
 export interface Location {
   latitude: number;
   longitude: number;
@@ -79,4 +82,9 @@ export interface EtcProduct {
   title: string;
   price: number;
   image: string;
+}
+
+export interface IconProp {
+  color: Color;
+  style?: ViewStyle;
 }
