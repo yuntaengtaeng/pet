@@ -11,7 +11,7 @@ import { UserState } from '../../store/atoms';
 import ScrollContainer from '../layout/ScrollContainer';
 import ChipContainer from '../ui/ChipContainer';
 import Dropdown from '../ui/dropdown/Dropdown';
-import Won from '../ui/icons/Won';
+import Won24 from '../ui/icons/Won24';
 import InputField from '../ui/inputs/InputField';
 import TextArea from '../ui/inputs/TextArea';
 import TYPOS from '../ui/typo';
@@ -177,11 +177,10 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
           />
           <InputField
             leftIcon={() => (
-              <Won
+              <Won24
                 style={{
                   marginLeft: 16,
                 }}
-                size={24}
                 color={data.isFreeGiveaway ? Color.neutral3 : Color.neutral1}
               />
             )}

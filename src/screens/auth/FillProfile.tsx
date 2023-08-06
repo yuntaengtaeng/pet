@@ -9,8 +9,7 @@ import InputField from '../../components/ui/inputs/InputField';
 import Button from '../../components/ui/buttons/Button';
 import UiCheckbox from '../../components/ui/UiCheckbox';
 import Color from '../../constants/color';
-import Camera from '../../components/ui/icons/Camera';
-
+import Camera16 from '../../components/ui/icons/Camera16';
 import * as MediaLibrary from 'expo-media-library';
 import useDebounce from '../../hooks/useDebounce';
 import axios, { AxiosError } from 'axios';
@@ -21,7 +20,6 @@ import { PetType } from '../../types/interface';
 import useInputState from '../../hooks/useInputState';
 import useModal from '../../hooks/useModal';
 import BottomSheet from '../../components/ui/BottomSheet';
-import ListValue from '../../components/ui/dropdown/ListValue';
 
 export type FillProfileScreenProps = StackScreenProps<
   RootStackParamList,
@@ -151,12 +149,22 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
                   : require('../../../assets/img/placeholder.png')
               }
             />
-            <Camera
-              style={{ position: 'absolute', bottom: 0, right: 0 }}
-              size={24}
-              circleColor={Color.primary700}
-              color={Color.white}
-            />
+
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                width: 24,
+                height: 24,
+                backgroundColor: Color.primary600,
+                borderRadius: 24,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Camera16 color={Color.white} />
+            </View>
           </Pressable>
         </View>
         <View>

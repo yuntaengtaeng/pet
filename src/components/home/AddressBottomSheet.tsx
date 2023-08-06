@@ -3,7 +3,7 @@ import { View, Pressable, Text } from 'react-native';
 import Color from '../../constants/color';
 import AddressLabel from '../ui/AddressLabel';
 import BottomSheet from '../ui/BottomSheet';
-import Plus from '../ui/icons/Plus';
+import Plus24 from '../ui/icons/Plus24';
 import TYPOS from '../ui/typo';
 import { HomeDispatchContext } from './HomeDispatchContext';
 import { UserAddress } from '../../types/interface';
@@ -160,7 +160,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
                 <Text style={[TYPOS.body1, { color: Color.black }]}>
                   추가하기
                 </Text>
-                <Plus size={24} color={Color.black} />
+                <Plus24 color={Color.black} />
               </Pressable>
             )}
 

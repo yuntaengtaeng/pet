@@ -5,9 +5,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ScrollView, Pressable, Text, StyleSheet, Image } from 'react-native';
 import Color from '../../../constants/color';
 import { RootStackParamList } from '../../../types/navigation';
-import Close from '../../ui/icons/Close';
+import Close20 from '../../ui/icons/Close20';
 import TYPOS from '../../ui/typo';
-import Camera from '../../ui/icons/Camera';
+import Camera24 from '../../ui/icons/Camera24';
 
 const LIMIT = 5;
 
@@ -71,7 +71,7 @@ const PhotoSelector = ({
           });
         }}
       >
-        <Camera size={24} color={Color.black} />
+        <Camera24 color={Color.black} />
         <Text
           style={[TYPOS.body3, { color: Color.black }]}
         >{`${selectedPhotos.length}/${LIMIT}`}</Text>
@@ -91,18 +91,18 @@ const PhotoSelector = ({
               deletePhoto(photo.id);
             }}
             style={{
-              width: 24,
-              height: 24,
+              width: 20,
+              height: 20,
               backgroundColor: Color.neutral1,
               position: 'absolute',
               right: -6,
               top: -6,
-              borderRadius: 24,
+              borderRadius: 20,
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Close size={20} color={Color.white} />
+            <Close20 color={Color.white} />
           </Pressable>
         </Pressable>
       ))}
@@ -117,6 +117,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     width: 76,
     height: 76,
-    marginRight: 4,
+    marginRight: 8,
   },
 });

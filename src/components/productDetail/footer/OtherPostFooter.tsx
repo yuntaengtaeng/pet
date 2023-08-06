@@ -2,8 +2,8 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import Color from '../../../constants/color';
 import Button from '../../ui/buttons/Button';
-import Favorite from '../../ui/icons/Favorite';
-import FillFavorite from '../../ui/icons/FillFavorite';
+import Favorite32 from '../../ui/icons/Favorite32';
+import FillFavorite32 from '../../ui/icons/FillFavorite32';
 import { ProductDetail } from '../../../types/interface';
 
 type Props = Pick<ProductDetail, 'isLike'> & {
@@ -23,9 +23,9 @@ const OtherPostFooter = ({ onLikeChangeHandler, isLike }: Props) => {
     >
       <Pressable onPress={onLikeChangeHandler}>
         {isLike ? (
-          <FillFavorite size={32} color={Color.primary900} />
+          <FillFavorite32 color={Color.primary900} />
         ) : (
-          <Favorite size={32} color={Color.neutral1} />
+          <Favorite32 color={Color.neutral1} />
         )}
       </Pressable>
       <View style={{ paddingLeft: 24 }} />

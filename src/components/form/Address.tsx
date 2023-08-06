@@ -20,7 +20,7 @@ import { useRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
 import axios from 'axios';
 import Guide from './Address/Guide';
-import Search from '../ui/icons/Search';
+import Search24 from '../ui/icons/Search24';
 import useInputState from '../../hooks/useInputState';
 
 interface Address extends LocationType {
@@ -202,9 +202,8 @@ const Address = ({ addressSelectHandler }: Props) => {
             placeholder="동명(읍, 면)으로 검색 (ex. 신대방동)"
             leftIcon={(hasFocus) => {
               return (
-                <Search
-                  size={24}
-                  {...(hasFocus && { color: Color.primary700 })}
+                <Search24
+                  color={hasFocus ? Color.primary700 : Color.neutral1}
                   style={{
                     marginLeft: 16,
                   }}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Pressable, ViewStyle } from 'react-native';
-import Check from './icons/Check';
+import Check16 from './icons/Check16';
 import Color from '../../constants/color';
 
 interface Props {
@@ -39,7 +39,7 @@ const UiCheckbox = (props: Props) => {
         ]}
       >
         {isChecked && (
-          <Check size={16} color={disabled ? Color.neutral3 : Color.white} />
+          <Check16 color={disabled ? Color.neutral3 : Color.white} />
         )}
       </Pressable>
       {children && (

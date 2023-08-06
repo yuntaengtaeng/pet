@@ -14,12 +14,12 @@ import useDidUpdate from '../hooks/useDidUpdate';
 import Header from '../components/ui/Header';
 import Color from '../constants/color';
 import TYPOS from '../components/ui/typo';
-import Camera from '../components/ui/icons/Camera';
+import Camera32 from '../components/ui/icons/Camera32';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
 import { useRecoilState } from 'recoil';
 import { LoadingState } from '../store/atoms';
-import Check from '../components/ui/icons/Check';
+import Check16 from '../components/ui/icons/Check16';
 import useModal from '../hooks/useModal';
 import Dialog from '../components/ui/Dialog';
 
@@ -92,7 +92,7 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
 
   const decideSelectedIndicator = (index: number) => {
     if (limit === 1) {
-      return <Check size={16} color={Color.white} />;
+      return <Check16 color={Color.white} />;
     } else {
       return (
         <Text
@@ -191,7 +191,7 @@ const Gallery = ({ navigation, route }: GalleryScreenProps) => {
         alignItems: 'center',
       }}
     >
-      <Camera size={32} />
+      <Camera32 color={Color.neutral1} />
       <Text style={[TYPOS.body3, { color: Color.black }]}>사진 촬영</Text>
     </Pressable>
   );

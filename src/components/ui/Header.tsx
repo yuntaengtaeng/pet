@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import TYPOS from './typo';
-import Close from './icons/Close';
+import Close24 from './icons/Close24';
 import Color from '../../constants/color';
 import { useNavigation } from '@react-navigation/native';
 
@@ -21,7 +21,7 @@ const Header = (props: Props) => {
   return (
     <View style={styles.header}>
       <Pressable onPress={onCloseHandler}>
-        <Close size={24} />
+        <Close24 color={Color.black} />
       </Pressable>
       <Text style={[TYPOS.headline3, styles.title]}>{title}</Text>
       <View style={styles.rightContent}>{props.rightContent}</View>

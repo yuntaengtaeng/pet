@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import InputField from './InputField';
-import Search from '../icons/Search';
+import Search24 from '../icons/Search24';
 import Color from '../../../constants/color';
 
 const meta = {
@@ -32,9 +32,8 @@ export const InputFieldSearch: Story = {
     placeholder: 'placeholder',
     leftIcon(hasFocus) {
       return (
-        <Search
-          size={24}
-          {...(hasFocus && { color: Color.primary700 })}
+        <Search24
+          color={hasFocus ? Color.primary700 : Color.neutral1}
           style={{
             marginLeft: 16,
           }}

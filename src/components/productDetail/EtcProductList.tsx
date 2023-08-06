@@ -8,7 +8,7 @@ import VerticalProductCard from '../ui/VerticalProductCard';
 import { StackNavigationProp } from '@react-navigation/stack';
 import TYPOS from '../ui/typo';
 import Color from '../../constants/color';
-import ArrowRight from '../ui/icons/ArrowRight';
+import Right16 from '../ui/icons/Right16';
 
 interface Props {
   boardId: string;
@@ -73,7 +73,7 @@ const EtcProductList = ({ isMe, boardId, sellerNickname }: Props) => {
             <Text style={[TYPOS.small, { color: Color.neutral2 }]}>
               모두보기
             </Text>
-            <ArrowRight size={16} color={Color.neutral2} />
+            <Right16 color={Color.neutral2} />
           </Pressable>
         )}
       </View>

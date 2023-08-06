@@ -9,7 +9,7 @@ import {
   TextInputChangeEventData,
 } from 'react-native';
 import Color from '../../../constants/color';
-import Close from '../icons/Close';
+import Close16 from '../icons/Close16';
 import TYPOS from '../typo';
 
 interface Props {
@@ -92,7 +92,7 @@ const TextArea = (props: Props) => {
       </View>
       {isError && !!errorMessage && (
         <View style={styles.errorWrap}>
-          <Close size={16} color={Color.error} />
+          <Close16 color={Color.error} />
           <Text style={[styles.errorMessage, TYPOS.body3]}>{errorMessage}</Text>
         </View>
       )}

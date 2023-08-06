@@ -7,9 +7,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Color from '../constants/color';
 import TYPOS from '../components/ui/typo';
 
-import Home from '../components/ui/icons/Home';
-import User from '../components/ui/icons/User';
-import Users from '../components/ui/icons/Users';
+import Home24 from '../components/ui/icons/Home24';
+import User24 from '../components/ui/icons/User24';
+import Users24 from '../components/ui/icons/Users24';
 
 export type MainScreenProps = StackScreenProps<
   RootStackParamList,
@@ -31,24 +31,15 @@ const BottomNavigation = () => {
           switch (route.name) {
             case 'Home':
               return (
-                <Home
-                  size={24}
-                  color={focused ? Color.neutral1 : Color.neutral3}
-                />
+                <Home24 color={focused ? Color.neutral1 : Color.neutral3} />
               );
             case 'PetMate':
               return (
-                <Users
-                  size={24}
-                  color={focused ? Color.neutral1 : Color.neutral3}
-                />
+                <Users24 color={focused ? Color.neutral1 : Color.neutral3} />
               );
             case 'MyPet':
               return (
-                <User
-                  size={24}
-                  color={focused ? Color.neutral1 : Color.neutral3}
-                />
+                <User24 color={focused ? Color.neutral1 : Color.neutral3} />
               );
           }
         },

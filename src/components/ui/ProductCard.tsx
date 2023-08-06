@@ -2,8 +2,8 @@ import React from 'react';
 import { Pressable, Image, View, Text } from 'react-native';
 import TYPOS from './typo';
 import Color from '../../constants/color';
-import Favorite from './icons/Favorite';
-import Chat from './icons/Chat';
+import Favorite16 from './icons/Favorite16';
+import Chat16 from './icons/Chat16';
 import { Product } from '../../types/interface';
 
 interface Props extends Product {
@@ -78,17 +78,13 @@ const ProductCard = (props: Props) => {
         </Text>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           <View style={{ flexDirection: 'row' }}>
-            <Favorite
-              size={16}
-              color={Color.neutral3}
-              style={{ marginRight: 4 }}
-            />
+            <Favorite16 color={Color.neutral3} style={{ marginRight: 4 }} />
             <Text style={[TYPOS.body3, { color: Color.neutral3 }]}>
               {props.likeCount}
             </Text>
           </View>
           <View style={{ flexDirection: 'row', marginLeft: 10 }}>
-            <Chat size={16} color={Color.neutral3} style={{ marginRight: 4 }} />
+            <Chat16 color={Color.neutral3} style={{ marginRight: 4 }} />
             <Text style={[TYPOS.body3, { color: Color.neutral3 }]}>
               {props.chatCount}
             </Text>

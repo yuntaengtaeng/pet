@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import Plus from '../ui/icons/Plus';
+import Plus32 from '../ui/icons/Plus32';
 import Color from '../../constants/color';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../types/navigation';
@@ -31,7 +31,7 @@ const FixedWriteButton = () => {
 
   return (
     <Pressable style={styles.wrap} onPress={verifyNeighborhood}>
-      <Plus size={32} color={Color.white} />
+      <Plus32 color={Color.white} />
     </Pressable>
   );
 };

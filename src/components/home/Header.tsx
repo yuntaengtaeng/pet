@@ -11,13 +11,13 @@ import {
 } from 'react-native';
 import Color from '../../constants/color';
 import TYPOS from '../ui/typo';
-import Alarm from '../ui/icons/Alarm';
-import Search from '../ui/icons/Search';
+import Bell24 from '../ui/icons/Bell24';
+import Search24 from '../ui/icons/Search24';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { LoadingState, UserState } from '../../store/atoms';
-import ArrowDown from '../ui/icons/ArrowDown';
-import ArrowUp from '../ui/icons/ArrowUp';
-import ArrowSwap from '../ui/icons/ArrowSwap';
+import Down16 from '../ui/icons/Down16';
+import Up16 from '../ui/icons/Up16';
+import Swap16 from '../ui/icons/Swap16';
 import useModal from '../../hooks/useModal';
 import SHADOWS from '../ui/shadow';
 import { UserAddress } from '../../types/interface';
@@ -130,7 +130,7 @@ const Header = () => {
         >
           <Text style={TYPOS.headline1}>{petType === 'dog' ? '🐶' : '😺'}</Text>
           <View style={styles.absoluteContainer}>
-            <ArrowSwap size={16} color={Color.white} />
+            <Swap16 color={Color.white} />
           </View>
         </TouchableOpacity>
         <View
@@ -150,9 +150,9 @@ const Header = () => {
               {address}
             </Text>
             {isVisible ? (
-              <ArrowUp size={16} style={{ marginLeft: 4 }} />
+              <Up16 color={Color.black} style={{ marginLeft: 4 }} />
             ) : (
-              <ArrowDown size={16} style={{ marginLeft: 4 }} />
+              <Down16 color={Color.black} style={{ marginLeft: 4 }} />
             )}
           </View>
           <Modal visible={isVisible} transparent animationType="fade">
@@ -207,8 +207,8 @@ const Header = () => {
           </Modal>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Alarm size={24} />
-          <Search size={24} />
+          <Bell24 color={Color.black} />
+          <Search24 color={Color.black} />
         </View>
       </View>
     </>

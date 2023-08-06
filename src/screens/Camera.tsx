@@ -6,10 +6,9 @@ import Header from '../components/ui/Header';
 import Container from '../components/layout/Container';
 import { RootStackParamList } from '../types/navigation';
 import { StackScreenProps } from '@react-navigation/stack';
-import ArrowSwap from '../components/ui/icons/ArrowSwap';
 import Color from '../constants/color';
 import TYPOS from '../components/ui/typo';
-import Swap from '../components/ui/icons/Swap';
+import CircularSwap24 from '../components/ui/icons/CircularSwap24';
 
 export type CameraScreenProps = StackScreenProps<RootStackParamList, 'Camera'>;
 
@@ -160,7 +159,7 @@ const CameraScreen = ({ navigation, route }: CameraScreenProps) => {
                       marginLeft: 'auto',
                     }}
                   >
-                    <Swap size={24} color={Color.white} />
+                    <CircularSwap24 color={Color.white} />
                   </Pressable>
                 </View>
               </>

@@ -25,13 +25,13 @@ import BottomSheet from '../components/ui/BottomSheet';
 import TYPOS from '../components/ui/typo';
 import { ProductStatus } from '../types/interface';
 import EtcProductList from '../components/productDetail/EtcProductList';
-import Share from '../components/ui/icons/Share';
-import Burger from '../components/ui/icons/Burger';
-import Home from '../components/ui/icons/Home';
 import SHADOWS from '../components/ui/shadow';
 import Dialog from '../components/ui/Dialog';
 import ListValue from '../components/ui/dropdown/ListValue';
 import { ToastDispatchContext } from '../components/ui/toast/ToastProvider';
+import Home24 from '../components/ui/icons/Home24';
+import Share24 from '../components/ui/icons/Share24';
+import Burger24 from '../components/ui/icons/Burger24';
 
 export type ProductDetailProps = StackScreenProps<
   RootStackParamList,
@@ -141,14 +141,14 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
               navigation.navigate('BottomNavigation');
             }}
           >
-            <Home size={24} color={Color.black} />
+            <Home24 color={Color.black} />
           </Pressable>
         }
         rightContent={
           <>
             <View style={{ flexDirection: 'row' }}>
               <Pressable>
-                <Share size={24} color={Color.black} />
+                <Share24 color={Color.black} />
               </Pressable>
               {data.isMe && (
                 <>
@@ -157,7 +157,7 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
                     ref={burgerRef}
                     style={{ marginLeft: 8 }}
                   >
-                    <Burger size={24} color={Color.black} />
+                    <Burger24 color={Color.black} />
                   </Pressable>
                   <Modal
                     visible={isVisibleDropdown}

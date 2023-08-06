@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import Color from '../../constants/color';
 import TYPOS from '../ui/typo';
-import ArrowRight from '../ui/icons/ArrowRight';
+import Right16 from '../ui/icons/Right16';
 import { ProductDetail } from '../../types/interface';
 
 type Props = Pick<
@@ -33,7 +33,7 @@ const ProductInfo = ({
         <Text style={[TYPOS.small, { color: Color.neutral2 }]}>
           {subCategory}
         </Text>
-        <ArrowRight size={16} color={Color.neutral2} />
+        <Right16 color={Color.neutral2} />
       </View>
       <View
         style={{

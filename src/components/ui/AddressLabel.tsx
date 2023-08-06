@@ -1,9 +1,8 @@
 import React from 'react';
 import { Text, Pressable, ViewStyle } from 'react-native';
-import SHADOWS from './shadow';
 import TYPOS from './typo';
 import Color from '../../constants/color';
-import Close from './icons/Close';
+import Close24 from './icons/Close24';
 
 interface Props {
   address: string;
@@ -41,7 +40,7 @@ const AddressLabel = ({
         {address}
       </Text>
       <Pressable onPress={onClosePressHandler}>
-        <Close size={24} color={isSelected ? Color.primary700 : Color.black} />
+        <Close24 color={isSelected ? Color.primary700 : Color.black} />
       </Pressable>
     </Pressable>
   );

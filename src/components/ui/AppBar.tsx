@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import TYPOS from './typo';
-import ArrowLeft from './icons/ArrowLeft';
+import Left24 from './icons/Left24';
 import Color from '../../constants/color';
 import { useNavigation } from '@react-navigation/native';
 
@@ -23,7 +23,7 @@ const AppBar = (props: Props) => {
   return (
     <View style={styles.header}>
       <Pressable onPress={onBackButtonHandler}>
-        <ArrowLeft size={24} />
+        <Left24 color={Color.black} />
       </Pressable>
       {props.leftContent && (
         <View style={styles.leftContent}>{props.leftContent}</View>
