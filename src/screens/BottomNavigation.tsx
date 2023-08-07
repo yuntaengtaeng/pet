@@ -10,6 +10,7 @@ import TYPOS from '../components/ui/typo';
 import Home24 from '../components/ui/icons/Home24';
 import User24 from '../components/ui/icons/User24';
 import Users24 from '../components/ui/icons/Users24';
+import Chat24 from '../components/ui/icons/Chat24';
 
 export type MainScreenProps = StackScreenProps<
   RootStackParamList,
@@ -37,6 +38,10 @@ const BottomNavigation = () => {
               return (
                 <Users24 color={focused ? Color.neutral1 : Color.neutral3} />
               );
+            case 'Chatting':
+              return (
+                <Chat24 color={focused ? Color.neutral1 : Color.neutral3} />
+              );
             case 'MyPet':
               return (
                 <User24 color={focused ? Color.neutral1 : Color.neutral3} />
@@ -54,6 +59,11 @@ const BottomNavigation = () => {
         name="PetMate"
         component={BottomTab.PetMate}
         options={{ headerShown: false, tabBarLabel: '펫메이트' }}
+      />
+      <Tab.Screen
+        name="Chatting"
+        component={BottomTab.Chatting}
+        options={{ headerShown: false, tabBarLabel: '채팅' }}
       />
       <Tab.Screen
         name="MyPet"

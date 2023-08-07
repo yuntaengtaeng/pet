@@ -37,4 +37,5 @@ export type TabNavigatorParamList = {
   Home: undefined;
   MyPet: undefined;
   PetMate: undefined;
+  Chatting: undefined;
 };
