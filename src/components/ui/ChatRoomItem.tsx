@@ -7,8 +7,12 @@ import Pin24 from './icons/Pin24';
 import FillPin24 from './icons/FillPin24';
 import Bell16 from './icons/Bell16';
 import PinIndicator from './icons/PinIndicator';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../types/navigation';
 
 interface Props {
+  roomId: string;
   image: string;
   roomName: string;
   region: string;
@@ -22,6 +26,7 @@ interface Props {
 }
 
 const ChatRoomItem = ({
+  roomId,
   image,
   roomName,
   region,
@@ -33,6 +38,8 @@ const ChatRoomItem = ({
   onExitPressHandler,
   onToggleNotificationHandler,
 }: Props) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
   const renderLeftActions = () => {
     return (
       <View
@@ -107,7 +114,12 @@ const ChatRoomItem = ({
       renderLeftActions={renderLeftActions}
       friction={1.5}
     >
-      <View
+      <Pressable
+        onPress={() => {
+          navigation.navigate('ChatRoom', {
+            roomId: roomId,
+          });
+        }}
         style={{
           backgroundColor: Color.white,
           padding: 16,
@@ -172,7 +184,7 @@ const ChatRoomItem = ({
             </Text>
           </View>
         </View>
-      </View>
+      </Pressable>
     </Swipeable>
   );
 };
