@@ -31,6 +31,9 @@ export type RootStackParamList = {
   ModifyProduct: {
     id: string;
   };
+  ChatRoom: {
+    roomId: string;
+  };
 };
 
 export type TabNavigatorParamList = {
