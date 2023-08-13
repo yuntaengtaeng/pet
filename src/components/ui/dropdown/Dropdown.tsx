@@ -15,6 +15,8 @@ import useModal from '../../../hooks/useModal';
 import ListValue from './ListValue';
 import SHADOWS from '../shadow';
 import TYPOS from '../typo';
+import Down24 from '../icons/Down24';
+import Up24 from '../icons/Up24';
 
 interface Props {
   list: string[];
@@ -90,7 +92,6 @@ const Dropdown = ({
         <Text
           style={[
             {
-              paddingHorizontal: 16,
               color: selectedLabel ? Color.neutral1 : Color.neutral2,
             },
             TYPOS.body1,
@@ -98,6 +99,11 @@ const Dropdown = ({
         >
           {selectedLabel ? selectedLabel : placeholder}
         </Text>
+        {isVisible ? (
+          <Up24 color={Color.primary700} />
+        ) : (
+          <Down24 color={Color.neutral2} />
+        )}
       </TouchableOpacity>
       <Modal visible={isVisible} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={closeModal}>
@@ -154,5 +160,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Color.neutral3,
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
   },
 });
