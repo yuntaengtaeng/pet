@@ -13,7 +13,10 @@ interface Props {
 
 const VerticalProductCard = (props: Props) => {
   return (
-    <Pressable style={props.style} onPress={props.onPressHandler}>
+    <Pressable
+      style={[props.style, { width: 160 }]}
+      onPress={props.onPressHandler}
+    >
       <Image
         style={[
           {
@@ -21,12 +24,17 @@ const VerticalProductCard = (props: Props) => {
             height: 160,
             resizeMode: 'cover',
             borderRadius: 8,
+            marginBottom: 8,
           },
         ]}
         source={{ uri: props.image }}
       />
-      <Text style={[TYPOS.body1, { color: Color.black, marginBottom: 4 }]}>
-        {props.title}
+      <Text
+        style={[TYPOS.body1, { color: Color.black, marginBottom: 4 }]}
+        numberOfLines={1}
+        ellipsizeMode="tail"
+      >
+        {props.title} 가나다라
       </Text>
       <Text style={[TYPOS.headline4, { color: Color.black }]}>
         {props.price.toLocaleString()}원
