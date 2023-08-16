@@ -11,7 +11,7 @@ const enum Color {
 
   primary900 = '#FD790D',
   primary800 = '#FE9713',
-  primary700 = '#FEA717',
+  primary700 = '#FEAD26',
   primary600 = '#FEBA1B',
   primary500 = '#FEC822',
   primary400 = '#FED035',
@@ -20,16 +20,16 @@ const enum Color {
   primary100 = '#FEEEB6',
   primary50 = '#fef9e2',
 
-  success = '#1B6E53',
-  successBg = '#F1FBF8',
+  success = '#3F8E52',
+  successBg = '#EDF9F0',
 
-  warning = '#FFA826',
-  warningBg = '#FFF8EC',
+  warning = '#C56C28',
+  warningBg = '#FFF4EC',
 
-  info = '#2E5AAC',
+  info = '#456CB5',
   infoBg = '#EEF2FA',
 
-  error = '#E01507',
+  error = '#E73B2F',
   errorBg = '#FFF1F0',
 }
 
