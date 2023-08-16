@@ -61,6 +61,22 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
     }
   );
 
+  const clampToMax = (inputPrice: string) => {
+    const MAX = 100000000; // 1억
+
+    if (inputPrice === '') {
+      return inputPrice;
+    }
+
+    const stringToNumber = Number(inputPrice.replace(/,/g, ''));
+
+    if (stringToNumber > MAX) {
+      return String(MAX);
+    }
+
+    return String(stringToNumber);
+  };
+
   useEffect(() => {
     updateData({ category: '' });
     const categories = (() => {
@@ -194,7 +210,7 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
             }
             layoutStyle={{ marginTop: 16 }}
             onChangeHandler={(value: string) => {
-              updateData({ productPrice: value });
+              updateData({ productPrice: clampToMax(value) });
             }}
           />
           <UiCheckbox
