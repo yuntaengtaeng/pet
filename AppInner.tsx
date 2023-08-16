@@ -23,6 +23,7 @@ import { StatusBar, SafeAreaView, StyleSheet } from 'react-native';
 import UserProductList from './src/screens/UserProductList';
 import ModifyProduct from './src/screens/ModifyProduct';
 import ChatRoom from './src/screens/ChatRoom';
+import Color from './src/constants/color';
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -99,72 +100,34 @@ const AppInner = () => {
       <StatusBar />
       <SafeAreaView style={styles.container}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Onboarding">
-            <Stack.Screen
-              name="Onboarding"
-              component={Onboarding}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="KaKaoLogin"
-              component={KaKaoLogin}
-              options={{ headerShown: false }}
-            />
+          <Stack.Navigator
+            initialRouteName="Onboarding"
+            screenOptions={{
+              headerShown: false,
+              cardStyle: {
+                backgroundColor: Color.white,
+              },
+            }}
+          >
+            <Stack.Screen name="Onboarding" component={Onboarding} />
+            <Stack.Screen name="KaKaoLogin" component={KaKaoLogin} />
             <Stack.Screen
               name="AddressRegistration"
               component={AddressRegistration}
-              options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="FillProfile"
-              component={FillProfile}
-              options={{ headerShown: false }}
-            />
+            <Stack.Screen name="FillProfile" component={FillProfile} />
             <Stack.Screen
               name="BottomNavigation"
               component={BottomNavigation}
-              options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="Gallery"
-              component={Gallery}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Camera"
-              component={Camera}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="EditProduct"
-              component={EditProduct}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AddressModify"
-              component={AddressModify}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ProductDetail"
-              component={ProductDetail}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="UserProductList"
-              component={UserProductList}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ModifyProduct"
-              component={ModifyProduct}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ChatRoom"
-              component={ChatRoom}
-              options={{ headerShown: false }}
-            />
+            <Stack.Screen name="Gallery" component={Gallery} />
+            <Stack.Screen name="Camera" component={Camera} />
+            <Stack.Screen name="EditProduct" component={EditProduct} />
+            <Stack.Screen name="AddressModify" component={AddressModify} />
+            <Stack.Screen name="ProductDetail" component={ProductDetail} />
+            <Stack.Screen name="UserProductList" component={UserProductList} />
+            <Stack.Screen name="ModifyProduct" component={ModifyProduct} />
+            <Stack.Screen name="ChatRoom" component={ChatRoom} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>
