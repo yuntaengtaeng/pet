@@ -9,6 +9,7 @@ import Burger24 from '../components/ui/icons/Burger24';
 import DateDisplay from '../components/chat/room/DateDisplay';
 import ChatBubble from '../components/ui/ChatBubble';
 import Input from '../components/chat/room/Input';
+import ProductInformation from '../components/chat/room/ProductInformation';
 
 export type OnboardingScreenProps = StackScreenProps<
   RootStackParamList,
@@ -28,6 +29,13 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
           </View>
         }
         rightContent={<Burger24 color={Color.black} />}
+      />
+      <ProductInformation
+        id="test"
+        name="강아지가 좋아하는 오리인형"
+        price="15,000원"
+        status="예약중"
+        image="https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg"
       />
       <ScrollView
         contentContainerStyle={{
