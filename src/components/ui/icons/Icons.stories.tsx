@@ -1,27 +1,58 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
-import Alarm from './Alarm';
-import ArrowDown from './ArrowDown';
-import ArrowLeft from './ArrowLeft';
-import ArrowRight from './ArrowRight';
-import ArrowSwap from './ArrowSwap';
-import ArrowUp from './ArrowUp';
-import Burger from './Burger';
-import Camera from './Camera';
-import Chat from './Chat';
-import Check from './Check';
-import Close from './Close';
-import Document from './Document';
-import Favorite from './Favorite';
-import Home from './Home';
-import Location from './Location';
-import Minus from './Minus';
-import Plus from './Plus';
-import Search from './Search';
-import User from './User';
-import Users from './Users';
-import Won from './Won';
+import Bell16 from './Bell16';
+import Bell24 from './Bell24';
+import Burger24 from './Burger24';
+import Calendar24 from './Calendar24';
+import Camera16 from './Camera16';
+import Camera24 from './Camera24';
+import Camera32 from './Camera32';
+import Chat16 from './Chat16';
+import Chat24 from './Chat24';
+import Check16 from './Check16';
+import Check24 from './Check24';
+import CircularSwap16 from './CircularSwap16';
+import CircularSwap24 from './CircularSwap24';
+import Close16 from './Close16';
+import Close20 from './Close20';
+import Close24 from './Close24';
+import Document24_2 from './Document24_2';
+import Document24 from './Document24';
+import Down16 from './Down16';
+import Down24 from './Down24';
+import Eye16 from './Eye16';
+import Eye24 from './Eye24';
+import Favorite16 from './Favorite16';
+import Favorite24 from './Favorite24';
+import Favorite32 from './Favorite32';
+import FillPin24 from './FillPin24';
+import Filter24 from './Filter24';
+import Home24 from './Home24';
+import Image24 from './Image24';
+import Image32 from './Image32';
+import Left24 from './Left24';
+import Location24 from './Location24';
+import Minus24 from './Minus24';
+import Pin24 from './Pin24';
+import PinIndicator from './PinIndicator';
+import Plus24 from './Plus24';
+import Plus32 from './Plus32';
+import Right16 from './Right16';
+import Right24 from './Right24';
+import RoundClose16 from './RoundClose16';
+import Search24 from './Search24';
+import Send24 from './Send24';
+import Share24 from './Share24';
+import Sole32 from './Sole32';
+import Swap16 from './Swap16';
+import Swap24 from './Swap24';
+import Up16 from './Up16';
+import Up24 from './Up24';
+import User24 from './User24';
+import Users24 from './Users24';
+import Won24 from './Won24';
+import Color from '../../../constants/color';
 
 const meta = {
   title: 'Design System/Icons',
@@ -33,44 +64,54 @@ export default meta;
 
 type Story = StoryObj;
 
-export const AlarmIcon = () => <Alarm size={24} />;
-
-export const ArrowDownIcon = () => <ArrowDown size={24} />;
-
-export const ArrowLeftIcon = () => <ArrowLeft size={24} />;
-
-export const ArrowRightIcon = () => <ArrowRight size={24} />;
-
-export const ArrowSwapIcon = () => <ArrowSwap size={24} />;
-
-export const ArrowUpIcon = () => <ArrowUp size={24} />;
-
-export const BurgerIcon = () => <Burger size={24} />;
-
-export const CameraIcon = () => <Camera size={24} />;
-
-export const ChatIcon = () => <Chat size={24} />;
-
-export const CheckIcon = () => <Check size={24} />;
-
-export const CloseIcon = () => <Close size={24} />;
-
-export const DocumentIcon = () => <Document size={24} />;
-
-export const FavoriteIcon = () => <Favorite size={24} />;
-
-export const HomeIcon = () => <Home size={24} />;
-
-export const LocationIcon = () => <Location size={24} />;
-
-export const MinusIcon = () => <Minus size={24} />;
-
-export const PlusIcon = () => <Plus size={24} />;
-
-export const SearchIcon = () => <Search size={24} />;
-
-export const UserIcon = () => <User size={24} />;
-
-export const UsersIcon = () => <Users size={24} />;
-
-export const WonIcon = () => <Won size={24} />;
+export const Bell16Icon = () => <Bell16 color={Color.black} />;
+export const Bell24Icon = () => <Bell24 color={Color.black} />;
+export const Burger24Icon = () => <Burger24 color={Color.black} />;
+export const Calendar24Icon = () => <Calendar24 color={Color.black} />;
+export const Camera16Icon = () => <Camera16 color={Color.black} />;
+export const Camera24Icon = () => <Camera24 color={Color.black} />;
+export const Camera32Icon = () => <Camera32 color={Color.black} />;
+export const Chat16Icon = () => <Chat16 color={Color.black} />;
+export const Chat24Icon = () => <Chat24 color={Color.black} />;
+export const Check16Icon = () => <Check16 color={Color.black} />;
+export const Check24Icon = () => <Check24 color={Color.black} />;
+export const CircularSwap16Icon = () => <CircularSwap16 color={Color.black} />;
+export const CircularSwap24Icon = () => <CircularSwap24 color={Color.black} />;
+export const Close16Icon = () => <Close16 color={Color.black} />;
+export const Close20Icon = () => <Close20 color={Color.black} />;
+export const Close24Icon = () => <Close24 color={Color.black} />;
+export const Document24_2Icon = () => <Document24_2 color={Color.black} />;
+export const Document24Icon = () => <Document24 color={Color.black} />;
+export const Down16Icon = () => <Down16 color={Color.black} />;
+export const Down24Icon = () => <Down24 color={Color.black} />;
+export const Eye16Icon = () => <Eye16 color={Color.black} />;
+export const Eye24Icon = () => <Eye24 color={Color.black} />;
+export const Favorite16Icon = () => <Favorite16 color={Color.black} />;
+export const Favorite24Icon = () => <Favorite24 color={Color.black} />;
+export const Favorite32Icon = () => <Favorite32 color={Color.black} />;
+export const FillPin24Icon = () => <FillPin24 color={Color.black} />;
+export const Filter24Icon = () => <Filter24 color={Color.black} />;
+export const Home24Icon = () => <Home24 color={Color.black} />;
+export const Image24Icon = () => <Image24 color={Color.black} />;
+export const Image32Icon = () => <Image32 color={Color.black} />;
+export const Left24Icon = () => <Left24 color={Color.black} />;
+export const Location24Icon = () => <Location24 color={Color.black} />;
+export const Minus24Icon = () => <Minus24 color={Color.black} />;
+export const Pin24Icon = () => <Pin24 color={Color.black} />;
+export const PinIndicatorIcon = () => <PinIndicator color={Color.black} />;
+export const Plus24Icon = () => <Plus24 color={Color.black} />;
+export const Plus32Icon = () => <Plus32 color={Color.black} />;
+export const Right16Icon = () => <Right16 color={Color.black} />;
+export const Right24Icon = () => <Right24 color={Color.black} />;
+export const RoundClose16Icon = () => <RoundClose16 color={Color.black} />;
+export const Search24Icon = () => <Search24 color={Color.black} />;
+export const Send24Icon = () => <Send24 color={Color.black} />;
+export const Share24Icon = () => <Share24 color={Color.black} />;
+export const Sole32Icon = () => <Sole32 color={Color.black} />;
+export const Swap16Icon = () => <Swap16 color={Color.black} />;
+export const Swap24Icon = () => <Swap24 color={Color.black} />;
+export const Up16Icon = () => <Up16 color={Color.black} />;
+export const Up24Icon = () => <Up24 color={Color.black} />;
+export const User24Icon = () => <User24 color={Color.black} />;
+export const Users24Icon = () => <Users24 color={Color.black} />;
+export const Won24Icon = () => <Won24 color={Color.black} />;
