@@ -6,7 +6,7 @@ import Color from '../../constants/color';
 interface Props {
   image: string;
   title: string;
-  price: number;
+  price: string;
   style?: ViewStyle;
   onPressHandler?: () => void;
 }
@@ -37,7 +37,7 @@ const VerticalProductCard = (props: Props) => {
         {props.title} 가나다라
       </Text>
       <Text style={[TYPOS.headline4, { color: Color.black }]}>
-        {props.price.toLocaleString()}원
+        {props.price}
       </Text>
     </Pressable>
   );
