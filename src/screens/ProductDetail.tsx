@@ -5,6 +5,7 @@ import {
   Pressable,
   Modal,
   TouchableWithoutFeedback,
+  Image,
 } from 'react-native';
 import ScrollContainer from '../components/layout/ScrollContainer';
 import AppBar from '../components/ui/AppBar';
@@ -219,7 +220,15 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
           address={data.address}
           sellerNickname={data.sellerNickname}
         />
-        <Carousel images={data.images} />
+        <Carousel
+          data={data.images}
+          renderItem={(item: string) => (
+            <Image
+              source={{ uri: item }}
+              style={{ flex: 1, resizeMode: 'cover' }}
+            />
+          )}
+        />
         <View style={{ paddingHorizontal: 16 }}>
           <View style={{ marginTop: 16 }} />
           <ProductInfo

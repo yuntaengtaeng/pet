@@ -2,25 +2,15 @@ import React, { useState } from 'react';
 import { Dimensions, View, FlatList, Image } from 'react-native';
 import Dots from './Dots';
 
-interface Props {
-  images: string[];
+interface Props<T> {
+  data: T[];
+  renderItem: (item: T) => React.ReactNode;
 }
 
-const Carousel = ({ images }: Props) => {
+const Carousel = <T extends {}>({ data, renderItem }: Props<T>) => {
   const pageWidth = Dimensions.get('window').width;
 
   const [page, setPage] = useState(0);
-
-  const renderItem = ({ item }: { item: string }) => {
-    return (
-      <View style={{ width: pageWidth }}>
-        <Image
-          source={{ uri: item }}
-          style={{ flex: 1, resizeMode: 'cover' }}
-        />
-      </View>
-    );
-  };
 
   const onScroll = (e: any) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.x / pageWidth);
@@ -36,18 +26,20 @@ const Carousel = ({ images }: Props) => {
     >
       <FlatList
         automaticallyAdjustContentInsets={false}
-        data={images}
+        data={data}
         decelerationRate="fast"
         horizontal
-        keyExtractor={(item: any) => `page__${item}`}
+        keyExtractor={(_, index) => `page__${index}`}
         onScroll={onScroll}
         pagingEnabled
-        renderItem={renderItem}
+        renderItem={({ item }) => (
+          <View style={{ width: pageWidth }}>{renderItem(item)}</View>
+        )}
         snapToInterval={pageWidth}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
       />
-      <Dots selectedPage={page} length={images.length} />
+      <Dots selectedPage={page} length={data.length} />
     </View>
   );
 };
