@@ -9,10 +9,23 @@ interface Props {
   onValueChangeHandler?: (checked: boolean) => void;
   children?: React.ReactNode;
   style?: ViewStyle;
+  size?: 'small' | 'medium';
 }
 
+const SIZE_MAP = {
+  small: 16,
+  medium: 24,
+};
+
 const UiCheckbox = (props: Props) => {
-  const { isChecked, disabled, onValueChangeHandler, children, style } = props;
+  const {
+    isChecked,
+    disabled,
+    onValueChangeHandler,
+    children,
+    style,
+    size = 'medium',
+  } = props;
 
   const onPressedHandler = () => {
     if (onValueChangeHandler) {
@@ -36,6 +49,10 @@ const UiCheckbox = (props: Props) => {
           isChecked && styles.checked,
           disabled && styles.disabled,
           isChecked && disabled && styles.checkedAndDisabled,
+          {
+            width: SIZE_MAP[size],
+            height: SIZE_MAP[size],
+          },
         ]}
       >
         {isChecked && (
@@ -59,8 +76,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkbox: {
-    height: 24,
-    width: 24,
     borderRadius: 4,
     borderWidth: 2,
     borderColor: Color.neutral3,
