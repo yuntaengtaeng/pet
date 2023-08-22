@@ -12,7 +12,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const AddressLabelDefault: Story = {
+export const DateDisplayExample: Story = {
   args: {
     timestamp: '2023년 2월 18일',
   },
