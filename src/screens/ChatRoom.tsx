@@ -44,7 +44,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
           flex: 1,
         }}
       >
-        <DateDisplay />
+        <DateDisplay timestamp="2023년 2월 18일" />
         <ChatBubble
           message="안녕하세여"
           isSentByMe={true}
