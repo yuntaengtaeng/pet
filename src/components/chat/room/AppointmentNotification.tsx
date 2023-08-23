@@ -23,7 +23,6 @@ const AppointmentNotification = ({ timestamp }: Props) => {
           ]}
         >
           {timestamp}
-          8.25 (금) 오후 6:30
         </Text>
       </View>
       <View style={{ backgroundColor: Color.white }}>
