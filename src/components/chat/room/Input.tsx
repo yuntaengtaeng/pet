@@ -19,6 +19,11 @@ import TYPOS from '../../ui/typo';
 import Image24 from '../../ui/icons/Image24';
 import Camera24 from '../../ui/icons/Camera24';
 import Calendar24 from '../../ui/icons/Calendar24';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../types/navigation';
+
+type MyScreenRouteProp = RouteProp<RootStackParamList, 'AppointmentScheduler'>;
 
 const Input = () => {
   const { StatusBarManager } = NativeModules;
@@ -26,6 +31,10 @@ const Input = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [text, setText] = useInputState();
   const textInputRef = useRef<TextInput | null>(null);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const {
+    params: { roomId },
+  } = useRoute<MyScreenRouteProp>();
 
   useEffect(() => {
     Platform.OS == 'ios'
@@ -156,7 +165,12 @@ const Input = () => {
                 사진 촬영
               </Text>
             </View>
-            <View style={{ alignSelf: 'flex-start' }}>
+            <Pressable
+              style={{ alignSelf: 'flex-start' }}
+              onPress={() => {
+                navigation.push('AppointmentScheduler', { roomId });
+              }}
+            >
               <View
                 style={{
                   width: 48,
@@ -174,7 +188,7 @@ const Input = () => {
               <Text style={[TYPOS.body2, { color: Color.black }]}>
                 약속 잡기
               </Text>
-            </View>
+            </Pressable>
           </View>
         )}
       </View>
