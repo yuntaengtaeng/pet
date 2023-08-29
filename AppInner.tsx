@@ -24,6 +24,7 @@ import UserProductList from './src/screens/UserProductList';
 import ModifyProduct from './src/screens/ModifyProduct';
 import ChatRoom from './src/screens/ChatRoom';
 import Color from './src/constants/color';
+import AppointmentScheduler from './src/screens/AppointmentScheduler';
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -128,6 +129,10 @@ const AppInner = () => {
             <Stack.Screen name="UserProductList" component={UserProductList} />
             <Stack.Screen name="ModifyProduct" component={ModifyProduct} />
             <Stack.Screen name="ChatRoom" component={ChatRoom} />
+            <Stack.Screen
+              name="AppointmentScheduler"
+              component={AppointmentScheduler}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>

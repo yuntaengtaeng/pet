@@ -34,6 +34,9 @@ export type RootStackParamList = {
   ChatRoom: {
     roomId: string;
   };
+  AppointmentScheduler: {
+    roomId: string;
+  };
 };
 
 export type TabNavigatorParamList = {
