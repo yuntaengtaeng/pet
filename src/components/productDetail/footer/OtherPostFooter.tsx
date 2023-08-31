@@ -8,9 +8,14 @@ import { ProductDetail } from '../../../types/interface';
 
 type Props = Pick<ProductDetail, 'isLike'> & {
   onLikeChangeHandler: () => void;
+  handleChatButtonPressed: () => void;
 };
 
-const OtherPostFooter = ({ onLikeChangeHandler, isLike }: Props) => {
+const OtherPostFooter = ({
+  onLikeChangeHandler,
+  isLike,
+  handleChatButtonPressed,
+}: Props) => {
   return (
     <View
       style={{
@@ -30,7 +35,7 @@ const OtherPostFooter = ({ onLikeChangeHandler, isLike }: Props) => {
       </Pressable>
       <View style={{ paddingLeft: 24 }} />
       <View style={{ flex: 1 }}>
-        <Button label="채팅하기" />
+        <Button label="채팅하기" onPressHandler={handleChatButtonPressed} />
       </View>
     </View>
   );

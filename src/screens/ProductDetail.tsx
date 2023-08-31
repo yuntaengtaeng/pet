@@ -133,6 +133,18 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
 
   const STATUS_MAP: ProductStatus[] = ['판매중', '예약중', '거래완료'];
 
+  const handleChatButtonPressed = async () => {
+    try {
+      const {
+        data: { chatRoomId },
+      } = await axios.post<{ chatRoomId: string }>('/chat/room', {
+        boardId: id,
+      });
+
+      navigation.navigate('ChatRoom', { roomId: chatRoomId });
+    } catch (error) {}
+  };
+
   return (
     <>
       <AppBar
@@ -272,6 +284,7 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
         <OtherPostFooter
           onLikeChangeHandler={onLikeChangeHandler}
           isLike={data.isLike}
+          handleChatButtonPressed={handleChatButtonPressed}
         />
       )}
       <BottomSheet
