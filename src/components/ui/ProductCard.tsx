@@ -5,6 +5,7 @@ import Color from '../../constants/color';
 import Favorite16 from './icons/Favorite16';
 import Chat16 from './icons/Chat16';
 import { Product } from '../../types/interface';
+import Image32 from './icons/Image32';
 
 interface Props extends Product {
   onPressHandler?: () => void;
@@ -22,17 +23,32 @@ const ProductCard = (props: Props) => {
       }}
     >
       <View style={{ position: 'relative' }}>
-        <Image
-          style={[
-            {
+        {!!props.image ? (
+          <Image
+            style={[
+              {
+                width: 96,
+                height: 96,
+                resizeMode: 'cover',
+                borderRadius: 8,
+              },
+            ]}
+            source={{ uri: props.image }}
+          />
+        ) : (
+          <View
+            style={{
               width: 96,
               height: 96,
-              resizeMode: 'cover',
               borderRadius: 8,
-            },
-          ]}
-          source={{ uri: props.image }}
-        />
+              backgroundColor: Color.neutral5,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Image32 color={Color.neutral4} />
+          </View>
+        )}
         {props.salesStatus === '예약중' && (
           <>
             <View
