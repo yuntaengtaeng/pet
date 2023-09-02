@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
 import TYPOS from '../components/ui/typo';
@@ -10,13 +10,78 @@ import DateDisplay from '../components/chat/room/DateDisplay';
 import ChatBubble from '../components/ui/ChatBubble';
 import Input from '../components/chat/room/Input';
 import ProductInformation from '../components/chat/room/ProductInformation';
+import { useRecoilValue } from 'recoil';
+import { WebSocketContext } from '../components/WebSocketContainer';
+import { UserState } from '../store/atoms';
+import AppointmentNotification from '../components/chat/room/AppointmentNotification';
 
 export type OnboardingScreenProps = StackScreenProps<
   RootStackParamList,
   'ChatRoom'
 >;
 
+type Message = {
+  id: string;
+  content: string;
+};
+
+type UserMessage = Message & {
+  timestamp?: string;
+  timeOfDay?: string;
+  isMe?: boolean;
+};
+
+type System = Message & {
+  id: string;
+  content: string;
+  promiseAt: string;
+  isPromise: boolean;
+};
+
+type ObjectArray = Array<UserMessage | System>;
+
+type ChatData = {
+  [key: string]: ObjectArray;
+};
+
 const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
+  const socket = useContext(WebSocketContext);
+  const { accessToken } = useRecoilValue(UserState);
+  const { roomId } = route.params;
+  const [chatData, setChatData] = useState<ChatData>({});
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleGetChatList = () => {
+      socket.emit('chat-list', {
+        token: accessToken,
+        chatRoomId: roomId,
+      });
+      socket.on('chat-list', (data) => {
+        setChatData(data.data.chatList);
+      });
+    };
+
+    handleGetChatList();
+
+    return () => {
+      socket.off('chat-list');
+    };
+  }, [socket]);
+
+  const onPostMessageHandler = (message: string) => {
+    if (!socket || !message) {
+      return;
+    }
+
+    socket.emit('message', {
+      token: accessToken,
+      chatRoomId: roomId,
+      message,
+    });
+  };
+
   return (
     <>
       <AppBar
@@ -40,35 +105,63 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 16,
-          backgroundColor: Color.white,
-          flex: 1,
         }}
       >
-        <DateDisplay timestamp="2023년 2월 18일" />
-        <ChatBubble
-          message="안녕하세여"
-          isSentByMe={true}
-          timeStamp="오후 9:43"
-        />
-        <ChatBubble message="구매하고 싶은데" isSentByMe={true} />
-        <ChatBubble
-          message="택배거래도 하실까요?"
-          isSentByMe={true}
-          timeStamp="오후 9:44"
-        />
-        <ChatBubble message="안녕하세요~!" isSentByMe={false} />
-        <ChatBubble
-          message="가급적 직거래를 선호해서요. 혹시 어디쪽에 사시나요?"
-          isSentByMe={false}
-          timeStamp="오후 9:44"
-        />
-        <ChatBubble
-          message="시간이 안되시면 택배거래도 가능합니다."
-          isSentByMe={false}
-          timeStamp="오후 9:45"
-        />
+        {Object.entries(chatData).map(([date, children], i) => {
+          const contents = children.map((child, index) => {
+            if ('isPromise' in child) {
+              const systemChild = child as System;
+
+              return (
+                <React.Fragment key={systemChild.id + index + 'Fragment'}>
+                  <View
+                    style={{ paddingTop: 16 }}
+                    key={systemChild.id + index + 'up'}
+                  />
+                  <AppointmentNotification
+                    key={systemChild.id}
+                    timestamp={systemChild.promiseAt}
+                    content={systemChild.content}
+                  />
+                  <View
+                    style={{ paddingBottom: 16 }}
+                    key={systemChild.id + index + 'down'}
+                  />
+                </React.Fragment>
+              );
+            } else {
+              const messageChild = child as UserMessage;
+
+              return (
+                <React.Fragment key={messageChild.id + index + 'Fragment'}>
+                  <ChatBubble
+                    key={messageChild.id}
+                    message={messageChild.content}
+                    isSentByMe={!!messageChild.isMe}
+                    {...(!!messageChild.timeOfDay &&
+                      !!messageChild.timestamp && {
+                        timeStamp: `${messageChild.timeOfDay} ${messageChild.timestamp}`,
+                      })}
+                  />
+                  <View
+                    style={{ paddingBottom: 4 }}
+                    key={messageChild.id + index}
+                  />
+                </React.Fragment>
+              );
+            }
+          });
+          return (
+            <React.Fragment key={date + i + 'Fragment'}>
+              <View style={{ paddingTop: 16 }} key={date + i + 'up'} />
+              <DateDisplay key={date} timestamp={date} />
+              <View style={{ paddingBottom: 16 }} key={date + i + 'down'} />
+              {contents}
+            </React.Fragment>
+          );
+        })}
       </ScrollView>
-      <Input />
+      <Input onPostMessageHandler={onPostMessageHandler} />
     </>
   );
 };
