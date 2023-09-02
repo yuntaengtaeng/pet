@@ -147,9 +147,11 @@ const ChatRoomItem = ({
               marginRight: 16,
             },
           ]}
-          source={{
-            uri: image,
-          }}
+          source={
+            image
+              ? { uri: image }
+              : require('../../../assets/img/placeholder.png')
+          }
         />
         <View style={{ flex: 1 }}>
           <View
