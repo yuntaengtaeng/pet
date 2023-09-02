@@ -25,7 +25,11 @@ import { RootStackParamList } from '../../../types/navigation';
 
 type MyScreenRouteProp = RouteProp<RootStackParamList, 'AppointmentScheduler'>;
 
-const Input = () => {
+interface Props {
+  onPostMessageHandler: (message: string) => void;
+}
+
+const Input = ({ onPostMessageHandler }: Props) => {
   const { StatusBarManager } = NativeModules;
   const [statusBarHeight, setStatusBarHeight] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,6 +57,11 @@ const Input = () => {
       textInputRef.current?.focus();
     }
   }, [isMenuOpen]);
+
+  const onSendMessage = () => {
+    onPostMessageHandler(text);
+    setText('');
+  };
 
   return (
     <KeyboardAvoidingView
@@ -113,7 +122,7 @@ const Input = () => {
               value={text}
               onChangeText={setText}
             />
-            <Pressable style={{ marginLeft: 8 }}>
+            <Pressable style={{ marginLeft: 8 }} onPress={onSendMessage}>
               <Send24 color={text.length ? Color.primary700 : Color.neutral3} />
             </Pressable>
           </View>
