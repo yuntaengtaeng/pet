@@ -4,9 +4,10 @@ import TYPOS from '../../ui/typo';
 
 interface Props {
   timestamp: string;
+  content: string;
 }
 
-const AppointmentNotification = ({ timestamp }: Props) => {
+const AppointmentNotification = ({ timestamp, content }: Props) => {
   return (
     <View
       style={{ borderWidth: 1, borderColor: Color.neutral4, borderRadius: 8 }}
@@ -27,7 +28,7 @@ const AppointmentNotification = ({ timestamp }: Props) => {
       </View>
       <View style={{ backgroundColor: Color.white }}>
         <Text style={[TYPOS.body2, { color: Color.neutral1, padding: 16 }]}>
-          직거래 약속이 잡혔어요
+          {content}
         </Text>
       </View>
     </View>
