@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   RootStackParamList,
@@ -6,120 +6,54 @@ import {
 } from '../../types/navigation';
 import { FlatList, Text, View } from 'react-native';
 import TYPOS from '../../components/ui/typo';
-import {
-  CompositeNavigationProp,
-  useNavigation,
-} from '@react-navigation/native';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import ChatRoomItem from '../../components/ui/ChatRoomItem';
 import Color from '../../constants/color';
 import EmptyList from '../../components/chat/EmptyList';
+import { WebSocketContext } from '../../components/WebSocketContainer';
+import { useRecoilValue } from 'recoil';
+import { UserState } from '../../store/atoms';
 
 type HomeScreenProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabNavigatorParamList, 'Chatting'>,
   StackNavigationProp<RootStackParamList>
 >;
 
-const dummy_data = [
-  {
-    roomId: '1',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-    isNotificationEnabled: true,
-    isPinned: true,
-  },
-  {
-    roomId: '2',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-  },
-  {
-    roomId: '3',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-    isNotificationEnabled: true,
-  },
-  {
-    roomId: '4',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-    isNotificationEnabled: true,
-  },
-  {
-    roomId: '5',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-    isNotificationEnabled: true,
-  },
-  {
-    roomId: '6',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-    isNotificationEnabled: true,
-  },
-  {
-    roomId: '7',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-  },
-  {
-    roomId: '8',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-  },
-  {
-    roomId: '9',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-  },
-  {
-    roomId: '10',
-    roomName: '냥냥펀치',
-    image:
-      'https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg',
-    region: '신림동',
-    timeStamp: '2주',
-    content: '1주일 뒤에 공구 진행하겠습니다~~',
-  },
-];
+interface RoomData {
+  id: string;
+  title: string;
+  lastChat: string;
+  lastChatAt: string;
+  isAllam: boolean;
+  isPinned: boolean;
+  isPetMate?: boolean;
+}
 
 const Chatting = () => {
+  const [rooms, setRooms] = useState<RoomData[]>([]);
+  const socket = useContext(WebSocketContext);
+  const { accessToken } = useRecoilValue(UserState);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleGetChatList = () => {
+      socket.emit('room-list', {
+        token: accessToken,
+      });
+      socket.on('room-list', ({ data: { chatRoomList } }) => {
+        setRooms(chatRoomList);
+      });
+    };
+
+    handleGetChatList();
+
+    return () => {
+      socket.off('room-list');
+    };
+  }, [socket]);
+
   return (
     <>
       <View
@@ -132,11 +66,25 @@ const Chatting = () => {
         <Text style={[TYPOS.headline3, { color: Color.black }]}>채팅</Text>
       </View>
       <FlatList
-        contentContainerStyle={{ ...(!dummy_data.length && { flex: 1 }) }}
-        keyExtractor={(item) => item.roomId}
-        data={dummy_data}
+        contentContainerStyle={{
+          backgroundColor: Color.white,
+          flex: 1,
+        }}
+        keyExtractor={(item) => item.id}
+        data={rooms}
         showsVerticalScrollIndicator={false}
-        renderItem={(data) => <ChatRoomItem {...data.item} />}
+        renderItem={({ item }) => (
+          <ChatRoomItem
+            roomId={item.id}
+            image=""
+            roomName={item.title}
+            region={'신림동'}
+            timeStamp={item.lastChatAt}
+            content={item.lastChat}
+            isPinned={item.isPinned}
+            isNotificationEnabled={item.isAllam}
+          />
+        )}
         ListEmptyComponent={<EmptyList />}
       />
     </>
