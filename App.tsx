@@ -3,6 +3,7 @@ import { useFonts } from 'expo-font';
 import { RecoilRoot } from 'recoil';
 import { ToastProvider } from './src/components/ui/toast/ToastProvider';
 import OverlayContext from './src/hooks/overlay/OverlayContext';
+import WebSocketContainer from './src/components/WebSocketContainer';
 
 export default function App() {
   const [isFontsLoaded] = useFonts({
@@ -17,11 +18,13 @@ export default function App() {
 
   return (
     <RecoilRoot>
-      <OverlayContext>
-        <ToastProvider>
-          <AppInner />
-        </ToastProvider>
-      </OverlayContext>
+      <WebSocketContainer>
+        <OverlayContext>
+          <ToastProvider>
+            <AppInner />
+          </ToastProvider>
+        </OverlayContext>
+      </WebSocketContainer>
     </RecoilRoot>
   );
 }
