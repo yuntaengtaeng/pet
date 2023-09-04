@@ -10,6 +10,7 @@ export type HomeDispatch = {
   locationVerificationPopup: ModalController;
   locationVerificationRequested: ModalController;
   togglePetType: () => void;
+  verifyNeighborhood: () => void;
 };
 
 export const HomeDispatchContext = createContext<HomeDispatch | null>(null);

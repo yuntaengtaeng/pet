@@ -1,18 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text } from 'react-native';
 import Color from '../../constants/color';
 import TYPOS from '../ui/typo';
 import Button from '../ui/buttons/Button';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../types/navigation';
+import { HomeDispatchContext } from './HomeDispatchContext';
 
 const EmptyList = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
-  const moveEdit = async () => {
-    navigation.push('EditProduct');
-  };
+  const dispatch = useContext(HomeDispatchContext);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 16 }}>
@@ -30,7 +24,7 @@ const EmptyList = () => {
         <Button
           label="상품 등록하기"
           onPressHandler={() => {
-            moveEdit();
+            dispatch?.verifyNeighborhood();
           }}
         />
       </View>

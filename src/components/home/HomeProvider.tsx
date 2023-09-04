@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { useState } from 'react';
 import useModal from '../../hooks/useModal';
 import { PetType } from '../../types/interface';
 import { useRecoilValue } from 'recoil';
@@ -8,10 +8,15 @@ import LocationVerificationRequested from './LocationVerificationRequested';
 import AddressBottomSheet from './AddressBottomSheet';
 import { HomeDispatchContext, HomeDispatch } from './HomeDispatchContext';
 import { HomeStateContext } from './HomeStateContext';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import axios, { AxiosError } from 'axios';
+import { RootStackParamList } from '../../types/navigation';
 
 const HomeProvider = ({ children }: { children: React.ReactNode }) => {
   const user = useRecoilValue(UserState);
   const [petType, setPetType] = useState<PetType>(user.petType);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const togglePetType = () => {
     setPetType((prev) => (prev === 'dog' ? 'cat' : 'dog'));
@@ -35,6 +40,22 @@ const HomeProvider = ({ children }: { children: React.ReactNode }) => {
     closeModal: closeLocationVerificationRequested,
   } = useModal();
 
+  const moveEdit = async () => {
+    navigation.push('EditProduct');
+  };
+
+  const verifyNeighborhood = async () => {
+    try {
+      const { data } = await axios.get('/auth/local-area');
+      moveEdit();
+    } catch (error) {
+      const errorResponse = (error as AxiosError).response;
+      if (errorResponse?.status === 400) {
+        dispatch?.locationVerificationPopup.open();
+      }
+    }
+  };
+
   const dispatch: HomeDispatch = {
     bottomSheetController: {
       open: () => {
@@ -51,6 +72,7 @@ const HomeProvider = ({ children }: { children: React.ReactNode }) => {
       close: closeLocationVerificationRequested,
     },
     togglePetType,
+    verifyNeighborhood,
   };
 
   return (
