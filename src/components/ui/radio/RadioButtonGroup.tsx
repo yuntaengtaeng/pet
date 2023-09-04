@@ -1,6 +1,5 @@
 import { View, ViewStyle } from 'react-native';
 import React, { createContext } from 'react';
-import RadioButtonItem from './RadioButtonItem';
 
 interface Props {
   selected?: string;
@@ -28,7 +27,5 @@ const RadioButtonGroup = (props: Props) => {
     </Provider>
   );
 };
-
-RadioButtonGroup.RadioButtonItem = RadioButtonItem;
 
 export default RadioButtonGroup;
