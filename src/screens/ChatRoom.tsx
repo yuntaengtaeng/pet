@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
 import TYPOS from '../components/ui/typo';
 import AppBar from '../components/ui/AppBar';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 import Color from '../constants/color';
 import Burger24 from '../components/ui/icons/Burger24';
 import DateDisplay from '../components/chat/room/DateDisplay';
@@ -14,6 +14,10 @@ import { useRecoilValue } from 'recoil';
 import { WebSocketContext } from '../components/WebSocketContainer';
 import { UserState } from '../store/atoms';
 import AppointmentNotification from '../components/chat/room/AppointmentNotification';
+import ListValue from '../components/ui/dropdown/ListValue';
+import Bell16 from '../components/ui/icons/Bell16';
+import MenuBackdrop from '../components/ui/dropdown/MenuBackdrop';
+import useMenuControl from '../hooks/useMenuControl';
 
 export type OnboardingScreenProps = StackScreenProps<
   RootStackParamList,
@@ -50,6 +54,11 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
   const { roomId } = route.params;
   const [chatData, setChatData] = useState<ChatData>({});
 
+  const burgerRef = useRef<View | null>(null);
+  const { isVisibleMenu, closeMenu, openMenu, menuTop } = useMenuControl({
+    targetRef: burgerRef,
+  });
+
   useEffect(() => {
     if (!socket) return;
 
@@ -82,6 +91,12 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
     });
   };
 
+  const onToggleAlarm = async () => {};
+
+  const onExit = async () => {};
+
+  const onBlock = async () => {};
+
   return (
     <>
       <AppBar
@@ -89,11 +104,33 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
           <View>
             <Text style={[TYPOS.headline3, { color: Color.black }]}>
               초코코
+              <Bell16 color={Color.neutral2} style={{ marginLeft: 4 }} />
             </Text>
             <Text style={[TYPOS.body3, { color: Color.neutral1 }]}>역삼동</Text>
           </View>
         }
-        rightContent={<Burger24 color={Color.black} />}
+        rightContent={
+          <>
+            <View>
+              <Pressable
+                onPress={openMenu}
+                ref={burgerRef}
+                style={{ marginLeft: 8 }}
+              >
+                <Burger24 color={Color.black} />
+              </Pressable>
+              <MenuBackdrop
+                isVisible={isVisibleMenu}
+                close={closeMenu}
+                menuStyle={{ top: menuTop, width: 146, right: 16 }}
+              >
+                <ListValue label="알림끄기" onClickHandler={onToggleAlarm} />
+                <ListValue label="차단하기" onClickHandler={onBlock} />
+                <ListValue label="나가기" onClickHandler={onExit} />
+              </MenuBackdrop>
+            </View>
+          </>
+        }
       />
       <ProductInformation
         id="test"
