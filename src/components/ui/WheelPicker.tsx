@@ -32,8 +32,6 @@ const WheelPicker: React.FC<Props> = (props) => {
       outputRange: [0.8, 1, 0.8],
     });
 
-    console.log(selectedIndex);
-
     return (
       <Animated.View
         style={[
