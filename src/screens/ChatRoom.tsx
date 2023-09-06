@@ -18,6 +18,10 @@ import ListValue from '../components/ui/dropdown/ListValue';
 import Bell16 from '../components/ui/icons/Bell16';
 import MenuBackdrop from '../components/ui/dropdown/MenuBackdrop';
 import useMenuControl from '../hooks/useMenuControl';
+import axios from 'axios';
+import { ToastDispatchContext } from '../components/ui/toast/ToastProvider';
+import Dialog from '../components/ui/Dialog';
+import useOverlay from '../hooks/overlay/useOverlay';
 
 export type OnboardingScreenProps = StackScreenProps<
   RootStackParamList,
@@ -49,15 +53,38 @@ type ChatData = {
 };
 
 const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
+  const overlay = useOverlay();
+  const toastDispatch = useContext(ToastDispatchContext);
   const socket = useContext(WebSocketContext);
   const { accessToken } = useRecoilValue(UserState);
   const { roomId } = route.params;
   const [chatData, setChatData] = useState<ChatData>({});
+  const [headerData, setHeaderData] = useState<{
+    nickname: string;
+    region: string;
+    isAlarm: boolean;
+    id: string;
+  }>({
+    nickname: '',
+    region: '',
+    isAlarm: true,
+    id: '',
+  });
 
   const burgerRef = useRef<View | null>(null);
   const { isVisibleMenu, closeMenu, openMenu, menuTop } = useMenuControl({
     targetRef: burgerRef,
   });
+  const target = useRef<string | null>(null);
+  const scrollViewRef = useRef<ScrollView | null>(null);
+
+  const scrollToBottom = () => {
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatData]);
 
   useEffect(() => {
     if (!socket) return;
@@ -72,12 +99,39 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
       });
     };
 
+    const handleGetAlarm = () => {
+      socket.on('alarm', (data) => {
+        setHeaderData({ ...headerData, isAlarm: data.data.isAlarm });
+        toastDispatch?.showToastMessage(
+          `채팅방 알림이 ${data.data.isAlarm ? '켜' : '꺼'}졌어요.`
+        );
+      });
+    };
+
     handleGetChatList();
+    handleGetAlarm();
 
     return () => {
       socket.off('chat-list');
+      socket.off('alarm');
     };
-  }, [socket]);
+  }, [socket, headerData]);
+
+  useEffect(() => {
+    const getHeaderData = async () => {
+      try {
+        const {
+          data: { chatRoomHeaderInfo },
+        } = await axios.get(`/chat/room/header?chatRoomId=${roomId}`);
+
+        setHeaderData(chatRoomHeaderInfo);
+      } catch (error) {}
+    };
+
+    if (roomId) {
+      getHeaderData();
+    }
+  }, [roomId]);
 
   const onPostMessageHandler = (message: string) => {
     if (!socket || !message) {
@@ -91,11 +145,74 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
     });
   };
 
-  const onToggleAlarm = async () => {};
+  const onToggleAlarm = () => {
+    if (!socket) {
+      return;
+    }
 
-  const onExit = async () => {};
+    socket.emit('alarm', {
+      token: accessToken,
+      chatRoomId: roomId,
+    });
+  };
 
-  const onBlock = async () => {};
+  const onExit = () => {
+    if (!socket) {
+      return;
+    }
+
+    target.current = null;
+    closeMenu();
+
+    socket.emit('leave', {
+      token: accessToken,
+      chatRoomId: roomId,
+    });
+
+    navigation.pop();
+  };
+
+  useEffect(() => {
+    if (!isVisibleMenu && target.current === 'blocked') {
+      openBlockDialog();
+    }
+  }, [isVisibleMenu]);
+
+  const openBlockDialog = () => {
+    if (!socket) {
+      return;
+    }
+
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Content content="채팅방을 나가면 대화 내용이 모두 삭제되며 복구할 수 없어요. 채팅방을 나갈까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '취소',
+              onPressHandler: overlay.close,
+            },
+            {
+              label: '나가기',
+              onPressHandler: () => {
+                overlay.close();
+                socket.emit('blocked', {
+                  token: accessToken,
+                  blockedBy: headerData.id,
+                });
+                navigation.pop();
+              },
+            },
+          ]}
+        />
+      </Dialog>
+    );
+  };
+
+  const onBlock = () => {
+    target.current = 'blocked';
+    closeMenu();
+  };
 
   return (
     <>
@@ -103,10 +220,14 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
         leftContent={
           <View>
             <Text style={[TYPOS.headline3, { color: Color.black }]}>
-              초코코
-              <Bell16 color={Color.neutral2} style={{ marginLeft: 4 }} />
+              {headerData.nickname}
+              {!headerData.isAlarm && (
+                <Bell16 color={Color.neutral2} style={{ marginLeft: 4 }} />
+              )}
             </Text>
-            <Text style={[TYPOS.body3, { color: Color.neutral1 }]}>역삼동</Text>
+            <Text style={[TYPOS.body3, { color: Color.neutral1 }]}>
+              {headerData.region}
+            </Text>
           </View>
         }
         rightContent={
@@ -120,11 +241,17 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                 <Burger24 color={Color.black} />
               </Pressable>
               <MenuBackdrop
-                isVisible={isVisibleMenu}
-                close={closeMenu}
+                isVisible={isVisibleMenu && !!menuTop}
+                close={() => {
+                  target.current = null;
+                  closeMenu();
+                }}
                 menuStyle={{ top: menuTop, width: 146, right: 16 }}
               >
-                <ListValue label="알림끄기" onClickHandler={onToggleAlarm} />
+                <ListValue
+                  label={`알림${headerData.isAlarm ? '끄기' : '켜기'}`}
+                  onClickHandler={onToggleAlarm}
+                />
                 <ListValue label="차단하기" onClickHandler={onBlock} />
                 <ListValue label="나가기" onClickHandler={onExit} />
               </MenuBackdrop>
@@ -143,6 +270,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
         contentContainerStyle={{
           paddingHorizontal: 16,
         }}
+        ref={scrollViewRef}
       >
         {Object.entries(chatData).map(([date, children], i) => {
           const contents = children.map((child, index) => {
