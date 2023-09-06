@@ -13,7 +13,7 @@ import { RootStackParamList } from '../../types/navigation';
 
 interface Props {
   roomId: string;
-  image: string;
+  image?: string;
   roomName: string;
   region: string;
   timeStamp: string;
