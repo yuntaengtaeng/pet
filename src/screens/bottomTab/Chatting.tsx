@@ -14,6 +14,7 @@ import EmptyList from '../../components/chat/EmptyList';
 import { WebSocketContext } from '../../components/WebSocketContainer';
 import { useRecoilValue } from 'recoil';
 import { UserState } from '../../store/atoms';
+import axios from 'axios';
 
 type HomeScreenProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabNavigatorParamList, 'Chatting'>,
@@ -25,9 +26,11 @@ interface RoomData {
   title: string;
   lastChat: string;
   lastChatAt: string;
-  isAllam: boolean;
+  isAlarm: boolean;
   isPinned: boolean;
   isPetMate?: boolean;
+  image?: string;
+  region: string;
 }
 
 const Chatting = () => {
@@ -54,6 +57,39 @@ const Chatting = () => {
     };
   }, [socket]);
 
+  const onPinPressHandler = async (id: string) => {
+    try {
+      const {
+        data: { chatRoomList },
+      } = await axios.patch(`/chat/pinned/${id}`);
+      setRooms(chatRoomList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onExitPressHandler = async (id: string) => {
+    try {
+      const {
+        data: { chatRoomList },
+      } = await axios.patch(`/chat/leave/${id}`);
+      setRooms(chatRoomList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onToggleNotificationHandler = async (id: string) => {
+    try {
+      const {
+        data: { chatRoomList },
+      } = await axios.patch(`/chat/alarm/${id}`);
+      setRooms(chatRoomList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <View
@@ -76,13 +112,22 @@ const Chatting = () => {
         renderItem={({ item }) => (
           <ChatRoomItem
             roomId={item.id}
-            image=""
+            image={item.image}
             roomName={item.title}
-            region={'신림동'}
+            region={item.region}
             timeStamp={item.lastChatAt}
             content={item.lastChat}
             isPinned={item.isPinned}
-            isNotificationEnabled={item.isAllam}
+            isNotificationEnabled={item.isAlarm}
+            onPinPressHandler={() => {
+              onPinPressHandler(item.id);
+            }}
+            onExitPressHandler={() => {
+              onExitPressHandler(item.id);
+            }}
+            onToggleNotificationHandler={() => {
+              onToggleNotificationHandler(item.id);
+            }}
           />
         )}
         ListEmptyComponent={<EmptyList />}
