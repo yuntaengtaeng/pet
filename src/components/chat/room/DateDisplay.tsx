@@ -10,9 +10,7 @@ interface Props {
 const DateDisplay = ({ timestamp }: Props) => {
   return (
     <View style={{ alignItems: 'center' }}>
-      <Text style={[TYPOS.body3, { color: Color.neutral3 }]}>
-        2023년 2월 18일
-      </Text>
+      <Text style={[TYPOS.body3, { color: Color.neutral3 }]}>{timestamp}</Text>
     </View>
   );
 };
