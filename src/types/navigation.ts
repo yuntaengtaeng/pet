@@ -41,7 +41,7 @@ export type RootStackParamList = {
 
 export type TabNavigatorParamList = {
   Home: undefined;
-  MyPet: undefined;
+  MyPage: undefined;
   PetMate: undefined;
   Chatting: undefined;
 };

@@ -14,18 +14,18 @@ import {
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 type HomeScreenProps = CompositeNavigationProp<
-  BottomTabNavigationProp<TabNavigatorParamList, 'MyPet'>,
+  BottomTabNavigationProp<TabNavigatorParamList, 'MyPage'>,
   StackNavigationProp<RootStackParamList>
 >;
 
-const MyPet = () => {
+const MyPage = () => {
   const navigation = useNavigation<HomeScreenProps>();
 
   return (
     <Container>
-      <Text style={[TYPOS.headline1]}>MyPet</Text>
+      <Text style={[TYPOS.headline1]}>MyPage</Text>
     </Container>
   );
 };
 
-export default MyPet;
+export default MyPage;

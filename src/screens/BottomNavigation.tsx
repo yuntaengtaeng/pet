@@ -42,7 +42,7 @@ const BottomNavigation = () => {
               return (
                 <Chat24 color={focused ? Color.neutral1 : Color.neutral3} />
               );
-            case 'MyPet':
+            case 'MyPage':
               return (
                 <User24 color={focused ? Color.neutral1 : Color.neutral3} />
               );
@@ -66,9 +66,9 @@ const BottomNavigation = () => {
         options={{ headerShown: false, tabBarLabel: '채팅' }}
       />
       <Tab.Screen
-        name="MyPet"
-        component={BottomTab.MyPet}
-        options={{ headerShown: false, tabBarLabel: '마이펫' }}
+        name="MyPage"
+        component={BottomTab.MyPage}
+        options={{ headerShown: false, tabBarLabel: '마이페이지' }}
       />
     </Tab.Navigator>
   );
