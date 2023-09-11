@@ -52,6 +52,7 @@ import Up24 from './Up24';
 import User24 from './User24';
 import Users24 from './Users24';
 import Won24 from './Won24';
+import Settings24 from './Settings24';
 import Color from '../../../constants/color';
 
 const meta = {
@@ -115,3 +116,4 @@ export const Up24Icon = () => <Up24 color={Color.black} />;
 export const User24Icon = () => <User24 color={Color.black} />;
 export const Users24Icon = () => <Users24 color={Color.black} />;
 export const Won24Icon = () => <Won24 color={Color.black} />;
+export const Settings24Icon = () => <Settings24 color={Color.black} />;
