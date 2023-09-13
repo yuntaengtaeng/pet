@@ -12,12 +12,12 @@ import TYPOS from './typo';
 
 interface Props {
   items: string[];
-  onIndexChange: (index: number) => void;
+  onItemChange: (item: string) => void;
   itemHeight: number;
 }
 
 const WheelPicker: React.FC<Props> = (props) => {
-  const { items, onIndexChange, itemHeight } = props;
+  const { items, onItemChange, itemHeight } = props;
   const scrollY = useRef(new Animated.Value(0)).current;
   const [selectedIndex, setSelectedIndex] = useState(items[0]);
 
@@ -68,7 +68,7 @@ const WheelPicker: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    onIndexChange(Number(selectedIndex));
+    onItemChange(selectedIndex);
   }, [selectedIndex]);
 
   return (
