@@ -15,6 +15,8 @@ import { WebSocketContext } from '../../components/WebSocketContainer';
 import { useRecoilValue } from 'recoil';
 import { UserState } from '../../store/atoms';
 import axios from 'axios';
+import useOverlay from '../../hooks/overlay/useOverlay';
+import Dialog from '../../components/ui/Dialog';
 
 type HomeScreenProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabNavigatorParamList, 'Chatting'>,
@@ -37,6 +39,7 @@ const Chatting = () => {
   const [rooms, setRooms] = useState<RoomData[]>([]);
   const socket = useContext(WebSocketContext);
   const { accessToken } = useRecoilValue(UserState);
+  const overlay = useOverlay();
 
   useEffect(() => {
     if (!socket) return;
@@ -69,14 +72,34 @@ const Chatting = () => {
   };
 
   const onExitPressHandler = async (id: string) => {
-    try {
-      const {
-        data: { chatRoomList },
-      } = await axios.patch(`/chat/leave/${id}`);
-      setRooms(chatRoomList);
-    } catch (error) {
-      console.log(error);
-    }
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Content content="채팅방을 나가면 대화 내용이 모두 삭제되며 복구할 수 없어요. 채팅방을 나갈까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '취소',
+              onPressHandler: overlay.close,
+            },
+            {
+              label: '나가기',
+              onPressHandler: async () => {
+                try {
+                  const {
+                    data: { chatRoomList },
+                  } = await axios.patch(`/chat/leave/${id}`);
+                  setRooms(chatRoomList);
+                } catch (error) {
+                  console.log(error);
+                } finally {
+                  overlay.close();
+                }
+              },
+            },
+          ]}
+        />
+      </Dialog>
+    );
   };
 
   const onToggleNotificationHandler = async (id: string) => {
