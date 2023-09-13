@@ -145,12 +145,9 @@ const Calendar = ({ selectedDate, onSelectDateChangeHandler }: Props) => {
           </Text>
         ))}
       </View>
-      <View>
+      <View style={{ height: 32 * 5 }}>
         {weeks.map((week, index) => (
-          <View
-            key={index}
-            style={{ flexDirection: 'row', flex: 1, minHeight: 32 }}
-          >
+          <View key={index} style={{ flexDirection: 'row', minHeight: 32 }}>
             {week.map((day, dayIndex) => {
               const isInDateRange =
                 day && day.isSameOrAfter(now) && day.isSameOrBefore(endDate);
