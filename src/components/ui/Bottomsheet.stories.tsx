@@ -19,5 +19,6 @@ export const BottomSheetExample: Story = {
     isOpened: false,
     onClose: () => {},
     height: 300,
+    title: 'title',
   },
 };

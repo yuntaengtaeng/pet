@@ -5,14 +5,16 @@ import {
   Text,
   Modal,
   Animated,
-  TouchableWithoutFeedback,
   Dimensions,
   PanResponder,
+  Pressable,
 } from 'react-native';
 import Color from '../../constants/color';
+import TYPOS from './typo';
 
 interface BottomSheetProps {
   isOpened: boolean;
+  title: string;
   onClose: () => void;
   children: React.ReactNode;
   height: number;
@@ -20,6 +22,7 @@ interface BottomSheetProps {
 
 const BottomSheet = ({
   isOpened,
+  title,
   onClose,
   children,
   height,
@@ -51,6 +54,8 @@ const BottomSheet = ({
         panY.setValue(gestureState.dy);
       },
       onPanResponderRelease: (event, gestureState) => {
+        console.log(gestureState);
+
         if (
           gestureState.dy > 0 &&
           (gestureState.dy > 80 || gestureState.vy > 1.5)
@@ -76,68 +81,59 @@ const BottomSheet = ({
   };
 
   return (
-    <Modal
-      visible={isOpened}
-      animationType="fade"
-      transparent
-      statusBarTranslucent
-    >
-      <TouchableWithoutFeedback onPress={closeModal}>
-        <View style={styles.overlay}>
-          <Animated.View
-            style={[
-              styles.background,
-              {
-                opacity: panY.interpolate({
-                  inputRange: [0, screenHeight],
-                  outputRange: [1, 0],
-                }),
-              },
-            ]}
-          />
-          <Animated.View
-            style={[
-              styles.bottomSheetContainer,
-              {
-                height,
-                transform: [{ translateY: translateY }],
-              },
-            ]}
-            {...panResponders.panHandlers}
-          >
-            <View style={{ alignItems: 'center' }}>
-              <View
-                style={{
-                  width: 44,
-                  height: 4,
-                  backgroundColor: '#DEDEDE',
-                  marginVertical: 8,
-                  borderRadius: 4,
-                }}
-              ></View>
-            </View>
-            <View>{children}</View>
-          </Animated.View>
+    <Modal animationType="fade" transparent={true} visible={isOpened}>
+      <Pressable
+        onPress={() => {
+          closeModal();
+        }}
+        style={styles.overlay}
+      ></Pressable>
+      <Animated.View
+        style={[
+          styles.bottomSheetContainer,
+          {
+            height,
+            transform: [{ translateY: translateY }],
+          },
+        ]}
+      >
+        <View {...panResponders.panHandlers}>
+          <View style={{ alignItems: 'center' }}>
+            <View
+              style={{
+                width: 44,
+                height: 4,
+                backgroundColor: '#DEDEDE',
+                marginVertical: 8,
+                borderRadius: 4,
+              }}
+            ></View>
+          </View>
+          <View style={{ paddingVertical: 24, paddingHorizontal: 16 }}>
+            <Text style={[TYPOS.headline3, { color: Color.black }]}>
+              {title}
+            </Text>
+          </View>
         </View>
-      </TouchableWithoutFeedback>
+        <View>{children}</View>
+      </Animated.View>
     </Modal>
   );
 };
 
+export default BottomSheet;
+
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
-  },
-  background: {
-    ...StyleSheet.absoluteFillObject,
   },
   bottomSheetContainer: {
     backgroundColor: Color.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
   },
 });
-
-export default BottomSheet;
