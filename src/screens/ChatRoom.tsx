@@ -75,7 +75,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
   const { isVisibleMenu, closeMenu, openMenu, menuTop } = useMenuControl({
     targetRef: burgerRef,
   });
-  const target = useRef<string | null>(null);
+  const nextAction = useRef<'blocked' | 'exit' | null>(null);
   const scrollViewRef = useRef<ScrollView | null>(null);
 
   const scrollToBottom = () => {
@@ -157,35 +157,56 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
   };
 
   const onExit = () => {
-    if (!socket) {
-      return;
-    }
-
-    target.current = null;
+    nextAction.current = 'exit';
     closeMenu();
+  };
 
-    socket.emit('leave', {
-      token: accessToken,
-      chatRoomId: roomId,
-    });
-
-    navigation.pop();
+  const onBlock = () => {
+    nextAction.current = 'blocked';
+    closeMenu();
   };
 
   useEffect(() => {
-    if (!isVisibleMenu && target.current === 'blocked') {
-      openBlockDialog();
+    if (!isVisibleMenu) {
+      openDialog();
     }
   }, [isVisibleMenu]);
 
-  const openBlockDialog = () => {
-    if (!socket) {
+  const openDialog = () => {
+    if (nextAction.current === null || !socket) {
       return;
     }
 
+    const [content, buttonLabel, buttonAction] = (() => {
+      switch (nextAction.current) {
+        case 'blocked':
+          return [
+            '차단 시 펫친에서 삭제되고 더 이상 채팅을 할 수 없어요. 차단할까요?',
+            '차단하기',
+            () => {
+              socket.emit('blocked', {
+                token: accessToken,
+                blockedBy: headerData.id,
+              });
+            },
+          ];
+        case 'exit':
+          return [
+            '채팅방을 나가면 대화 내용이 모두 삭제되며 복구할 수 없어요. 채팅방을 나갈까요?',
+            '나가기',
+            () => {
+              socket.emit('leave', {
+                token: accessToken,
+                chatRoomId: roomId,
+              });
+            },
+          ];
+      }
+    })();
+
     overlay.open(
       <Dialog isOpened={true}>
-        <Dialog.Content content="채팅방을 나가면 대화 내용이 모두 삭제되며 복구할 수 없어요. 채팅방을 나갈까요?" />
+        <Dialog.Content content={content} />
         <Dialog.Buttons
           buttons={[
             {
@@ -193,13 +214,10 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
               onPressHandler: overlay.close,
             },
             {
-              label: '나가기',
+              label: buttonLabel,
               onPressHandler: () => {
                 overlay.close();
-                socket.emit('blocked', {
-                  token: accessToken,
-                  blockedBy: headerData.id,
-                });
+                buttonAction();
                 navigation.pop();
               },
             },
@@ -207,11 +225,6 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
         />
       </Dialog>
     );
-  };
-
-  const onBlock = () => {
-    target.current = 'blocked';
-    closeMenu();
   };
 
   return (
@@ -243,7 +256,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
               <MenuBackdrop
                 isVisible={isVisibleMenu && !!menuTop}
                 close={() => {
-                  target.current = null;
+                  nextAction.current = null;
                   closeMenu();
                 }}
                 menuStyle={{ top: menuTop, width: 146, right: 16 }}
