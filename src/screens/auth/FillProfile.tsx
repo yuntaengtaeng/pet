@@ -258,6 +258,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
           closeModal();
         }}
         height={310}
+        title=" 프로필 이미지 변경"
       >
         <View
           style={{
@@ -265,11 +266,6 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
             height: '100%',
           }}
         >
-          <View style={{ paddingVertical: 24, paddingHorizontal: 16 }}>
-            <Text style={[TYPOS.headline3, { color: Color.black }]}>
-              프로필 이미지 변경
-            </Text>
-          </View>
           <View>
             <Pressable
               style={{ padding: 16 }}

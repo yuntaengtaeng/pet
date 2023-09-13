@@ -293,6 +293,7 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
           closeModal();
         }}
         height={280}
+        title="상태 변경"
       >
         <View
           style={{
@@ -301,11 +302,6 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
             height: '100%',
           }}
         >
-          <View style={{ paddingVertical: 16 }}>
-            <Text style={[TYPOS.headline3, { color: Color.black }]}>
-              상태변경
-            </Text>
-          </View>
           {STATUS_MAP.map((text) => (
             <Pressable
               style={{ paddingVertical: 16 }}

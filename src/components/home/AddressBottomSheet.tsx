@@ -115,6 +115,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
           dispatch?.bottomSheetController.close();
         }}
         height={360}
+        title="동네 설정"
       >
         <View
           style={{
@@ -123,11 +124,6 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
             height: '100%',
           }}
         >
-          <View style={{ paddingVertical: 16 }}>
-            <Text style={[TYPOS.headline3, { color: Color.black }]}>
-              동네 설정
-            </Text>
-          </View>
           <View>
             {userAddressSettings.map((address) => (
               <AddressLabel
