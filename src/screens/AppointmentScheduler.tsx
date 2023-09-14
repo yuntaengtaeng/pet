@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import Container from '../components/layout/Container';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
-import { Text } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
+import Header from '../components/ui/Header';
+import UiSwitch from '../components/ui/UiSwitch';
+import TYPOS from '../components/ui/typo';
+import Color from '../constants/color';
+import Button from '../components/ui/buttons/Button';
+import RadioButtonGroup from '../components/ui/radio/RadioButtonGroup';
+import Calendar from '../components/ui/Calender';
+import TimePicker from '../components/ui/TimePicker';
+import BottomSheet from '../components/ui/BottomSheet';
+import RadioButtonItem from '../components/ui/radio/RadioButtonItem';
+import useModal from '../hooks/useModal';
+import TextIconButton from '../components/ui/buttons/TextIconButton';
+import { useRecoilValue } from 'recoil';
+import { WebSocketContext } from '../components/WebSocketContainer';
+import { UserState } from '../store/atoms';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+dayjs.locale('ko');
 
 export type AppointmentSchedulerScreenProps = StackScreenProps<
   RootStackParamList,
@@ -13,10 +31,228 @@ const AppointmentScheduler = ({
   navigation,
   route,
 }: AppointmentSchedulerScreenProps) => {
+  const socket = useContext(WebSocketContext);
+  const { accessToken } = useRecoilValue(UserState);
+  const { roomId } = route.params;
+  const [scheduleData, setScheduleData] = useState<{
+    date: string;
+    time: {
+      ampm: string;
+      hour: string;
+      minute: string;
+    };
+    isAlarmOn: boolean;
+    alarmTime: string;
+  }>({
+    date: '',
+    time: {
+      ampm: '',
+      hour: '',
+      minute: '',
+    },
+    isAlarmOn: false,
+    alarmTime: '5분 전',
+  });
+  const {
+    isVisible: isDateVisible,
+    openModal: openDateBottomSheet,
+    closeModal: closeDateBottomSheet,
+  } = useModal();
+  const {
+    isVisible: isTimeVisible,
+    openModal: openTimeBottomSheet,
+    closeModal: closeTimeBottomSheet,
+  } = useModal();
+
+  const isButtonActive = !!scheduleData.date && !!scheduleData.time;
+
+  const onSubmit = () => {
+    if (!socket) {
+      return;
+    }
+
+    const { ampm, hour, minute } = scheduleData.time;
+
+    const combineTime = `${String(
+      Number(hour) + (ampm === 'PM' ? 12 : 0)
+    ).padStart(2, '0')}:${minute.padStart(2, '0')}`;
+
+    const promiseAt = `${dayjs(scheduleData.date).format(
+      'YYYY-MM-DD'
+    )} ${combineTime}`;
+
+    socket.emit('schedule', {
+      token: accessToken,
+      chatRoomId: roomId,
+      promiseAt,
+      ...(!!scheduleData.isAlarmOn && {
+        alarmTime: scheduleData.alarmTime,
+      }),
+    });
+
+    navigation.pop();
+  };
+
   return (
-    <Container>
-      <Text>AppointmentScheduler</Text>
-    </Container>
+    <>
+      <Header title="약속 잡기" />
+      <Container>
+        <View
+          style={{
+            height: 55,
+            marginHorizontal: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottomColor: Color.neutral5,
+            borderBottomWidth: 1,
+          }}
+        >
+          {scheduleData.date ? (
+            <Text style={[TYPOS.headline4, { color: Color.neutral1 }]}>
+              {dayjs(scheduleData.date).format('M.D (dd)')}
+            </Text>
+          ) : (
+            <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
+              거래날짜
+            </Text>
+          )}
+          <TextIconButton label="변경" onPressHandler={openDateBottomSheet} />
+        </View>
+        <View
+          style={{
+            height: 55,
+            marginHorizontal: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottomColor: Color.neutral5,
+            borderBottomWidth: 1,
+          }}
+        >
+          {scheduleData.time.ampm ? (
+            <Text style={[TYPOS.headline4, { color: Color.neutral1 }]}>
+              {`${scheduleData.time.ampm === 'AM' ? '오전' : '오후'} ${
+                scheduleData.time.hour
+              }:${scheduleData.time.minute}`}
+            </Text>
+          ) : (
+            <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>
+              거래시간
+            </Text>
+          )}
+          <TextIconButton label="변경" onPressHandler={openTimeBottomSheet} />
+        </View>
+        <View
+          style={{
+            height: 55,
+            marginHorizontal: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Text
+            style={[
+              TYPOS.body1,
+              {
+                color: scheduleData.isAlarmOn ? Color.neutral1 : Color.neutral2,
+              },
+            ]}
+          >
+            약속 알림 시간 설정
+          </Text>
+          <UiSwitch
+            isOn={scheduleData.isAlarmOn}
+            onToggle={(isOn) => {
+              setScheduleData({
+                ...scheduleData,
+                isAlarmOn: isOn,
+              });
+            }}
+          />
+        </View>
+        {scheduleData.isAlarmOn && (
+          <View style={{ paddingHorizontal: 24 }}>
+            <RadioButtonGroup
+              containerStyle={{ gap: 24 }}
+              onSelected={(value) => {
+                setScheduleData({
+                  ...scheduleData,
+                  alarmTime: value,
+                });
+              }}
+              selected={scheduleData.alarmTime}
+            >
+              {['5분 전', '10분 전', '30분 전', '1시간 전'].map((time) => (
+                <RadioButtonItem value={time} key={time}>
+                  <Text style={[TYPOS.body1, { color: Color.black }]}>
+                    {time}
+                  </Text>
+                </RadioButtonItem>
+              ))}
+            </RadioButtonGroup>
+          </View>
+        )}
+      </Container>
+      <View style={{ marginHorizontal: 16 }}>
+        <Button
+          label="완료"
+          disabled={!isButtonActive}
+          onPressHandler={onSubmit}
+        />
+      </View>
+
+      <BottomSheet
+        isOpened={isDateVisible}
+        onClose={() => {
+          closeDateBottomSheet();
+        }}
+        height={420}
+        title="거래 날짜"
+      >
+        <Calendar
+          onSelectDateChangeHandler={(date) => {
+            setScheduleData({
+              ...scheduleData,
+              date,
+            });
+          }}
+          selectedDate={scheduleData.date}
+        />
+        <View style={{ marginHorizontal: 16, marginTop: 24 }}>
+          <Button label="선택" onPressHandler={closeDateBottomSheet} />
+        </View>
+      </BottomSheet>
+
+      <BottomSheet
+        isOpened={isTimeVisible}
+        onClose={() => {
+          closeTimeBottomSheet();
+        }}
+        height={300}
+        title="거래 날짜"
+      >
+        <TimePicker
+          itemHeight={36}
+          onTimeChange={(time) => {
+            const { ampm, hour, minute } = time;
+
+            setScheduleData({
+              ...scheduleData,
+              time: {
+                ampm,
+                hour,
+                minute,
+              },
+            });
+          }}
+        />
+        <View style={{ marginHorizontal: 16, marginTop: 24 }}>
+          <Button label="선택" onPressHandler={closeTimeBottomSheet} />
+        </View>
+      </BottomSheet>
+    </>
   );
 };
 
