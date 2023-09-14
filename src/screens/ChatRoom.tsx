@@ -70,6 +70,13 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
     isAlarm: true,
     id: '',
   });
+  const [productInfo, setProductInfo] = useState<{
+    id: string;
+    title: string;
+    price: string;
+    status: '판매중' | '예약중' | '판매완료' | '삭제됨';
+    image: string;
+  } | null>(null);
 
   const burgerRef = useRef<View | null>(null);
   const { isVisibleMenu, closeMenu, openMenu, menuTop } = useMenuControl({
@@ -108,8 +115,20 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
       });
     };
 
+    const handlerGetProductInfo = () => {
+      socket.emit('get-chat/used-item', {
+        token: accessToken,
+        chatRoomId: roomId,
+      });
+      socket.on('get-chat/used-item', (data) => {
+        console.log(data);
+        setProductInfo(data.data.usedItemInfo);
+      });
+    };
+
     handleGetChatList();
     handleGetAlarm();
+    handlerGetProductInfo();
 
     return () => {
       socket.off('chat-list');
@@ -272,13 +291,15 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
           </>
         }
       />
-      <ProductInformation
-        id="test"
-        name="강아지가 좋아하는 오리인형"
-        price="15,000원"
-        status="예약중"
-        image="https://petmily-images.s3.amazonaws.com/profileImages/dbsxo360@naver.com/dbsxo360@naver.com.jpeg"
-      />
+      {productInfo && (
+        <ProductInformation
+          id={productInfo.id}
+          name={productInfo.title}
+          price={productInfo.price}
+          status={productInfo.status}
+          image={productInfo.image}
+        />
+      )}
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 16,
