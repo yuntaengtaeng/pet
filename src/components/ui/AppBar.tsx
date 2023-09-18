@@ -9,10 +9,11 @@ interface Props {
   title?: string;
   leftContent?: React.ReactNode;
   rightContent?: React.ReactNode;
+  onCustomBackButtonHandler?: () => void;
 }
 
 const AppBar = (props: Props) => {
-  const { title } = props;
+  const { title, onCustomBackButtonHandler } = props;
 
   const navigation = useNavigation();
 
@@ -22,7 +23,13 @@ const AppBar = (props: Props) => {
 
   return (
     <View style={styles.header}>
-      <Pressable onPress={onBackButtonHandler}>
+      <Pressable
+        onPress={
+          onCustomBackButtonHandler
+            ? onCustomBackButtonHandler
+            : onBackButtonHandler
+        }
+      >
         <Left24 color={Color.black} />
       </Pressable>
       {props.leftContent && (
