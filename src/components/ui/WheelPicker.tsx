@@ -6,6 +6,7 @@ import {
   NativeSyntheticEvent,
   Text,
   View,
+  ViewStyle,
 } from 'react-native';
 import Color from '../../constants/color';
 import TYPOS from './typo';
@@ -14,12 +15,17 @@ interface Props {
   items: string[];
   onItemChange: (item: string) => void;
   itemHeight: number;
+  initValue?: string;
+  containerStyle?: ViewStyle;
 }
 
 const WheelPicker: React.FC<Props> = (props) => {
-  const { items, onItemChange, itemHeight } = props;
+  const { items, onItemChange, itemHeight, initValue } = props;
   const scrollY = useRef(new Animated.Value(0)).current;
-  const [selectedIndex, setSelectedIndex] = useState(items[0]);
+  const initValueIndex = initValue ? items.indexOf(initValue) : -1;
+  const [selectedIndex, setSelectedIndex] = useState(
+    initValueIndex >= 0 ? items[initValueIndex] : items[0]
+  );
 
   const renderItem = ({ item, index }: ListRenderItemInfo<string>) => {
     const inputRange = [
@@ -72,7 +78,7 @@ const WheelPicker: React.FC<Props> = (props) => {
   }, [selectedIndex]);
 
   return (
-    <View style={{ height: itemHeight * 3, flex: 1 }}>
+    <View style={[{ height: itemHeight * 3 }, props.containerStyle]}>
       <Animated.FlatList
         data={modifiedItems}
         renderItem={renderItem}
@@ -89,6 +95,7 @@ const WheelPicker: React.FC<Props> = (props) => {
           offset: itemHeight * index,
           index,
         })}
+        initialScrollIndex={initValueIndex}
       />
     </View>
   );
