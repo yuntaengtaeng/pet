@@ -1,7 +1,8 @@
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import Color from '../../constants/color';
 import WheelPicker from './WheelPicker';
 import { useRef } from 'react';
+import TYPOS from './typo';
 
 interface Time {
   ampm: string;
@@ -12,12 +13,18 @@ interface Time {
 interface Props {
   onTimeChange: (time: Time) => void;
   itemHeight: number;
+  initValue?: Time;
 }
 
-const TimePicker = ({ onTimeChange, itemHeight }: Props) => {
+const TimePicker = ({ onTimeChange, itemHeight, initValue }: Props) => {
   const ampmItems = ['AM', 'PM'];
-  const hourItems = Array.from({ length: 12 }, (_, i) => (i + 1).toString());
-  const minuteItems = Array.from({ length: 60 }, (_, i) => i.toString());
+  const hourItems = Array.from({ length: 13 }, (_, i) =>
+    i.toString().padStart(2, '0')
+  );
+  const minuteItems = Array.from({ length: 60 }, (_, i) =>
+    i.toString().padStart(2, '0')
+  );
+  const { ampm, hour, minute } = initValue || {};
 
   const selectedAMPM = useRef('');
   const selectedHour = useRef('');
@@ -50,22 +57,38 @@ const TimePicker = ({ onTimeChange, itemHeight }: Props) => {
       style={{
         flexDirection: 'row',
         height: itemHeight * 3,
+        justifyContent: 'center',
       }}
     >
       <WheelPicker
         items={ampmItems}
         onItemChange={(item) => handleIndexChange('ampm', item)}
         itemHeight={itemHeight}
+        initValue={ampm}
+        containerStyle={{ marginRight: 70 }}
       />
       <WheelPicker
         items={hourItems}
         onItemChange={(item) => handleIndexChange('hour', item)}
         itemHeight={itemHeight}
+        initValue={hour}
+        containerStyle={{ paddingHorizontal: 16 }}
       />
+      <View
+        style={{
+          height: itemHeight * 3,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Text style={[TYPOS.headline4, { color: Color.black }]}>:</Text>
+      </View>
       <WheelPicker
         items={minuteItems}
         onItemChange={(item) => handleIndexChange('minute', item)}
         itemHeight={itemHeight}
+        initValue={minute}
+        containerStyle={{ paddingHorizontal: 16 }}
       />
       <View
         style={{
