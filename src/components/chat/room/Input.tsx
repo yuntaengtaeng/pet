@@ -177,7 +177,10 @@ const Input = ({ onPostMessageHandler }: Props) => {
             <Pressable
               style={{ alignSelf: 'flex-start' }}
               onPress={() => {
-                navigation.push('AppointmentScheduler', { roomId });
+                navigation.push('AppointmentScheduler', {
+                  roomId,
+                  type: 'ADD',
+                });
               }}
             >
               <View

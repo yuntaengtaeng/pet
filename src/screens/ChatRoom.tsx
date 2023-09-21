@@ -321,6 +321,13 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                     key={systemChild.id}
                     timestamp={systemChild.promiseAt}
                     content={systemChild.content}
+                    onModifyHandler={() => {
+                      navigation.navigate('AppointmentScheduler', {
+                        roomId,
+                        type: 'MODIFY',
+                        scheduleId: systemChild.id,
+                      });
+                    }}
                   />
                   <View
                     style={{ paddingBottom: 16 }}
