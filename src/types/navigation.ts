@@ -36,6 +36,8 @@ export type RootStackParamList = {
   };
   AppointmentScheduler: {
     roomId: string;
+    type: 'ADD' | 'MODIFY';
+    scheduleId?: string;
   };
 };
 
