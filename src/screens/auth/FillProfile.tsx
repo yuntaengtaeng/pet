@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { RootStackParamList } from '../../types/navigation';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Container from '../../components/layout/Container';
 import TYPOS from '../../components/ui/typo';
 import AppBar from '../../components/ui/AppBar';
@@ -9,10 +9,9 @@ import InputField from '../../components/ui/inputs/InputField';
 import Button from '../../components/ui/buttons/Button';
 import UiCheckbox from '../../components/ui/UiCheckbox';
 import Color from '../../constants/color';
-import Camera16 from '../../components/ui/icons/Camera16';
 import * as MediaLibrary from 'expo-media-library';
 import useDebounce from '../../hooks/useDebounce';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { User } from '../../types/interface';
 import { useSetRecoilState } from 'recoil';
 import { UserState, LoadingState } from '../../store/atoms';
@@ -20,6 +19,8 @@ import { PetType } from '../../types/interface';
 import useInputState from '../../hooks/useInputState';
 import useModal from '../../hooks/useModal';
 import BottomSheet from '../../components/ui/BottomSheet';
+import ProfileImageSelector from '../../components/form/ProfileImageSelector';
+import { checkDuplicateNickname } from '../../lib/api';
 
 export type FillProfileScreenProps = StackScreenProps<
   RootStackParamList,
@@ -48,26 +49,22 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
 
   const { isVisible, openModal, closeModal } = useModal();
 
-  const checkDuplicateNickname = async () => {
+  const callCheckDuplicateNickname = async () => {
     try {
-      await axios.post('/auth/nickname', {
-        nickname,
-      });
-
+      await checkDuplicateNickname(nickname);
       setErrorLog({ isError: false, message: '' });
     } catch (error) {
-      const errorResponse = (error as AxiosError).response;
-
-      if (errorResponse) {
-        const { message } = errorResponse.data as { message: string };
-        setErrorLog({ isError: true, message });
+      if (error instanceof Error) {
+        setErrorLog({ isError: true, message: error.message });
+      } else {
+        console.log(error);
       }
     }
   };
 
   useEffect(() => {
     if (debouncedValue) {
-      checkDuplicateNickname();
+      callCheckDuplicateNickname();
     }
   }, [debouncedValue]);
 
@@ -129,44 +126,13 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
       <AppBar />
       <Container style={{ paddingHorizontal: 16 }}>
         <Text style={TYPOS.headline1}>프로필을 완성해주세요.</Text>
-        <View
-          style={{
-            alignItems: 'center',
-            marginVertical: 32,
+        <ProfileImageSelector
+          photo={photo}
+          onPhotoChange={(image) => {
+            setPhoto(image);
           }}
-        >
-          <Pressable
-            style={{ position: 'relative' }}
-            onPress={() => {
-              openModal();
-            }}
-          >
-            <Image
-              style={{ width: 80, height: 80, borderRadius: 80 }}
-              source={
-                photo
-                  ? { uri: photo.uri }
-                  : require('../../../assets/img/placeholder.png')
-              }
-            />
-
-            <View
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                right: 0,
-                width: 24,
-                height: 24,
-                backgroundColor: Color.primary600,
-                borderRadius: 24,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Camera16 color={Color.white} />
-            </View>
-          </Pressable>
-        </View>
+          containerStyle={{ marginVertical: 32 }}
+        />
         <View>
           <InputField
             placeholder="닉네임"
