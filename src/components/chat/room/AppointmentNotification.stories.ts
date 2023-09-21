@@ -15,5 +15,7 @@ type Story = StoryObj<typeof meta>;
 export const AppointmentNotificationExample: Story = {
   args: {
     timestamp: '8.25 (금) 오후 6:30',
+    content: '직거래가 잡혔어요',
+    onModifyHandler: () => {},
   },
 };
