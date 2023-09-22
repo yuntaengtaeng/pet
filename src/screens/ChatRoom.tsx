@@ -93,6 +93,39 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
     scrollToBottom();
   }, [chatData]);
 
+  const showChangeSalesStatusDialog = () => {
+    if (!socket) {
+      return;
+    }
+
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Content content="직거래 약속이 잡혔어요. 판매상태를 예약중으로 변경할까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '취소',
+              onPressHandler: overlay.close,
+            },
+            {
+              label: '변경하기',
+              onPressHandler: () => {
+                socket.emit('patch-used-item-status', {
+                  token: accessToken,
+                  chatRoomId: roomId,
+                  status: '예약중',
+                  usedItemBoardId: productInfo?.id,
+                });
+
+                overlay.close();
+              },
+            },
+          ]}
+        />
+      </Dialog>
+    );
+  };
+
   useEffect(() => {
     if (!socket) return;
 
@@ -121,14 +154,20 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
         chatRoomId: roomId,
       });
       socket.on('get-chat/used-item', (data) => {
-        console.log(data);
         setProductInfo(data.data.usedItemInfo);
+      });
+    };
+
+    const handlerGetCreateSchedule = () => {
+      socket.on('create-schedule', (data) => {
+        showChangeSalesStatusDialog();
       });
     };
 
     handleGetChatList();
     handleGetAlarm();
     handlerGetProductInfo();
+    handlerGetCreateSchedule();
 
     return () => {
       socket.off('chat-list');
