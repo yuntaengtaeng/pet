@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Container from '../components/layout/Container';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
@@ -20,6 +20,9 @@ import { WebSocketContext } from '../components/WebSocketContainer';
 import { UserState } from '../store/atoms';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import axios from 'axios';
+import useOverlay from '../hooks/overlay/useOverlay';
+import Dialog from '../components/ui/Dialog';
 dayjs.locale('ko');
 
 export type AppointmentSchedulerScreenProps = StackScreenProps<
@@ -31,9 +34,10 @@ const AppointmentScheduler = ({
   navigation,
   route,
 }: AppointmentSchedulerScreenProps) => {
+  const overlay = useOverlay();
   const socket = useContext(WebSocketContext);
   const { accessToken } = useRecoilValue(UserState);
-  const { roomId } = route.params;
+  const { roomId, type, scheduleId } = route.params;
   const [scheduleData, setScheduleData] = useState<{
     date: string;
     time: {
@@ -66,8 +70,44 @@ const AppointmentScheduler = ({
 
   const isButtonActive = !!scheduleData.date && !!scheduleData.time;
 
-  const onSubmit = () => {
-    if (!socket) {
+  useEffect(() => {
+    if (!!scheduleId && type === 'MODIFY') {
+      const fetch = async () => {
+        try {
+          const {
+            data: { alarmInfo },
+          } = await axios.get(`/chat/alarm?alarmId=${scheduleId}`);
+
+          console.log(alarmInfo);
+
+          const date = dayjs(alarmInfo.promiseAt).format('YYYYMMDD');
+          const isAlarmOn = alarmInfo.isAlarm;
+          const [ampm, time] = alarmInfo.promiseTime.split(' ');
+          const [hour, minute] = time.split(':');
+
+          const timeObject = {
+            ampm: ampm === '오후' ? 'PM' : 'AM',
+            hour: hour.padStart(2, '0'),
+            minute: minute.padStart(2, '0'),
+          };
+
+          setScheduleData({
+            date,
+            isAlarmOn,
+            time: timeObject,
+            alarmTime: alarmInfo.alarmTime || '5분 전',
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetch();
+    }
+  }, [scheduleId, type]);
+
+  const onSubmit = (socketType: 'schedule' | 'patch-schedule') => {
+    if (!socket || (socketType === 'patch-schedule' && !scheduleId)) {
       return;
     }
 
@@ -81,16 +121,59 @@ const AppointmentScheduler = ({
       'YYYY-MM-DD'
     )} ${combineTime}`;
 
-    socket.emit('schedule', {
+    socket.emit(socketType, {
       token: accessToken,
       chatRoomId: roomId,
       promiseAt,
       ...(!!scheduleData.isAlarmOn && {
         alarmTime: scheduleData.alarmTime,
       }),
+      ...(socketType === 'patch-schedule' &&
+        scheduleId && {
+          scheduleId,
+        }),
     });
 
     navigation.pop();
+  };
+
+  const onAdd = () => {
+    onSubmit('schedule');
+  };
+
+  const onModify = () => {
+    onSubmit('patch-schedule');
+  };
+
+  const onCancel = () => {
+    if (!socket) {
+      return;
+    }
+
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Content content="약속을 취소할까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '취소',
+              onPressHandler: overlay.close,
+            },
+            {
+              label: '확인',
+              onPressHandler: () => {
+                socket.emit('delete-schedule', {
+                  token: accessToken,
+                  scheduleId,
+                });
+                overlay.close();
+                navigation.pop();
+              },
+            },
+          ]}
+        />
+      </Dialog>
+    );
   };
 
   return (
@@ -195,12 +278,39 @@ const AppointmentScheduler = ({
           </View>
         )}
       </Container>
-      <View style={{ marginHorizontal: 16 }}>
-        <Button
-          label="완료"
-          disabled={!isButtonActive}
-          onPressHandler={onSubmit}
-        />
+      <View
+        style={{
+          marginHorizontal: 16,
+          ...(type === 'MODIFY' && {
+            flexDirection: 'row',
+            gap: 16,
+          }),
+        }}
+      >
+        {type === 'ADD' ? (
+          <Button
+            label="완료"
+            disabled={!isButtonActive}
+            onPressHandler={onAdd}
+          />
+        ) : (
+          <>
+            <View style={{ flex: 1 }}>
+              <Button
+                label="약속 취소"
+                onPressHandler={onCancel}
+                buttonType="secondary"
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                label="완료"
+                disabled={!isButtonActive}
+                onPressHandler={onModify}
+              />
+            </View>
+          </>
+        )}
       </View>
 
       <BottomSheet
@@ -234,6 +344,11 @@ const AppointmentScheduler = ({
         title="거래 날짜"
       >
         <TimePicker
+          initValue={{
+            ampm: scheduleData.time.ampm,
+            hour: scheduleData.time.hour,
+            minute: scheduleData.time.minute,
+          }}
           itemHeight={36}
           onTimeChange={(time) => {
             const { ampm, hour, minute } = time;
