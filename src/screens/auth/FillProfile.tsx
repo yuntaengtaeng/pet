@@ -21,6 +21,7 @@ import useModal from '../../hooks/useModal';
 import BottomSheet from '../../components/ui/BottomSheet';
 import ProfileImageSelector from '../../components/form/ProfileImageSelector';
 import { checkDuplicateNickname } from '../../lib/api';
+import PetCard from '../../components/ui/PetCard';
 
 export type FillProfileScreenProps = StackScreenProps<
   RootStackParamList,
@@ -155,38 +156,22 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
             키우고 있는 반려동물을 선택해주세요
           </Text>
           <View style={styles.cardContainer}>
-            <Pressable
-              style={[
-                styles.card,
-                {
-                  ...(selectedPetType === 'dog' && {
-                    borderColor: Color.primary600,
-                  }),
-                },
-              ]}
-              onPress={() => {
+            <PetCard
+              type="DOG"
+              cardStyle={{ height: 100, width: '48%' }}
+              isSelected={selectedPetType === 'dog'}
+              onPressHandler={() => {
                 setSelectedPetType('dog');
               }}
-            >
-              <Text style={TYPOS.headline1}>🐶</Text>
-              <Text style={[TYPOS.body1, { color: Color.black }]}>강아지</Text>
-            </Pressable>
-            <Pressable
-              style={[
-                styles.card,
-                {
-                  ...(selectedPetType === 'cat' && {
-                    borderColor: Color.primary600,
-                  }),
-                },
-              ]}
-              onPress={() => {
+            />
+            <PetCard
+              type="CAT"
+              cardStyle={{ height: 100, width: '48%' }}
+              isSelected={selectedPetType === 'cat'}
+              onPressHandler={() => {
                 setSelectedPetType('cat');
               }}
-            >
-              <Text style={TYPOS.headline1}>😺</Text>
-              <Text style={[TYPOS.body1, { color: Color.black }]}>고양이</Text>
-            </Pressable>
+            />
           </View>
           <UiCheckbox
             isChecked={isChecked}
@@ -280,14 +265,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 16,
-  },
-  card: {
-    height: 100,
-    width: '48%',
-    borderWidth: 1,
-    borderColor: Color.neutral4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 4,
   },
 });
