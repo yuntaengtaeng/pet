@@ -80,7 +80,7 @@ export interface ProductModifyData {
 export interface EtcProduct {
   id: string;
   title: string;
-  price: number;
+  price: string;
   image: string;
 }
 
