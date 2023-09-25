@@ -172,6 +172,8 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
     return () => {
       socket.off('chat-list');
       socket.off('alarm');
+      socket.off('get-chat/used-item');
+      socket.off('create-schedule');
     };
   }, [socket, headerData]);
 
