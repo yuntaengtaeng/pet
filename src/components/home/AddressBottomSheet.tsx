@@ -120,8 +120,7 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
         <View
           style={{
             paddingHorizontal: 24,
-            width: '100%',
-            height: '100%',
+            height: 280,
           }}
         >
           <View>
