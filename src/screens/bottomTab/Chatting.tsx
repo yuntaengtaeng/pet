@@ -33,6 +33,7 @@ interface RoomData {
   isPetMate?: boolean;
   image?: string;
   region: string;
+  productImage?: string;
 }
 
 const Chatting = () => {
