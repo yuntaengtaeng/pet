@@ -208,6 +208,7 @@ const Header = () => {
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Bell24 color={Color.black} />
+          <View style={{ marginLeft: 16 }} />
           <Search24 color={Color.black} />
         </View>
       </View>
