@@ -28,7 +28,9 @@ const PetCard = ({ type, isSelected, onPressHandler, cardStyle }: Props) => {
       ]}
       onPress={onPressHandler}
     >
-      <Text style={TYPOS.headline1}>{type === 'DOG' ? '🐶' : '😺'}</Text>
+      <Text style={[TYPOS.headline1, { marginBottom: 4 }]}>
+        {type === 'DOG' ? '🐶' : '😺'}
+      </Text>
       <Text style={[TYPOS.body1, { color: Color.black }]}>
         {type === 'DOG' ? '강아지' : '고양이'}
       </Text>
