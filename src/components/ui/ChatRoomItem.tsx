@@ -14,6 +14,7 @@ import { RootStackParamList } from '../../types/navigation';
 interface Props {
   roomId: string;
   image?: string;
+  productImage?: string;
   roomName: string;
   region: string;
   timeStamp: string;
@@ -28,6 +29,7 @@ interface Props {
 const ChatRoomItem = ({
   roomId,
   image,
+  productImage,
   roomName,
   region,
   timeStamp,
@@ -125,6 +127,7 @@ const ChatRoomItem = ({
           padding: 16,
           flexDirection: 'row',
           position: 'relative',
+          alignItems: 'center',
         }}
       >
         {isPinned && (
@@ -153,39 +156,57 @@ const ChatRoomItem = ({
               : require('../../../assets/img/placeholder.png')
           }
         />
-        <View style={{ flex: 1 }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              flex: 1,
-              justifyContent: 'space-between',
-            }}
-          >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={[{ color: Color.black }, TYPOS.headline4]}>
-                {roomName}
-              </Text>
-              <Text
-                style={[
-                  { color: Color.neutral2, marginHorizontal: 4 },
-                  TYPOS.body3,
-                ]}
-              >
-                {region}
-              </Text>
-              {!isNotificationEnabled && <Bell16 color={Color.neutral2} />}
-            </View>
+        <View style={{ flex: 1, gap: 4 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={[{ color: Color.black }, TYPOS.headline4]}>
+              {roomName}
+            </Text>
+            <Text
+              style={[
+                { color: Color.neutral2, marginHorizontal: 4 },
+                TYPOS.body3,
+              ]}
+            >
+              {region}신림동
+            </Text>
+            {!isNotificationEnabled && <Bell16 color={Color.neutral2} />}
+            <Bell16 color={Color.neutral2} />
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text
+              numberOfLines={1}
+              style={[{ color: Color.neutral1, flex: 1 }, TYPOS.body2]}
+            >
+              {content}
+              이거보다 길어지면 어쩌려고 그래요 안 그래요?
+            </Text>
+            <Text
+              style={[
+                { color: Color.neutral2, marginHorizontal: 4 },
+                TYPOS.body3,
+              ]}
+            >
+              ·
+            </Text>
             <Text style={[{ color: Color.neutral2 }, TYPOS.body3]}>
               {timeStamp}
             </Text>
           </View>
-          <View>
-            <Text style={[{ color: Color.neutral1 }, TYPOS.body2]}>
-              {content}
-            </Text>
-          </View>
         </View>
+        {productImage && (
+          <Image
+            style={[
+              {
+                width: 56,
+                height: 56,
+                resizeMode: 'cover',
+                borderRadius: 5,
+                marginLeft: 16,
+              },
+            ]}
+            source={{ uri: productImage }}
+          />
+        )}
       </Pressable>
     </Swipeable>
   );
