@@ -3,12 +3,16 @@ import { Pressable, StyleSheet } from 'react-native';
 import Plus32 from '../ui/icons/Plus32';
 import Color from '../../constants/color';
 import { HomeDispatchContext } from './HomeDispatchContext';
+import SHADOWS from '../ui/shadow';
 
 const FixedWriteButton = () => {
   const dispatch = useContext(HomeDispatchContext);
 
   return (
-    <Pressable style={styles.wrap} onPress={dispatch?.verifyNeighborhood}>
+    <Pressable
+      style={[styles.wrap, SHADOWS.shadow4]}
+      onPress={dispatch?.verifyNeighborhood}
+    >
       <Plus32 color={Color.white} />
     </Pressable>
   );
