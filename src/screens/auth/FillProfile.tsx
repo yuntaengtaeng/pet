@@ -1,14 +1,13 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { RootStackParamList } from '../../types/navigation';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Container from '../../components/layout/Container';
 import TYPOS from '../../components/ui/typo';
 import AppBar from '../../components/ui/AppBar';
 import InputField from '../../components/ui/inputs/InputField';
 import Button from '../../components/ui/buttons/Button';
 import UiCheckbox from '../../components/ui/UiCheckbox';
-import Color from '../../constants/color';
 import * as MediaLibrary from 'expo-media-library';
 import useDebounce from '../../hooks/useDebounce';
 import axios from 'axios';
@@ -18,7 +17,6 @@ import { UserState, LoadingState } from '../../store/atoms';
 import { PetType } from '../../types/interface';
 import useInputState from '../../hooks/useInputState';
 import useModal from '../../hooks/useModal';
-import BottomSheet from '../../components/ui/BottomSheet';
 import ProfileImageSelector from '../../components/form/ProfileImageSelector';
 import { checkDuplicateNickname } from '../../lib/api';
 import PetCard from '../../components/ui/PetCard';
@@ -47,8 +45,6 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
     (!!selectedPetType || isChecked);
   const setUser = useSetRecoilState(UserState);
   const setIsLoading = useSetRecoilState(LoadingState);
-
-  const { isVisible, openModal, closeModal } = useModal();
 
   const callCheckDuplicateNickname = async () => {
     try {
@@ -182,6 +178,7 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
 
               setIsChecked(value);
             }}
+            size="small"
           >
             <Text style={TYPOS.body2}>반려동물을 키우고 있지 않아요.</Text>
           </UiCheckbox>
@@ -203,58 +200,6 @@ const FillProfile = ({ navigation, route }: FillProfileScreenProps) => {
           disabled={!isAllConditionsMet}
         />
       </View>
-      <BottomSheet
-        isOpened={isVisible}
-        onClose={() => {
-          closeModal();
-        }}
-        height={310}
-        title=" 프로필 이미지 변경"
-      >
-        <View
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          <View>
-            <Pressable
-              style={{ padding: 16 }}
-              onPress={() => {
-                closeModal();
-                navigation.navigate('Gallery', {
-                  limit: 1,
-                  callback: (medias) => {
-                    const media = medias[0];
-                    setPhoto(media);
-                  },
-                  ...(photo && {
-                    selectedPhotoIds: [photo],
-                  }),
-                });
-              }}
-            >
-              <Text style={[TYPOS.body1, { color: Color.black }]}>
-                앨범에서 선택
-              </Text>
-            </Pressable>
-            <Pressable
-              style={{ padding: 16 }}
-              onPress={() => {
-                closeModal();
-                setPhoto(null);
-              }}
-            >
-              <Text style={[TYPOS.body1, { color: Color.black }]}>
-                기본이미지로 변경
-              </Text>
-            </Pressable>
-          </View>
-          <View style={{ marginHorizontal: 16, marginTop: 24 }}>
-            <Button label="닫기" onPressHandler={closeModal} />
-          </View>
-        </View>
-      </BottomSheet>
     </>
   );
 };
