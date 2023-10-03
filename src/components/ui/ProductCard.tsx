@@ -83,16 +83,24 @@ const ProductCard = (props: Props) => {
         )}
       </View>
       <View style={{ flex: 1, marginLeft: 16 }}>
-        <Text style={[TYPOS.headline4, { marginBottom: 4 }]}>
+        <Text
+          style={[TYPOS.headline4, { marginBottom: 4, color: Color.black }]}
+        >
           {props.title}
         </Text>
         <Text
-          style={[TYPOS.body3, { marginBottom: 4 }]}
+          style={[TYPOS.body3, { marginBottom: 4, color: Color.neutral2 }]}
         >{`${props.address} · ${props.timeDelta}`}</Text>
         <Text style={[TYPOS.headline4, { color: Color.primary900 }]}>
           {props.price}
         </Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 'auto',
+            justifyContent: 'flex-end',
+          }}
+        >
           <View style={{ flexDirection: 'row' }}>
             <Favorite16 color={Color.neutral3} style={{ marginRight: 4 }} />
             <Text style={[TYPOS.body3, { color: Color.neutral3 }]}>
