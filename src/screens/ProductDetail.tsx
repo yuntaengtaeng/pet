@@ -1,12 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  Modal,
-  TouchableWithoutFeedback,
-  Image,
-} from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
 import ScrollContainer from '../components/layout/ScrollContainer';
 import AppBar from '../components/ui/AppBar';
 import Profile from '../components/productDetail/Profile';
@@ -21,18 +14,19 @@ import MyPostFooter from '../components/productDetail/footer/MyPostFooter';
 import Description from '../components/productDetail/Description';
 import ProductStats from '../components/productDetail/ProductStats';
 import Color from '../constants/color';
-import useModal from '../hooks/useModal';
 import BottomSheet from '../components/ui/BottomSheet';
 import TYPOS from '../components/ui/typo';
 import { ProductStatus } from '../types/interface';
 import EtcProductList from '../components/productDetail/EtcProductList';
-import SHADOWS from '../components/ui/shadow';
 import Dialog from '../components/ui/Dialog';
 import ListValue from '../components/ui/dropdown/ListValue';
 import { ToastDispatchContext } from '../components/ui/toast/ToastProvider';
 import Home24 from '../components/ui/icons/Home24';
 import Share24 from '../components/ui/icons/Share24';
 import Burger24 from '../components/ui/icons/Burger24';
+import useMenuControl from '../hooks/useMenuControl';
+import MenuBackdrop from '../components/ui/dropdown/MenuBackdrop';
+import useOverlay from '../hooks/overlay/useOverlay';
 
 export type ProductDetailProps = StackScreenProps<
   RootStackParamList,
@@ -42,21 +36,13 @@ export type ProductDetailProps = StackScreenProps<
 const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
   const { id } = route.params;
   const [data, setData] = useState<ProductDetailType | null>(null);
-  const { isVisible, closeModal, openModal } = useModal();
-  const [dropdownTop, setDropdownTop] = useState(0);
   const burgerRef = useRef<View | null>(null);
-  const {
-    isVisible: isVisibleDropdown,
-    closeModal: closeDropdown,
-    openModal: openDropdown,
-  } = useModal();
-  const {
-    isVisible: isVisibleDeleteModal,
-    closeModal: closeDeleteModel,
-    openModal: openDeleteModal,
-  } = useModal();
+  const { isVisibleMenu, closeMenu, openMenu, menuTop } = useMenuControl({
+    targetRef: burgerRef,
+  });
 
   const toastDispatch = useContext(ToastDispatchContext);
+  const overlay = useOverlay();
 
   useEffect(() => {
     const fetch = async () => {
@@ -71,16 +57,6 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
 
     fetch();
   }, [id]);
-
-  useEffect(() => {
-    if (!isVisibleDropdown) {
-      return;
-    }
-
-    burgerRef.current?.measure((_x, _y, _width, height, pageX, pageY) => {
-      setDropdownTop(pageY + height + 8);
-    });
-  }, [isVisibleDropdown]);
 
   if (!data) {
     return null;
@@ -99,8 +75,6 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
 
       const clone = { ...data };
       setData({ ...clone, salesStatus });
-
-      closeModal();
     } catch (error) {}
   };
 
@@ -145,6 +119,63 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
     } catch (error) {}
   };
 
+  const openDeleteDialog = () => {
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Content content="게시글을 삭제할까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '삭제',
+              onPressHandler: () => {
+                overlay.close();
+                removePost();
+              },
+            },
+            {
+              label: '닫기',
+              onPressHandler: overlay.close,
+            },
+          ]}
+        />
+      </Dialog>
+    );
+  };
+
+  const openStatusChangeBottomSheet = () => {
+    overlay.open(
+      <BottomSheet
+        isOpened={true}
+        onClose={() => {
+          overlay.close();
+        }}
+        height={280}
+        title="상태 변경"
+      >
+        <View
+          style={{
+            paddingHorizontal: 24,
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          {STATUS_MAP.map((text) => (
+            <Pressable
+              style={{ paddingVertical: 16 }}
+              key={text}
+              onPress={async () => {
+                await onChangeStatus(text);
+                overlay.close();
+              }}
+            >
+              <Text style={[TYPOS.body1, { color: Color.black }]}>{text}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </BottomSheet>
+    );
+  };
+
   return (
     <>
       <AppBar
@@ -166,60 +197,36 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
               {data.isMe && (
                 <>
                   <Pressable
-                    onPress={openDropdown}
+                    onPress={openMenu}
                     ref={burgerRef}
                     style={{ marginLeft: 8 }}
                   >
                     <Burger24 color={Color.black} />
                   </Pressable>
-                  <Modal
-                    visible={isVisibleDropdown}
-                    transparent
-                    animationType="fade"
+                  <MenuBackdrop
+                    isVisible={isVisibleMenu && !!menuTop}
+                    close={() => {
+                      closeMenu();
+                    }}
+                    menuStyle={{ top: menuTop, width: 146, right: 16 }}
                   >
-                    <TouchableWithoutFeedback onPress={closeDropdown}>
-                      <View
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <View
-                          style={[
-                            {
-                              width: 146,
-                              position: 'absolute',
-                              zIndex: 10,
-                              top: dropdownTop,
-                              borderRadius: 8,
-                              right: 16,
-                              backgroundColor: Color.white,
-                              flexDirection: 'column',
-                            },
-                            SHADOWS.shadow4,
-                          ]}
-                        >
-                          <ListValue
-                            label="글 수정하기"
-                            onClickHandler={() => {
-                              closeDropdown();
-                              navigation.navigate('ModifyProduct', {
-                                id,
-                              });
-                            }}
-                          />
-                          <ListValue
-                            label="삭제"
-                            onClickHandler={() => {
-                              closeDropdown();
-                              openDeleteModal();
-                            }}
-                          />
-                        </View>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </Modal>
+                    <ListValue
+                      label="글 수정하기"
+                      onClickHandler={() => {
+                        closeMenu();
+                        navigation.navigate('ModifyProduct', {
+                          id,
+                        });
+                      }}
+                    />
+                    <ListValue
+                      label="삭제"
+                      onClickHandler={() => {
+                        closeMenu();
+                        openDeleteDialog();
+                      }}
+                    />
+                  </MenuBackdrop>
                 </>
               )}
             </View>
@@ -279,7 +286,7 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
         />
       </ScrollContainer>
       {data.isMe ? (
-        <MyPostFooter onStatusChangeHandler={openModal} />
+        <MyPostFooter onStatusChangeHandler={openStatusChangeBottomSheet} />
       ) : (
         <OtherPostFooter
           onLikeChangeHandler={onLikeChangeHandler}
@@ -287,51 +294,6 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
           handleChatButtonPressed={handleChatButtonPressed}
         />
       )}
-      <BottomSheet
-        isOpened={isVisible}
-        onClose={() => {
-          closeModal();
-        }}
-        height={280}
-        title="상태 변경"
-      >
-        <View
-          style={{
-            paddingHorizontal: 24,
-            width: '100%',
-            height: '100%',
-          }}
-        >
-          {STATUS_MAP.map((text) => (
-            <Pressable
-              style={{ paddingVertical: 16 }}
-              key={text}
-              onPress={() => {
-                onChangeStatus(text);
-              }}
-            >
-              <Text style={[TYPOS.body1, { color: Color.black }]}>{text}</Text>
-            </Pressable>
-          ))}
-        </View>
-      </BottomSheet>
-      <Dialog isOpened={isVisibleDeleteModal}>
-        <Dialog.Content content="게시글을 삭제할까요?" />
-        <Dialog.Buttons
-          buttons={[
-            {
-              label: '삭제',
-              onPressHandler: () => {
-                removePost();
-              },
-            },
-            {
-              label: '닫기',
-              onPressHandler: closeDeleteModel,
-            },
-          ]}
-        />
-      </Dialog>
     </>
   );
 };
