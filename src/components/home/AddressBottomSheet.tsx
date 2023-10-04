@@ -80,6 +80,11 @@ const AddressBottomSheet = ({ isVisibleBottomSheet }: Props) => {
       return;
     }
 
+    if (address.isLastSelected) {
+      showToastMessage('선택된 동네는 삭제가 불가합니다.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
