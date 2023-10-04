@@ -167,7 +167,7 @@ const ChatRoomItem = ({
                 TYPOS.body3,
               ]}
             >
-              {region}신림동
+              {region}
             </Text>
             {!isNotificationEnabled && <Bell16 color={Color.neutral2} />}
             <Bell16 color={Color.neutral2} />
@@ -178,7 +178,6 @@ const ChatRoomItem = ({
               style={[{ color: Color.neutral1, flex: 1 }, TYPOS.body2]}
             >
               {content}
-              이거보다 길어지면 어쩌려고 그래요 안 그래요?
             </Text>
             <Text
               style={[
