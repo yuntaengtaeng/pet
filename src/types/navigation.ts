@@ -1,4 +1,4 @@
-import { Location } from './interface';
+import { Location, PetType } from './interface';
 import * as MediaLibrary from 'expo-media-library';
 
 export type RootStackParamList = {
@@ -38,6 +38,9 @@ export type RootStackParamList = {
     roomId: string;
     type: 'ADD' | 'MODIFY';
     scheduleId?: string;
+  };
+  AddPet: {
+    type: PetType;
   };
 };
 

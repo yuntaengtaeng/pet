@@ -25,6 +25,7 @@ import ModifyProduct from './src/screens/ModifyProduct';
 import ChatRoom from './src/screens/ChatRoom';
 import Color from './src/constants/color';
 import AppointmentScheduler from './src/screens/AppointmentScheduler';
+import AddPet from './src/screens/myPage/AddPet';
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -133,6 +134,7 @@ const AppInner = () => {
               name="AppointmentScheduler"
               component={AppointmentScheduler}
             />
+            <Stack.Screen name="AddPet" component={AddPet} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>
