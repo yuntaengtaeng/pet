@@ -135,6 +135,10 @@ const AppInner = () => {
               component={AppointmentScheduler}
             />
             <Stack.Screen name="AddPet" component={AddPet} />
+            <Stack.Screen
+              name="TradeConfirmation"
+              component={TradeConfirmation}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>

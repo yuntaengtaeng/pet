@@ -42,6 +42,7 @@ export type RootStackParamList = {
   AddPet: {
     type: PetType;
   };
+  TradeConfirmation: undefined;
 };
 
 export type TabNavigatorParamList = {
