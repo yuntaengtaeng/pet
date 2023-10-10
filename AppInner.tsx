@@ -26,6 +26,7 @@ import ChatRoom from './src/screens/ChatRoom';
 import Color from './src/constants/color';
 import AppointmentScheduler from './src/screens/AppointmentScheduler';
 import AddPet from './src/screens/myPage/AddPet';
+import TradeConfirmation from './src/screens/TradeConfirmation';
 
 axios.defaults.baseURL = process.env.API_URL;
 
