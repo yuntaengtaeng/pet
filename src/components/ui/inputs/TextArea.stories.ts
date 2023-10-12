@@ -32,3 +32,21 @@ export const TextAreaError: Story = {
     errorMessage: 'errorMessage',
   },
 };
+
+export const TextAreaMaxLength: Story = {
+  args: {
+    placeholder: 'placeholder',
+    value: 'value',
+    maxLength: 200,
+  },
+};
+
+export const TextAreaMaxLengthError: Story = {
+  args: {
+    placeholder: 'placeholder',
+    value: 'value',
+    maxLength: 200,
+    isError: true,
+    errorMessage: 'errorMessage',
+  },
+};
