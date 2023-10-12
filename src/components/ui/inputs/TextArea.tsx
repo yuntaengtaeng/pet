@@ -22,6 +22,7 @@ interface Props {
   fieldStyle?: ViewStyle;
   disabled?: boolean;
   onSubmitEditingHandler?: () => void;
+  maxLength?: number;
 }
 
 const TextArea = (props: Props) => {
@@ -35,9 +36,11 @@ const TextArea = (props: Props) => {
     fieldStyle,
     disabled,
     onSubmitEditingHandler,
+    maxLength,
   } = props;
 
   const [hasFocus, setHasFocus] = useState(false);
+  const isBottomAreaVisible = (isError && !!errorMessage) || !!maxLength;
 
   return (
     <View style={layoutStyle}>
@@ -90,10 +93,24 @@ const TextArea = (props: Props) => {
           placeholderTextColor={Color.neutral2}
         />
       </View>
-      {isError && !!errorMessage && (
-        <View style={styles.errorWrap}>
-          <Close16 color={Color.error} />
-          <Text style={[styles.errorMessage, TYPOS.body3]}>{errorMessage}</Text>
+      {isBottomAreaVisible && (
+        <View style={styles.bottomContainer}>
+          {isError && !!errorMessage && (
+            <View style={styles.errorWrap}>
+              <Close16 color={Color.error} />
+              <Text style={[styles.errorMessage, TYPOS.body3]}>
+                {errorMessage}
+              </Text>
+            </View>
+          )}
+          {!isError && <View style={{ flex: 1 }} />}
+          {maxLength && (
+            <View>
+              <Text style={[TYPOS.body3, { color: Color.neutral2 }]}>
+                {value?.length}/{maxLength}
+              </Text>
+            </View>
+          )}
         </View>
       )}
     </View>
@@ -124,8 +141,13 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: Color.error,
   },
-  errorWrap: {
+  bottomContainer: {
     marginTop: 8,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  errorWrap: {
     alignItems: 'center',
     flexDirection: 'row',
   },
