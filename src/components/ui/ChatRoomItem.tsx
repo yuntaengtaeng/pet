@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import Color from '../../constants/color';
@@ -24,6 +24,7 @@ interface Props {
   onPinPressHandler?: () => void;
   onExitPressHandler?: () => void;
   onToggleNotificationHandler?: () => void;
+  setSwipeable: (ref: Swipeable | null) => void;
 }
 
 const ChatRoomItem = ({
@@ -39,8 +40,10 @@ const ChatRoomItem = ({
   onPinPressHandler,
   onExitPressHandler,
   onToggleNotificationHandler,
+  setSwipeable,
 }: Props) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const swipeableRef = useRef<Swipeable | null>(null);
 
   const renderLeftActions = () => {
     return (
@@ -115,6 +118,10 @@ const ChatRoomItem = ({
       renderRightActions={renderRightActions}
       renderLeftActions={renderLeftActions}
       friction={1.5}
+      ref={swipeableRef}
+      onSwipeableOpen={() => {
+        setSwipeable(swipeableRef.current);
+      }}
     >
       <Pressable
         onPress={() => {

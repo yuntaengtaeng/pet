@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   RootStackParamList,
@@ -17,6 +17,8 @@ import { UserState } from '../../store/atoms';
 import axios from 'axios';
 import useOverlay from '../../hooks/overlay/useOverlay';
 import Dialog from '../../components/ui/Dialog';
+import { Swipeable } from 'react-native-gesture-handler';
+import Button from '../../components/ui/buttons/Button';
 
 type HomeScreenProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabNavigatorParamList, 'Chatting'>,
@@ -39,6 +41,15 @@ interface RoomData {
 const Chatting = () => {
   const [rooms, setRooms] = useState<RoomData[]>([]);
   const socket = useContext(WebSocketContext);
+  const rowRef = useRef<Swipeable | null>(null);
+
+  const closeRow = () => {
+    if (rowRef.current) {
+      rowRef.current.close();
+      rowRef.current = null;
+    }
+  };
+
   const { accessToken } = useRecoilValue(UserState);
   const overlay = useOverlay();
 
@@ -145,12 +156,24 @@ const Chatting = () => {
             isNotificationEnabled={item.isAlarm}
             onPinPressHandler={() => {
               onPinPressHandler(item.id);
+              closeRow();
+              rowRef.current = null;
             }}
             onExitPressHandler={() => {
               onExitPressHandler(item.id);
+              closeRow();
+              rowRef.current = null;
             }}
             onToggleNotificationHandler={() => {
               onToggleNotificationHandler(item.id);
+              closeRow();
+              rowRef.current = null;
+            }}
+            setSwipeable={(ref) => {
+              if (rowRef.current && ref !== rowRef.current) {
+                closeRow();
+              }
+              rowRef.current = ref;
             }}
           />
         )}
