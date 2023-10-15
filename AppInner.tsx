@@ -27,6 +27,7 @@ import Color from './src/constants/color';
 import AppointmentScheduler from './src/screens/AppointmentScheduler';
 import AddPet from './src/screens/myPage/AddPet';
 import TradeConfirmation from './src/screens/TradeConfirmation';
+import ModifyProfile from './src/screens/myPage/ModifyProfile';
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -140,6 +141,7 @@ const AppInner = () => {
               name="TradeConfirmation"
               component={TradeConfirmation}
             />
+            <Stack.Screen name="ModifyProfile" component={ModifyProfile} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>
