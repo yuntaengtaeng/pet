@@ -78,8 +78,6 @@ const AppointmentScheduler = ({
             data: { alarmInfo },
           } = await axios.get(`/chat/alarm?alarmId=${scheduleId}`);
 
-          console.log(alarmInfo);
-
           const date = dayjs(alarmInfo.promiseAt).format('YYYYMMDD');
           const isAlarmOn = alarmInfo.isAlarm;
           const [ampm, time] = alarmInfo.promiseTime.split(' ');

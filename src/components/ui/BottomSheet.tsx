@@ -54,8 +54,6 @@ const BottomSheet = ({
         panY.setValue(gestureState.dy);
       },
       onPanResponderRelease: (event, gestureState) => {
-        console.log(gestureState);
-
         if (
           gestureState.dy > 0 &&
           (gestureState.dy > 80 || gestureState.vy > 1.5)
