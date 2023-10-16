@@ -18,17 +18,25 @@ const Profile = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
+  const fetch = async () => {
+    const { data } = await axios.get<{ userInfo: UserInfo }>(
+      '/my-page/user-info'
+    );
+
+    setUserInfo(data.userInfo);
+  };
+
   useEffect(() => {
-    const fetch = async () => {
-      const { data } = await axios.get<{ userInfo: UserInfo }>(
-        '/my-page/user-info'
-      );
-
-      setUserInfo(data.userInfo);
-    };
-
     fetch();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetch();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   if (!userInfo) {
     return null;
