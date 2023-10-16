@@ -88,3 +88,9 @@ export interface IconProp {
   color: Color;
   style?: ViewStyle;
 }
+
+export interface Date {
+  yyyy: string;
+  m: string;
+  d: string;
+}
