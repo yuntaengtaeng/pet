@@ -53,6 +53,7 @@ const SpeciesPicker = ({ value, onChangeHandler, type, petType }: Props) => {
   const inputForm = () => {
     return (
       <InputField
+        placeholder="묘종을 선택하세요."
         value={value}
         onChangeHandler={(text) => {
           onChangeHandler(text);
@@ -103,7 +104,13 @@ const SpeciesPicker = ({ value, onChangeHandler, type, petType }: Props) => {
   };
 
   const selectForm = () => {
-    return <Selectable value={value} onPressHandler={openListBottomSheet} />;
+    return (
+      <Selectable
+        value={value}
+        onPressHandler={openListBottomSheet}
+        placeholder="묘종을 선택하세요."
+      />
+    );
   };
 
   return <>{type === '목록에서 선택' ? selectForm() : inputForm()}</>;

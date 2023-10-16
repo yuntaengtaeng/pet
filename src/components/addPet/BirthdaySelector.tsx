@@ -37,6 +37,7 @@ const BirthdaySelector = ({ value, onChangeHandler }: Props) => {
       <Selectable
         value={isValidValue ? `${value.yyyy} ${value.m} ${value.d}` : ''}
         onPressHandler={openModal}
+        placeholder="날짜를 선택하세요."
       />
       <BottomSheet
         isOpened={isVisible}
