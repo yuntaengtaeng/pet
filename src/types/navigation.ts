@@ -43,10 +43,10 @@ export type RootStackParamList = {
     type: PetType;
   };
   TradeConfirmation: undefined;
-  ModifyProfile: {
+  ModifyProfile: undefined;
+  PetDetail: {
     petId: string;
   };
-  PetDetail: undefined;
 };
 
 export type TabNavigatorParamList = {
