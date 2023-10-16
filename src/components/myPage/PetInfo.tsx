@@ -8,34 +8,39 @@ import { RootStackParamList } from '../../types/navigation';
 import BottomSheet from '../ui/BottomSheet';
 import Right24 from '../ui/icons/Right24';
 import TYPOS from '../ui/typo';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const dummy_data = [
-  {
-    id: '123',
-    name: '연탄이',
-    image:
-      'https://petmily-images.s3.amazonaws.com/usedItemImages/649193f013a61cf6c63e75cd/e1880e04-ebe5-47d4-86d3-21c60ed4dc0420230620205632',
-    petType: '고양이',
-  },
-  {
-    id: '1234',
-    name: '숯불이',
-    image:
-      'https://petmily-images.s3.amazonaws.com/usedItemImages/649193f013a61cf6c63e75cd/e1880e04-ebe5-47d4-86d3-21c60ed4dc0420230620205632',
-    petType: '강아지',
-  },
-  {
-    id: '12345',
-    name: '재떨이',
-    image:
-      'https://petmily-images.s3.amazonaws.com/usedItemImages/649193f013a61cf6c63e75cd/e1880e04-ebe5-47d4-86d3-21c60ed4dc0420230620205632',
-    petType: '강아지',
-  },
-];
+interface Pet {
+  id: string;
+  name: string;
+  type: '강아지' | '고양이';
+  image?: string;
+}
 
 const PetInfo = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const overlay = useOverlay();
+  const [pets, setPets] = useState<Pet[]>([]);
+
+  const fetch = async () => {
+    try {
+      const { data } = await axios.get<{ pets: Pet[] }>('/my-page/pets');
+      setPets(data.pets);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetch();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   const moveAddPet = (type: PetType) => {
     navigation.navigate('AddPet', {
@@ -111,8 +116,9 @@ const PetInfo = () => {
           gap: 16,
         }}
       >
-        {dummy_data.map((v) => (
+        {pets.map((pet) => (
           <Pressable
+            key={pet.id}
             style={{
               width: 156,
               height: 88,
@@ -124,17 +130,24 @@ const PetInfo = () => {
               borderColor: Color.primary700,
               borderRadius: 5,
             }}
+            onPress={() => {
+              navigation.navigate('PetDetail', { petId: pet.id });
+            }}
           >
             <Image
               style={{ width: 56, height: 56, borderRadius: 56 }}
-              source={require('../../../assets/img/placeholder.png')}
+              source={
+                pet.image
+                  ? { uri: pet.image }
+                  : require('../../../assets/img/placeholder.png')
+              }
             />
             <View>
               <Text style={[TYPOS.headline4, { color: Color.black }]}>
-                {v.name}
+                {pet.name}
               </Text>
               <Text style={[TYPOS.body3, { color: Color.neutral2 }]}>
-                {v.petType}
+                {pet.type}
               </Text>
             </View>
           </Pressable>
