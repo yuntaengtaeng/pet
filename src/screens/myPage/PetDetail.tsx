@@ -12,6 +12,8 @@ import TextIconButton from '../../components/ui/buttons/TextIconButton';
 import dayjs from 'dayjs';
 import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
+import useOverlay from '../../hooks/overlay/useOverlay';
+import Dialog from '../../components/ui/Dialog';
 
 interface PetInfo {
   name: string;
@@ -34,6 +36,7 @@ const PetDetail = ({ navigation, route }: PetDetailScreenProps) => {
   const [petInfo, setPetInfo] = useState<PetInfo | null>(null);
   const setIsLoading = useSetRecoilState(LoadingState);
   const { petId } = route.params;
+  const overlay = useOverlay();
 
   useEffect(() => {
     const fetch = async () => {
@@ -55,7 +58,7 @@ const PetDetail = ({ navigation, route }: PetDetailScreenProps) => {
     return null;
   }
 
-  const onDelete = async () => {
+  const onRequestDelete = async () => {
     setIsLoading(true);
     try {
       await axios.delete(`/my-page/pet/${petId}`);
@@ -64,6 +67,31 @@ const PetDetail = ({ navigation, route }: PetDetailScreenProps) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const onDelete = async () => {
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Content content="반려동물 정보를 삭제할까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '삭제',
+              onPressHandler: () => {
+                overlay.close();
+                onRequestDelete();
+              },
+            },
+            {
+              label: '취소',
+              onPressHandler: () => {
+                overlay.close();
+              },
+            },
+          ]}
+        />
+      </Dialog>
+    );
   };
 
   return (
