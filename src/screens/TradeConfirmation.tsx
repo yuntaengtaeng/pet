@@ -4,13 +4,27 @@ import { Text, Pressable, View } from 'react-native';
 import TYPOS from '../components/ui/typo';
 import Color from '../constants/color';
 import ProductInformation from '../components/chat/room/ProductInformation';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/navigation';
 
-const TradeConfirmation = () => {
+export type TradeConfirmationScreenProps = StackScreenProps<
+  RootStackParamList,
+  'TradeConfirmation'
+>;
+
+const TradeConfirmation = ({
+  navigation,
+  route,
+}: TradeConfirmationScreenProps) => {
   return (
     <>
       <Header
         rightContent={
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.pop();
+            }}
+          >
             <Text style={[TYPOS.medium, { color: Color.neutral2 }]}>
               다음에 하기
             </Text>
@@ -37,11 +51,11 @@ const TradeConfirmation = () => {
           최근 거래 목록
         </Text>
         <ProductInformation
-          id="test"
-          name="강아지가 좋아하는 오리인형"
-          price="15,000원"
-          status="예약중"
-          image="https://petmily-images.s3.amazonaws.com/usedItemImages/649193f013a61cf6c63e75cd/e1880e04-ebe5-47d4-86d3-21c60ed4dc0420230620205632"
+          id={route.params.id}
+          title={route.params.title}
+          price={route.params.price}
+          status={route.params.status}
+          image={route.params.image}
         />
       </Container>
     </>

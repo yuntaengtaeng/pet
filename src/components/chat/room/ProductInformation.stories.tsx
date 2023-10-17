@@ -1,12 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
+import { useNavigation, NavigationContainer } from '@react-navigation/native';
 import ProductInformation from './ProductInformation';
+import React from 'react';
 
 const meta = {
   title: 'ui/chatroom/ProductInformation',
   component: ProductInformation,
   tags: ['autodocs'],
   argTypes: {},
+  decorators: [
+    (Story) => (
+      <NavigationContainer>
+        <Story />
+      </NavigationContainer>
+    ),
+  ],
 } satisfies Meta<typeof ProductInformation>;
 
 export default meta;
@@ -15,7 +23,7 @@ type Story = StoryObj<typeof meta>;
 export const ProductInformationExample: Story = {
   args: {
     id: 'test',
-    name: '강아지가 좋아하는 오리인형',
+    title: '강아지가 좋아하는 오리인형',
     price: '15,000원',
     status: '예약중',
     image:

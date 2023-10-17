@@ -22,6 +22,7 @@ import axios from 'axios';
 import { ToastDispatchContext } from '../components/ui/toast/ToastProvider';
 import Dialog from '../components/ui/Dialog';
 import useOverlay from '../hooks/overlay/useOverlay';
+import { ProductInfo } from '../types/interface';
 
 export type OnboardingScreenProps = StackScreenProps<
   RootStackParamList,
@@ -70,13 +71,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
     isAlarm: true,
     id: '',
   });
-  const [productInfo, setProductInfo] = useState<{
-    id: string;
-    title: string;
-    price: string;
-    status: '판매중' | '예약중' | '판매완료' | '삭제됨';
-    image: string;
-  } | null>(null);
+  const [productInfo, setProductInfo] = useState<ProductInfo | null>(null);
 
   const burgerRef = useRef<View | null>(null);
   const { isVisibleMenu, closeMenu, openMenu, menuTop } = useMenuControl({
@@ -335,7 +330,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
       {productInfo && (
         <ProductInformation
           id={productInfo.id}
-          name={productInfo.title}
+          title={productInfo.title}
           price={productInfo.price}
           status={productInfo.status}
           image={productInfo.image}

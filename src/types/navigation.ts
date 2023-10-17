@@ -1,4 +1,4 @@
-import { Location, PetType } from './interface';
+import { Location, PetType, ProductInfo } from './interface';
 import * as MediaLibrary from 'expo-media-library';
 
 export type RootStackParamList = {
@@ -42,7 +42,7 @@ export type RootStackParamList = {
   AddPet: {
     type: PetType;
   };
-  TradeConfirmation: undefined;
+  TradeConfirmation: ProductInfo;
   ModifyProfile: undefined;
   PetDetail: {
     petId: string;
