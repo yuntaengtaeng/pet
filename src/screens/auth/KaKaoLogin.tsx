@@ -5,7 +5,7 @@ import axios, { AxiosError } from 'axios';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
 import Header from '../../components/ui/Header';
-import { User } from '../../types/interface';
+import { ProductInfo, User } from '../../types/interface';
 import { useSetRecoilState } from 'recoil';
 import { UserState } from '../../store/atoms';
 
@@ -56,7 +56,17 @@ const KaKaoLogin = ({ navigation, route }: KaKaoLoginScreenProps) => {
       if (response.status === 200) {
         const user: User = response.data.data;
         setUser(user);
+        const { data } = await axios.get<{
+          usedItemsCompletedDeals: ProductInfo[];
+        }>('/board/used-items/completed-deals');
+
         navigation.reset({ routes: [{ name: 'BottomNavigation' }] });
+
+        data.usedItemsCompletedDeals.forEach((usedItems) => {
+          navigation.push('TradeConfirmation', {
+            ...usedItems,
+          });
+        });
       } else if (response.status === 202) {
         navigation.replace('AddressRegistration', { email });
       }
