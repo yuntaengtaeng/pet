@@ -84,6 +84,14 @@ export interface EtcProduct {
   image: string;
 }
 
+export interface ProductInfo {
+  id: string;
+  title: string;
+  price: string;
+  status: '판매중' | '예약중' | '판매완료' | '삭제됨';
+  image?: string;
+}
+
 export interface IconProp {
   color: Color;
   style?: ViewStyle;
