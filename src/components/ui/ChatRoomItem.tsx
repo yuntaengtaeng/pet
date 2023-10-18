@@ -177,7 +177,6 @@ const ChatRoomItem = ({
               {region}
             </Text>
             {!isNotificationEnabled && <Bell16 color={Color.neutral2} />}
-            <Bell16 color={Color.neutral2} />
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text
