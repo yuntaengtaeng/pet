@@ -32,12 +32,12 @@ export type OnboardingScreenProps = StackScreenProps<
 type Message = {
   id: string;
   content: string;
+  isMe?: boolean;
 };
 
 type UserMessage = Message & {
   timestamp?: string;
   timeOfDay?: string;
-  isMe?: boolean;
 };
 
 type System = Message & {
@@ -364,6 +364,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                         scheduleId: systemChild.id,
                       });
                     }}
+                    isEditButtonVisible={systemChild.isMe}
                   />
                   <View
                     style={{ paddingBottom: 16 }}
