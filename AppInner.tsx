@@ -29,6 +29,7 @@ import AddPet from './src/screens/myPage/AddPet';
 import TradeConfirmation from './src/screens/TradeConfirmation';
 import ModifyProfile from './src/screens/myPage/ModifyProfile';
 import PetDetail from './src/screens/myPage/PetDetail';
+import ProductChatting from './src/screens/ProductChatting';
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -144,6 +145,7 @@ const AppInner = () => {
             />
             <Stack.Screen name="ModifyProfile" component={ModifyProfile} />
             <Stack.Screen name="PetDetail" component={PetDetail} />
+            <Stack.Screen name="ProductChatting" component={ProductChatting} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>

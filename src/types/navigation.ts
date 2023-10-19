@@ -47,6 +47,9 @@ export type RootStackParamList = {
   PetDetail: {
     petId: string;
   };
+  ProductChatting: {
+    id: string;
+  };
 };
 
 export type TabNavigatorParamList = {
