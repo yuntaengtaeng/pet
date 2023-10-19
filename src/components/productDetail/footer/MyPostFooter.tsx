@@ -5,9 +5,15 @@ import Color from '../../../constants/color';
 
 interface Props {
   onStatusChangeHandler: () => void;
+  onRedirectToProductChatRooms: () => void;
+  chatCount: number;
 }
 
-const MyPostFooter = ({ onStatusChangeHandler }: Props) => {
+const MyPostFooter = ({
+  onStatusChangeHandler,
+  onRedirectToProductChatRooms,
+  chatCount,
+}: Props) => {
   return (
     <View
       style={{
@@ -18,11 +24,18 @@ const MyPostFooter = ({ onStatusChangeHandler }: Props) => {
       }}
     >
       <View style={{ flex: 1 }}>
-        <Button label="상태변경" onPressHandler={onStatusChangeHandler} />
+        <Button
+          label="상태변경"
+          onPressHandler={onStatusChangeHandler}
+          buttonType="secondary"
+        />
       </View>
       <View style={{ paddingLeft: 16 }} />
       <View style={{ flex: 1 }}>
-        <Button label="대화중인 채팅방" buttonType="secondary" />
+        <Button
+          label={`대화중인 채팅방 (${chatCount})`}
+          onPressHandler={onRedirectToProductChatRooms}
+        />
       </View>
     </View>
   );
