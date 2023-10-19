@@ -102,3 +102,16 @@ export interface Date {
   m: string;
   d: string;
 }
+
+export interface Room {
+  id: string;
+  title: string;
+  lastChat: string;
+  lastChatAt: string;
+  isAlarm: boolean;
+  isPinned: boolean;
+  isPetMate?: boolean;
+  image?: string;
+  region: string;
+  productImage?: string;
+}
