@@ -7,12 +7,14 @@ interface Props {
   timestamp: string;
   content: string;
   onModifyHandler: () => void;
+  isEditButtonVisible?: boolean;
 }
 
 const AppointmentNotification = ({
   timestamp,
   content,
   onModifyHandler,
+  isEditButtonVisible,
 }: Props) => {
   return (
     <View
@@ -38,22 +40,24 @@ const AppointmentNotification = ({
         >
           {timestamp}
         </Text>
-        <Pressable
-          style={{ flexDirection: 'row', alignItems: 'center' }}
-          onPress={onModifyHandler}
-        >
-          <Text
-            style={[
-              TYPOS.small,
-              {
-                color: Color.neutral2,
-              },
-            ]}
+        {isEditButtonVisible && (
+          <Pressable
+            style={{ flexDirection: 'row', alignItems: 'center' }}
+            onPress={onModifyHandler}
           >
-            수정하기
-          </Text>
-          <Right16 color={Color.neutral2} />
-        </Pressable>
+            <Text
+              style={[
+                TYPOS.small,
+                {
+                  color: Color.neutral2,
+                },
+              ]}
+            >
+              수정하기
+            </Text>
+            <Right16 color={Color.neutral2} />
+          </Pressable>
+        )}
       </View>
       <View style={{ backgroundColor: Color.white }}>
         <Text style={[TYPOS.body2, { color: Color.neutral1, padding: 16 }]}>
