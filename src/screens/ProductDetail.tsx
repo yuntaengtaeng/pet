@@ -43,15 +43,20 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
 
   const toastDispatch = useContext(ToastDispatchContext);
   const overlay = useOverlay();
+  const existingChatRoomId = useRef<string | null>(null);
 
   useEffect(() => {
     const fetch = async () => {
       const {
-        data: { usedItemBoardInfo },
+        data: { usedItemBoardInfo, chatRoomInfo },
       } = await axios.get<{
         usedItemBoardInfo: ProductDetailType;
+        chatRoomInfo?: {
+          id: string;
+        };
       }>(`/board/used-item/${id}`);
 
+      existingChatRoomId.current = chatRoomInfo?.id || null;
       setData(usedItemBoardInfo);
     };
 
@@ -108,6 +113,11 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
   const STATUS_MAP: ProductStatus[] = ['판매중', '예약중', '거래완료'];
 
   const handleChatButtonPressed = async () => {
+    if (existingChatRoomId.current) {
+      navigation.navigate('ChatRoom', { roomId: existingChatRoomId.current });
+      return;
+    }
+
     try {
       const {
         data: { chatRoomId },
@@ -174,6 +184,12 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
         </View>
       </BottomSheet>
     );
+  };
+
+  const onRedirectToProductChatRooms = () => {
+    navigation.navigate('ProductChatting', {
+      id,
+    });
   };
 
   return (
@@ -286,7 +302,11 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
         />
       </ScrollContainer>
       {data.isMe ? (
-        <MyPostFooter onStatusChangeHandler={openStatusChangeBottomSheet} />
+        <MyPostFooter
+          onRedirectToProductChatRooms={onRedirectToProductChatRooms}
+          onStatusChangeHandler={openStatusChangeBottomSheet}
+          chatCount={data.chatCount}
+        />
       ) : (
         <OtherPostFooter
           onLikeChangeHandler={onLikeChangeHandler}
