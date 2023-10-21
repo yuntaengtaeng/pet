@@ -115,3 +115,5 @@ export interface Room {
   region: string;
   productImage?: string;
 }
+
+export type BlockStatus = 'Me' | 'Other' | 'None';
