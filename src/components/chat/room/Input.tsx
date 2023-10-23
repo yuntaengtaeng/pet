@@ -22,14 +22,16 @@ import Calendar24 from '../../ui/icons/Calendar24';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../types/navigation';
+import { BlockStatus } from '../../../types/interface';
 
 type MyScreenRouteProp = RouteProp<RootStackParamList, 'AppointmentScheduler'>;
 
 interface Props {
   onPostMessageHandler: (message: string) => void;
+  blockStatus: BlockStatus;
 }
 
-const Input = ({ onPostMessageHandler }: Props) => {
+const Input = ({ onPostMessageHandler, blockStatus }: Props) => {
   const { StatusBarManager } = NativeModules;
   const [statusBarHeight, setStatusBarHeight] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,6 +64,17 @@ const Input = ({ onPostMessageHandler }: Props) => {
     onPostMessageHandler(text);
     setText('');
   };
+
+  const placeholder = (() => {
+    switch (blockStatus) {
+      case 'Me':
+        return '차단하면 메세지를 보낼 수 없어요.';
+      case 'Other':
+        return '상대방과 대화가 불가능 합니다.';
+      case 'None':
+        return '메세지를 입력하세요.';
+    }
+  })();
 
   return (
     <KeyboardAvoidingView
@@ -108,7 +121,7 @@ const Input = ({ onPostMessageHandler }: Props) => {
               multiline={true}
               numberOfLines={5}
               selectionColor={Color.primary700}
-              placeholder="메세지를 입력하세요."
+              placeholder={placeholder}
               placeholderTextColor={Color.neutral3}
               style={[
                 TYPOS.body2,
@@ -121,8 +134,13 @@ const Input = ({ onPostMessageHandler }: Props) => {
               ]}
               value={text}
               onChangeText={setText}
+              editable={blockStatus === 'None'}
             />
-            <Pressable style={{ marginLeft: 8 }} onPress={onSendMessage}>
+            <Pressable
+              style={{ marginLeft: 8 }}
+              onPress={onSendMessage}
+              disabled={blockStatus !== 'None'}
+            >
               <Send24 color={text.length ? Color.primary700 : Color.neutral3} />
             </Pressable>
           </View>
