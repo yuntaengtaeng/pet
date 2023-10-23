@@ -70,6 +70,57 @@ const AppointmentScheduler = ({
 
   const isButtonActive = !!scheduleData.date && !!scheduleData.time;
 
+  const openSameScheduleDialog = () => {
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Title title="이 시간에 다른분과 직거래 약속이 있어요." />
+        <Dialog.Content content="같은 시간에 약속을 잡을까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '취소',
+              onPressHandler: overlay.close,
+            },
+            {
+              label: '약속 잡기',
+              onPressHandler: () => {
+                overlay.close();
+                onSubmit(
+                  type === 'ADD' ? 'schedule' : 'patch-schedule',
+                  'sameTime'
+                );
+              },
+            },
+          ]}
+        />
+      </Dialog>
+    );
+  };
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleGetSameSchedule = () => {
+      socket.on('same-schedule', (data) => {
+        openSameScheduleDialog();
+      });
+    };
+
+    const handleGetCreateSchedule = () => {
+      socket.on('create-schedule', (data) => {
+        navigation.pop();
+      });
+    };
+
+    handleGetCreateSchedule();
+    handleGetSameSchedule();
+
+    return () => {
+      socket.off('create-schedule');
+      socket.off('same-schedule');
+    };
+  }, [socket, scheduleData]);
+
   useEffect(() => {
     if (!!scheduleId && type === 'MODIFY') {
       const fetch = async () => {
@@ -104,7 +155,10 @@ const AppointmentScheduler = ({
     }
   }, [scheduleId, type]);
 
-  const onSubmit = (socketType: 'schedule' | 'patch-schedule') => {
+  const onSubmit = (
+    socketType: 'schedule' | 'patch-schedule',
+    option?: 'sameTime'
+  ) => {
     if (!socket || (socketType === 'patch-schedule' && !scheduleId)) {
       return;
     }
@@ -130,9 +184,10 @@ const AppointmentScheduler = ({
         scheduleId && {
           scheduleId,
         }),
+      ...(option === 'sameTime' && {
+        option,
+      }),
     });
-
-    navigation.pop();
   };
 
   const onAdd = () => {
