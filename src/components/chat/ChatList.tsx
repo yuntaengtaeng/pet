@@ -12,9 +12,14 @@ import EmptyList from './EmptyList';
 interface Props {
   rooms: Room[];
   handleRoomsDataUpdate: (rooms: Room[]) => void;
+  isSwipable?: boolean;
 }
 
-const ChatList = ({ rooms, handleRoomsDataUpdate }: Props) => {
+const ChatList = ({
+  rooms,
+  handleRoomsDataUpdate,
+  isSwipable = true,
+}: Props) => {
   const rowRef = useRef<Swipeable | null>(null);
 
   const closeRow = () => {
@@ -90,6 +95,7 @@ const ChatList = ({ rooms, handleRoomsDataUpdate }: Props) => {
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => (
         <ChatRoomItem
+          isSwipable={isSwipable}
           roomId={item.id}
           image={item.image}
           roomName={item.title}

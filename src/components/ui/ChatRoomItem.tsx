@@ -24,7 +24,8 @@ interface Props {
   onPinPressHandler?: () => void;
   onExitPressHandler?: () => void;
   onToggleNotificationHandler?: () => void;
-  setSwipeable: (ref: Swipeable | null) => void;
+  setSwipeable?: (ref: Swipeable | null) => void;
+  isSwipable?: boolean;
 }
 
 const ChatRoomItem = ({
@@ -41,6 +42,7 @@ const ChatRoomItem = ({
   onExitPressHandler,
   onToggleNotificationHandler,
   setSwipeable,
+  isSwipable = true,
 }: Props) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const swipeableRef = useRef<Swipeable | null>(null);
@@ -113,107 +115,123 @@ const ChatRoomItem = ({
     );
   };
 
+  const parentComponent = (children: React.ReactNode) => {
+    if (isSwipable) {
+      return (
+        <Swipeable
+          renderRightActions={renderRightActions}
+          renderLeftActions={renderLeftActions}
+          friction={1.5}
+          ref={swipeableRef}
+          onSwipeableOpen={() => {
+            if (setSwipeable) {
+              setSwipeable(swipeableRef.current);
+            }
+          }}
+        >
+          {children}
+        </Swipeable>
+      );
+    } else {
+      return <>{children}</>;
+    }
+  };
+
   return (
-    <Swipeable
-      renderRightActions={renderRightActions}
-      renderLeftActions={renderLeftActions}
-      friction={1.5}
-      ref={swipeableRef}
-      onSwipeableOpen={() => {
-        setSwipeable(swipeableRef.current);
-      }}
-    >
-      <Pressable
-        onPress={() => {
-          navigation.navigate('ChatRoom', {
-            roomId: roomId,
-          });
-        }}
-        style={{
-          backgroundColor: Color.white,
-          padding: 16,
-          flexDirection: 'row',
-          position: 'relative',
-          alignItems: 'center',
-        }}
-      >
-        {isPinned && (
-          <PinIndicator
-            color={Color.primary700}
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-            }}
-          />
-        )}
-        <Image
-          style={[
-            {
-              width: 48,
-              height: 48,
-              resizeMode: 'cover',
-              borderRadius: 48,
-              marginRight: 16,
-            },
-          ]}
-          source={
-            image
-              ? { uri: image }
-              : require('../../../assets/img/placeholder.png')
-          }
-        />
-        <View style={{ flex: 1, gap: 4 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={[{ color: Color.black }, TYPOS.headline4]}>
-              {roomName}
-            </Text>
-            <Text
-              style={[
-                { color: Color.neutral2, marginHorizontal: 4 },
-                TYPOS.body3,
-              ]}
-            >
-              {region}
-            </Text>
-            {!isNotificationEnabled && <Bell16 color={Color.neutral2} />}
-          </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text
-              numberOfLines={1}
-              style={[{ color: Color.neutral1, flex: 1 }, TYPOS.body2]}
-            >
-              {content}
-            </Text>
-            <Text
-              style={[
-                { color: Color.neutral2, marginHorizontal: 4 },
-                TYPOS.body3,
-              ]}
-            >
-              ·
-            </Text>
-            <Text style={[{ color: Color.neutral2 }, TYPOS.body3]}>
-              {timeStamp}
-            </Text>
-          </View>
-        </View>
-        {productImage && (
+    <>
+      {parentComponent(
+        <Pressable
+          onPress={() => {
+            navigation.navigate('ChatRoom', {
+              roomId: roomId,
+            });
+          }}
+          style={{
+            backgroundColor: Color.white,
+            padding: 16,
+            flexDirection: 'row',
+            position: 'relative',
+            alignItems: 'center',
+          }}
+        >
+          {isPinned && (
+            <PinIndicator
+              color={Color.primary700}
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+              }}
+            />
+          )}
           <Image
             style={[
               {
-                width: 56,
-                height: 56,
+                width: 48,
+                height: 48,
                 resizeMode: 'cover',
-                borderRadius: 5,
-                marginLeft: 16,
+                borderRadius: 48,
+                marginRight: 16,
               },
             ]}
-            source={{ uri: productImage }}
+            source={
+              image
+                ? { uri: image }
+                : require('../../../assets/img/placeholder.png')
+            }
           />
-        )}
-      </Pressable>
-    </Swipeable>
+          <View style={{ flex: 1, gap: 4 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={[{ color: Color.black }, TYPOS.headline4]}>
+                {roomName}
+              </Text>
+              <Text
+                style={[
+                  { color: Color.neutral2, marginHorizontal: 4 },
+                  TYPOS.body3,
+                ]}
+              >
+                {region}
+              </Text>
+              {!isNotificationEnabled && <Bell16 color={Color.neutral2} />}
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text
+                numberOfLines={1}
+                style={[{ color: Color.neutral1, flex: 1 }, TYPOS.body2]}
+              >
+                {content}
+              </Text>
+              <Text
+                style={[
+                  { color: Color.neutral2, marginHorizontal: 4 },
+                  TYPOS.body3,
+                ]}
+              >
+                ·
+              </Text>
+              <Text style={[{ color: Color.neutral2 }, TYPOS.body3]}>
+                {timeStamp}
+              </Text>
+            </View>
+          </View>
+          {productImage && (
+            <Image
+              style={[
+                {
+                  width: 56,
+                  height: 56,
+                  resizeMode: 'cover',
+                  borderRadius: 5,
+                  marginLeft: 16,
+                },
+              ]}
+              source={{ uri: productImage }}
+            />
+          )}
+        </Pressable>
+      )}
+    </>
   );
 };
 

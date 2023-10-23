@@ -96,8 +96,6 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
           `/chat/blocked/user?chatRoomId=${roomId}`
         );
 
-        console.log(result.data.blockedStatus);
-
         setBlockStatus(result.data.blockedStatus);
       } catch (error) {}
     };
