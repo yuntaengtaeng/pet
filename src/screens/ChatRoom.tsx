@@ -22,7 +22,7 @@ import axios from 'axios';
 import { ToastDispatchContext } from '../components/ui/toast/ToastProvider';
 import Dialog from '../components/ui/Dialog';
 import useOverlay from '../hooks/overlay/useOverlay';
-import { ProductInfo } from '../types/interface';
+import { BlockStatus, ProductInfo } from '../types/interface';
 
 export type OnboardingScreenProps = StackScreenProps<
   RootStackParamList,
@@ -72,6 +72,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
     id: '',
   });
   const [productInfo, setProductInfo] = useState<ProductInfo | null>(null);
+  const [blockStatus, setBlockStatus] = useState<BlockStatus>('None');
 
   const burgerRef = useRef<View | null>(null);
   const { isVisibleMenu, closeMenu, openMenu, menuTop } = useMenuControl({
@@ -87,6 +88,22 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
   useEffect(() => {
     scrollToBottom();
   }, [chatData]);
+
+  useEffect(() => {
+    const getBlockStatus = async () => {
+      try {
+        const result = await axios.get<{ blockedStatus: BlockStatus }>(
+          `/chat/blocked/user?chatRoomId=${roomId}`
+        );
+
+        console.log(result.data.blockedStatus);
+
+        setBlockStatus(result.data.blockedStatus);
+      } catch (error) {}
+    };
+
+    getBlockStatus();
+  }, []);
 
   const showChangeSalesStatusDialog = () => {
     if (!socket) {
@@ -159,16 +176,24 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
       });
     };
 
+    const handlerGetBlockedStatus = () => {
+      socket.on('blocked-status', (data) => {
+        setBlockStatus(data.data.blockedStatus);
+      });
+    };
+
     handleGetChatList();
     handleGetAlarm();
     handlerGetProductInfo();
     handlerGetCreateSchedule();
+    handlerGetBlockedStatus();
 
     return () => {
       socket.off('chat-list');
       socket.off('alarm');
       socket.off('get-chat/used-item');
       socket.off('create-schedule');
+      socket.off('blocked-status');
     };
   }, [socket, headerData]);
 
@@ -235,16 +260,29 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
     const [content, buttonLabel, buttonAction] = (() => {
       switch (nextAction.current) {
         case 'blocked':
-          return [
-            '차단 시 펫친에서 삭제되고 더 이상 채팅을 할 수 없어요. 차단할까요?',
-            '차단하기',
-            () => {
-              socket.emit('blocked', {
-                token: accessToken,
-                blockedBy: headerData.id,
-              });
-            },
-          ];
+          if (blockStatus === 'Me') {
+            return [
+              '차단을 해제할까요?',
+              '해제하기',
+              () => {
+                socket.emit('unblock', {
+                  token: accessToken,
+                  chatRoomId: roomId,
+                });
+              },
+            ];
+          } else {
+            return [
+              '차단 시 펫친에서 삭제되고 더 이상 채팅을 할 수 없어요. 차단할까요?',
+              '차단하기',
+              () => {
+                socket.emit('block', {
+                  token: accessToken,
+                  chatRoomId: roomId,
+                });
+              },
+            ];
+          }
         case 'exit':
           return [
             '채팅방을 나가면 대화 내용이 모두 삭제되며 복구할 수 없어요. 채팅방을 나갈까요?',
@@ -254,6 +292,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                 token: accessToken,
                 chatRoomId: roomId,
               });
+              navigation.pop();
             },
           ];
       }
@@ -273,7 +312,6 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
               onPressHandler: () => {
                 overlay.close();
                 buttonAction();
-                navigation.pop();
               },
             },
           ]}
@@ -320,7 +358,10 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                   label={`알림${headerData.isAlarm ? '끄기' : '켜기'}`}
                   onClickHandler={onToggleAlarm}
                 />
-                <ListValue label="차단하기" onClickHandler={onBlock} />
+                <ListValue
+                  label={`차단${blockStatus !== 'Me' ? '하기' : ' 해제하기'}`}
+                  onClickHandler={onBlock}
+                />
                 <ListValue label="나가기" onClickHandler={onExit} />
               </MenuBackdrop>
             </View>
@@ -404,7 +445,10 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
           );
         })}
       </ScrollView>
-      <Input onPostMessageHandler={onPostMessageHandler} />
+      <Input
+        blockStatus={blockStatus}
+        onPostMessageHandler={onPostMessageHandler}
+      />
     </>
   );
 };
