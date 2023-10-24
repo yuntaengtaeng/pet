@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { ScrollView, FlatList } from 'react-native';
+import { ScrollView, FlatList, Dimensions } from 'react-native';
 import { DOG_CATEGORY, CAT_CATEGORY } from '../../constants/category';
 import Container from '../layout/Container';
-import ChipContainer from '../ui/ChipContainer';
+import { ChipContainerScrollView } from '../ui/ChipContainer';
 import ProductCard from '../ui/ProductCard';
 import axios from 'axios';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -21,6 +21,8 @@ import { RootStackParamList } from '../../types/navigation';
 import EmptyList from './EmptyList';
 import FixedWriteButton from './FixedWriteButton';
 
+const fullWidth = Dimensions.get('window').width;
+
 const LIMIT = 20;
 
 const ProductList = () => {
@@ -38,6 +40,8 @@ const ProductList = () => {
   const [list, setList] = useState<Product[]>([]);
 
   const isRequestList = useRef(false);
+
+  const scrollViewRef = useRef<ScrollView | null>(null);
 
   const requestProduct = async ({
     isPageResetting,
@@ -91,6 +95,10 @@ const ProductList = () => {
   useDidUpdate(() => {
     setCategory('전체');
     requestProduct({ isPageResetting: true, initCategory: '전체' });
+
+    if (scrollViewRef.current) {
+      scrollViewRef.current?.scrollTo({ x: 0 });
+    }
   }, [petType]);
 
   useDidUpdate(() => {
@@ -121,10 +129,10 @@ const ProductList = () => {
             marginBottom: 24,
           }}
         >
-          <ChipContainer
+          <ChipContainerScrollView
             containerStyle={{
-              flexDirection: 'row',
               height: 40,
+              width: fullWidth - 32,
             }}
             labels={isDog ? DOG_CATEGORY : CAT_CATEGORY}
             selectedLabel={category}
@@ -135,6 +143,9 @@ const ProductList = () => {
                 setCategory(label as SelectedCategory);
               }
             }}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            ref={scrollViewRef}
           />
         </ScrollView>
         <FlatList

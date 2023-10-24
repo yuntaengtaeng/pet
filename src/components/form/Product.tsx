@@ -9,7 +9,7 @@ import {
 import Color from '../../constants/color';
 import { UserState } from '../../store/atoms';
 import ScrollContainer from '../layout/ScrollContainer';
-import ChipContainer from '../ui/ChipContainer';
+import { ChipContainerView } from '../ui/ChipContainer';
 import Dropdown from '../ui/dropdown/Dropdown';
 import Won24 from '../ui/icons/Won24';
 import InputField from '../ui/inputs/InputField';
@@ -139,7 +139,7 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
     <>
       <ScrollContainer style={{ paddingHorizontal: 16 }}>
         <View>
-          <ChipContainer
+          <ChipContainerView
             chipStyle={{ marginRight: 8 }}
             containerStyle={{ flexDirection: 'row', marginTop: 16 }}
             labels={['전체', '강아지', '고양이']}

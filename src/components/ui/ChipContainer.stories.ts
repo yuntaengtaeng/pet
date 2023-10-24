@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ChipContainer from './ChipContainer';
+import { ChipContainerView } from './ChipContainer';
 
 const meta = {
   title: 'ui/ChipContainer',
-  component: ChipContainer,
+  component: ChipContainerView,
   tags: ['autodocs'],
   argTypes: {},
-} satisfies Meta<typeof ChipContainer>;
+} satisfies Meta<typeof ChipContainerView>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -1,5 +1,5 @@
-import React from 'react';
-import { ViewStyle, View } from 'react-native';
+import React, { forwardRef } from 'react';
+import { ViewStyle, ScrollView, View } from 'react-native';
 import Chip from './Chip';
 
 type SingleSelectedHandler = (label: string) => void;
@@ -14,58 +14,69 @@ interface Props {
   chipStyle?: ViewStyle;
 }
 
-const ChipContainer = ({
-  labels,
-  type,
-  selectedLabel,
-  onSelectedHandler,
-  containerStyle,
-  chipStyle,
-}: Props) => {
-  const onPressHandler = (isActive: boolean, label: string) => {
-    if (type === 'single') {
-      if (isActive) {
-        (onSelectedHandler as SingleSelectedHandler)?.('');
-      } else {
-        (onSelectedHandler as SingleSelectedHandler)?.(label);
-      }
-    } else if (type === 'multi') {
-      const selectedLabels = Array.isArray(selectedLabel)
-        ? [...selectedLabel]
-        : [];
+interface ScrollViewProps
+  extends Props,
+    React.ComponentProps<typeof ScrollView> {}
 
-      if (isActive) {
-        const index = selectedLabels.indexOf(label);
-        if (index !== -1) {
-          selectedLabels.splice(index, 1);
+const ChipContainer =
+  (Component: React.ComponentType<any>, forwardedRef?: React.Ref<ScrollView>) =>
+  ({
+    labels,
+    type,
+    selectedLabel,
+    onSelectedHandler,
+    containerStyle,
+    chipStyle,
+    ...restProps
+  }: ScrollViewProps) => {
+    const onPressHandler = (isActive: boolean, label: string) => {
+      if (type === 'single') {
+        if (isActive) {
+          (onSelectedHandler as SingleSelectedHandler)?.('');
+        } else {
+          (onSelectedHandler as SingleSelectedHandler)?.(label);
         }
-      } else {
-        selectedLabels.push(label);
-      }
+      } else if (type === 'multi') {
+        const selectedLabels = Array.isArray(selectedLabel)
+          ? [...selectedLabel]
+          : [];
 
-      (onSelectedHandler as MultiSelectedHandler)?.(selectedLabels);
-    }
+        if (isActive) {
+          const index = selectedLabels.indexOf(label);
+          if (index !== -1) {
+            selectedLabels.splice(index, 1);
+          }
+        } else {
+          selectedLabels.push(label);
+        }
+
+        (onSelectedHandler as MultiSelectedHandler)?.(selectedLabels);
+      }
+    };
+
+    return (
+      <Component style={containerStyle} ref={forwardedRef} {...restProps}>
+        {labels.map((label) => {
+          const isActive = Array.isArray(selectedLabel)
+            ? selectedLabel.includes(label)
+            : selectedLabel === label;
+
+          return (
+            <Chip
+              key={label}
+              label={label}
+              style={chipStyle}
+              isActive={isActive}
+              onPressHandler={() => onPressHandler(isActive, label)}
+            />
+          );
+        })}
+      </Component>
+    );
   };
 
-  return (
-    <View style={containerStyle}>
-      {labels.map((label) => {
-        const isActive = Array.isArray(selectedLabel)
-          ? selectedLabel.includes(label)
-          : selectedLabel === label;
+export const ChipContainerView = ChipContainer(View);
 
-        return (
-          <Chip
-            key={label}
-            label={label}
-            style={chipStyle}
-            isActive={isActive}
-            onPressHandler={() => onPressHandler(isActive, label)}
-          />
-        );
-      })}
-    </View>
-  );
-};
-
-export default ChipContainer;
+export const ChipContainerScrollView = forwardRef<ScrollView, ScrollViewProps>(
+  (props, forwardedRef) => ChipContainer(ScrollView, forwardedRef)(props)
+);
