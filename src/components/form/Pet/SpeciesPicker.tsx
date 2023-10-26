@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import InputField from '../../ui/inputs/InputField';
 import Selectable from '../../ui/Selectable';
 import useOverlay from '../../../hooks/overlay/useOverlay';
@@ -7,6 +7,7 @@ import BottomSheet from '../../ui/BottomSheet';
 import { Pressable, View, Text } from 'react-native';
 import TYPOS from '../../ui/typo';
 import Color from '../../../constants/color';
+import useDidUpdate from '../../../hooks/useDidUpdate';
 
 interface Props {
   value: string;
@@ -46,7 +47,7 @@ const SpeciesPicker = ({ value, onChangeHandler, type, petType }: Props) => {
   const list = petType === 'dog' ? DOG_LIST : CAT_LIST;
   const defaultHeader = 80 + list.length * 56 + 40;
 
-  useEffect(() => {
+  useDidUpdate(() => {
     onChangeHandler('');
   }, [type]);
 
