@@ -51,8 +51,12 @@ const PetDetail = ({ navigation, route }: PetDetailScreenProps) => {
       }
     };
 
-    fetch();
-  }, [petId]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetch();
+    });
+
+    return unsubscribe;
+  }, [navigation, petId]);
 
   if (!petInfo) {
     return null;
