@@ -135,7 +135,14 @@ const PetDetail = ({ navigation, route }: PetDetailScreenProps) => {
                 {petInfo.gender} / {petInfo.species}
               </Text>
             </View>
-            <TextIconButton label="수정" />
+            <TextIconButton
+              label="수정"
+              onPressHandler={() => {
+                navigation.navigate('ModifyPet', {
+                  id: petId,
+                });
+              }}
+            />
           </View>
           <View
             style={{
