@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import InputField from '../ui/inputs/InputField';
-import Selectable from '../ui/Selectable';
-import useOverlay from '../../hooks/overlay/useOverlay';
-import { PetType } from '../../types/interface';
-import BottomSheet from '../ui/BottomSheet';
+import InputField from '../../ui/inputs/InputField';
+import Selectable from '../../ui/Selectable';
+import useOverlay from '../../../hooks/overlay/useOverlay';
+import { PetType } from '../../../types/interface';
+import BottomSheet from '../../ui/BottomSheet';
 import { Pressable, View, Text } from 'react-native';
-import TYPOS from '../ui/typo';
-import Color from '../../constants/color';
+import TYPOS from '../../ui/typo';
+import Color from '../../../constants/color';
 
 interface Props {
   value: string;

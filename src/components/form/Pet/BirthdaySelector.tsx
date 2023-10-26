@@ -1,11 +1,11 @@
 import React from 'react';
-import useModal from '../../hooks/useModal';
-import Selectable from '../ui/Selectable';
+import useModal from '../../../hooks/useModal';
+import Selectable from '../../ui/Selectable';
 import { View } from 'react-native';
-import BottomSheet from '../ui/BottomSheet';
-import Button from '../ui/buttons/Button';
-import BirthdayPicker from '../ui/BirthdayPicker';
-import { Date } from '../../types/interface';
+import BottomSheet from '../../ui/BottomSheet';
+import Button from '../../ui/buttons/Button';
+import BirthdayPicker from '../../ui/BirthdayPicker';
+import { Date } from '../../../types/interface';
 
 interface Props {
   value: Partial<Date>;

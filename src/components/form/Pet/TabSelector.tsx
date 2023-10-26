@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Pressable, Text, Animated } from 'react-native';
-import Color from '../../constants/color';
-import TYPOS from '../ui/typo';
+import Color from '../../../constants/color';
+import TYPOS from '../../ui/typo';
 
 export type Tap = 0 | 1;
 
