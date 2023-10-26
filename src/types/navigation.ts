@@ -50,6 +50,9 @@ export type RootStackParamList = {
   ProductChatting: {
     id: string;
   };
+  ModifyPet: {
+    id: string;
+  };
 };
 
 export type TabNavigatorParamList = {
