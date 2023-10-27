@@ -55,6 +55,7 @@ import Won24 from './Won24';
 import Settings24 from './Settings24';
 import Kakao24 from './Kakao24';
 import Color from '../../../constants/color';
+import Dog16 from './Dog16';
 
 const meta = {
   title: 'Design System/Icons',
@@ -119,3 +120,4 @@ export const Users24Icon = () => <Users24 color={Color.black} />;
 export const Won24Icon = () => <Won24 color={Color.black} />;
 export const Settings24Icon = () => <Settings24 color={Color.black} />;
 export const Kakao24Icon = () => <Kakao24 />;
+export const Dog16Icon = () => <Dog16 color={Color.black} />;
