@@ -1,18 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import Plus32 from '../ui/icons/Plus32';
+import Plus32 from './icons/Plus32';
 import Color from '../../constants/color';
-import { HomeDispatchContext } from './HomeDispatchContext';
-import SHADOWS from '../ui/shadow';
+import SHADOWS from './shadow';
 
-const FixedWriteButton = () => {
-  const dispatch = useContext(HomeDispatchContext);
+interface Props {
+  onPressHandler: () => void;
+}
 
+const FixedWriteButton = ({ onPressHandler }: Props) => {
   return (
-    <Pressable
-      style={[styles.wrap, SHADOWS.shadow4]}
-      onPress={dispatch?.verifyNeighborhood}
-    >
+    <Pressable style={[styles.wrap, SHADOWS.shadow4]} onPress={onPressHandler}>
       <Plus32 color={Color.white} />
     </Pressable>
   );

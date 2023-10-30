@@ -19,7 +19,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
 import EmptyList from './EmptyList';
-import FixedWriteButton from './FixedWriteButton';
+import FixedWriteButton from '../ui/FixedWriteButton';
+import { HomeDispatchContext } from './HomeDispatchContext';
 
 const fullWidth = Dimensions.get('window').width;
 
@@ -30,6 +31,7 @@ const ProductList = () => {
   const user = useRecoilValue(UserState);
 
   const petType = useContext(HomeStateContext) as PetType;
+  const homeDispatch = useContext(HomeDispatchContext);
 
   const isDog: boolean = petType === 'dog';
   type SelectedCategory = typeof isDog extends true ? DogCategory : CatCategory;
@@ -173,7 +175,13 @@ const ProductList = () => {
           )}
         />
       </Container>
-      {list.length > 0 && <FixedWriteButton />}
+      {list.length > 0 && (
+        <FixedWriteButton
+          onPressHandler={() => {
+            homeDispatch?.verifyNeighborhood();
+          }}
+        />
+      )}
     </>
   );
 };
