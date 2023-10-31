@@ -106,7 +106,12 @@ const TextArea = (props: Props) => {
           {!isError && <View style={{ flex: 1 }} />}
           {maxLength && (
             <View>
-              <Text style={[TYPOS.body3, { color: Color.neutral2 }]}>
+              <Text
+                style={[
+                  TYPOS.body3,
+                  { color: isError ? Color.error : Color.neutral2 },
+                ]}
+              >
                 {value?.length}/{maxLength}
               </Text>
             </View>
