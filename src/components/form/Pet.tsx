@@ -61,6 +61,11 @@ const Pet = ({ type, onSubmitHandler, initValue, initTap }: Props) => {
     }
   );
 
+  const [isInputErrors, setIsInputErrors] = useState({
+    unusualCondition: false,
+    helloMessage: false,
+  });
+
   const onChange = (tap: Tap) => {
     setTap(tap);
   };
@@ -183,7 +188,13 @@ const Pet = ({ type, onSubmitHandler, initValue, initTap }: Props) => {
             fieldStyle={{ minHeight: 64 }}
             maxLength={50}
             value={data.unusualCondition}
+            errorMessage="최대 글자 수를 초과했어요."
+            isError={isInputErrors.unusualCondition}
             onChangeHandler={(value) => {
+              setIsInputErrors((prev) => ({
+                ...prev,
+                unusualCondition: value.length > 50,
+              }));
               updateData({ unusualCondition: value });
             }}
           />
@@ -194,8 +205,14 @@ const Pet = ({ type, onSubmitHandler, initValue, initTap }: Props) => {
             placeholder="인사말을 입력하세요."
             fieldStyle={{ minHeight: 84 }}
             maxLength={100}
+            errorMessage="최대 글자 수를 초과했어요."
             value={data.helloMessage}
+            isError={isInputErrors.helloMessage}
             onChangeHandler={(value) => {
+              setIsInputErrors((prev) => ({
+                ...prev,
+                helloMessage: value.length > 100,
+              }));
               updateData({ helloMessage: value });
             }}
           />
