@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=chpt_a7b88289046b641"
+    "chromatic": "npx chromatic --project-token=chpt_a7b88289046b641",
+    "publish": "expo publish && npx chromatic --project-token=chpt_a7b88289046b641"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
