@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import RadioButtonGroup from './RadioButtonGroup';
+import RadioButtonItem from './RadioButtonItem';
 import { Text } from 'react-native';
 
 const meta = {
@@ -18,44 +19,44 @@ export const RadioButton: Story = {
     selected: 'item1',
     children: (
       <>
-        <RadioButtonGroup.RadioButtonItem value="item1">
+        <RadioButtonItem value="item1">
           <Text>item1</Text>
-        </RadioButtonGroup.RadioButtonItem>
-        <RadioButtonGroup.RadioButtonItem value="item2">
+        </RadioButtonItem>
+        <RadioButtonItem value="item2">
           <Text>item2</Text>
-        </RadioButtonGroup.RadioButtonItem>
-        <RadioButtonGroup.RadioButtonItem value="item3">
+        </RadioButtonItem>
+        <RadioButtonItem value="item3">
           <Text>item3</Text>
-        </RadioButtonGroup.RadioButtonItem>
+        </RadioButtonItem>
       </>
     ),
   },
 };
 
-export const RadioButtonItem = () => (
-  <RadioButtonGroup.RadioButtonItem value="">
+export const RadioButtonItemExample = () => (
+  <RadioButtonItem value="">
     <Text>item1</Text>
-  </RadioButtonGroup.RadioButtonItem>
+  </RadioButtonItem>
 );
 
 export const SelectedRadioButtonItem = () => (
   <RadioButtonGroup selected="item1">
-    <RadioButtonGroup.RadioButtonItem value="item1">
+    <RadioButtonItem value="item1">
       <Text>item1</Text>
-    </RadioButtonGroup.RadioButtonItem>
+    </RadioButtonItem>
   </RadioButtonGroup>
 );
 
 export const DisabledRadioButtonItem = () => (
-  <RadioButtonGroup.RadioButtonItem value="item1" disabled>
+  <RadioButtonItem value="item1" disabled>
     <Text>item1</Text>
-  </RadioButtonGroup.RadioButtonItem>
+  </RadioButtonItem>
 );
 
 export const SelectedDisabledRadioButtonItem = () => (
   <RadioButtonGroup selected="item1">
-    <RadioButtonGroup.RadioButtonItem value="item1" disabled>
+    <RadioButtonItem value="item1" disabled>
       <Text>item1</Text>
-    </RadioButtonGroup.RadioButtonItem>
+    </RadioButtonItem>
   </RadioButtonGroup>
 );
