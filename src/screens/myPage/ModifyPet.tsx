@@ -10,6 +10,7 @@ import { RootStackParamList } from '../../types/navigation';
 import * as MediaLibrary from 'expo-media-library';
 import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
+import { generateImageIds } from '../../utils';
 
 interface InitValue extends Data {
   speciesInputType: 'select' | 'input';
@@ -37,22 +38,12 @@ const ModifyPet = ({ navigation, route }: ModifyPetProps) => {
       );
 
       const { images, birthday, weight, ...rest } = petInfo;
-      const transformedImages = images.map((image) => {
-        const split = image.split('/');
-        const id = split[split.length - 1];
-
-        return {
-          uri: image,
-          id,
-        };
-      });
-
       const [year, month, day] = dayjs(birthday).format('YYYY M D').split(' ');
 
       setInitValue({
         ...rest,
         weight: String(weight),
-        petImages: transformedImages,
+        petImages: generateImageIds(images),
         birthday: {
           yyyy: `${year}년`,
           m: `${month}월`,

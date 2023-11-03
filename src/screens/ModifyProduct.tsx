@@ -12,6 +12,7 @@ import Product, { Data } from '../components/form/Product';
 import * as MediaLibrary from 'expo-media-library';
 import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../store/atoms';
+import { generateImageIds } from '../utils';
 
 export type ModifyProductProps = StackScreenProps<
   RootStackParamList,
@@ -34,21 +35,11 @@ const ModifyProduct = ({ navigation, route }: ModifyProductProps) => {
       const { title, subCategory, topCategory, images, description, price } =
         editUsedItemBoardInfo;
 
-      const transformedImages = images.map((image) => {
-        const split = image.split('/');
-        const id = split[split.length - 1];
-
-        return {
-          uri: image,
-          id,
-        };
-      });
-
       setInitValue({
         petType: topCategory,
         category: subCategory,
         productName: title,
-        images: transformedImages,
+        images: generateImageIds(images),
         productDescription: description,
         productPrice: String(price),
         isFreeGiveaway: !price,
