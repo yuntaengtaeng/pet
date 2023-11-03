@@ -6,8 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../../types/navigation';
 import Container from '../../components/layout/Container';
 import Header from '../../components/ui/Header';
 import InputField from '../../components/ui/inputs/InputField';
@@ -162,7 +160,7 @@ const Address = ({ addressSelectHandler }: Props) => {
         <FlatList
           contentContainerStyle={{ marginHorizontal: 16 }}
           ListHeaderComponent={
-            <View>
+            <View style={{ marginBottom: 8 }}>
               <Text style={TYPOS.headline4}>{headerToShow}</Text>
             </View>
           }
@@ -194,7 +192,13 @@ const Address = ({ addressSelectHandler }: Props) => {
       <Container>
         <View style={styles.fixed}>
           <Text style={TYPOS.headline1}>내 동네를 선택해주세요.</Text>
-          <Text style={[TYPOS.body1, styles.fixedCenterItem]}>
+          <Text
+            style={[
+              TYPOS.body1,
+              styles.fixedCenterItem,
+              { color: Color.neutral2 },
+            ]}
+          >
             아래 목록에 없다면 검색해주세요.
           </Text>
           <InputField

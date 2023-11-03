@@ -55,7 +55,7 @@ const TextArea = (props: Props) => {
               borderColor: Color.error,
             }),
             ...(disabled && {
-              borderColor: Color.neutral4,
+              borderColor: Color.neutral3,
             }),
           },
           fieldStyle,
@@ -68,7 +68,7 @@ const TextArea = (props: Props) => {
             styles.input,
             {
               ...(disabled && {
-                color: Color.neutral4,
+                color: Color.neutral3,
               }),
             },
             TYPOS.body1,
@@ -90,7 +90,7 @@ const TextArea = (props: Props) => {
             setHasFocus(false);
           }}
           onSubmitEditing={onSubmitEditingHandler}
-          placeholderTextColor={Color.neutral2}
+          placeholderTextColor={disabled ? Color.neutral3 : Color.neutral2}
         />
       </View>
       {isBottomAreaVisible && (

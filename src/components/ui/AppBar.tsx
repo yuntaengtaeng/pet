@@ -52,10 +52,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   leftContent: {
-    marginLeft: 16,
+    marginLeft: 8,
   },
   title: {
-    marginLeft: 16,
+    marginLeft: 8,
   },
   rightContent: {
     marginLeft: 'auto',

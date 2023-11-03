@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.white,
   },
   title: {
-    marginLeft: 16,
+    marginLeft: 8,
   },
   rightContent: {
     marginLeft: 'auto',

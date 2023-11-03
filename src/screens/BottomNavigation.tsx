@@ -28,6 +28,11 @@ const BottomNavigation = () => {
         tabBarLabelStyle: {
           ...TYPOS.body2,
         },
+        tabBarStyle: {
+          height: 56,
+          paddingBottom: 4,
+          paddingTop: 8,
+        },
         tabBarIcon: ({ focused }) => {
           switch (route.name) {
             case 'Home':

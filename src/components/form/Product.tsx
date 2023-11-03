@@ -200,7 +200,7 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
                 color={data.isFreeGiveaway ? Color.neutral3 : Color.neutral1}
               />
             )}
-            placeholder="0"
+            placeholder={data.isFreeGiveaway ? '0' : '가격을 입력해주세요'}
             keyboardType="number-pad"
             disabled={data.isFreeGiveaway}
             value={
@@ -220,7 +220,7 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
               updateData({ isFreeGiveaway: isChecked });
             }}
           >
-            <Text style={TYPOS.body2}>무료나눔</Text>
+            <Text style={TYPOS.body2}>무료 나눔</Text>
           </UiCheckbox>
         </View>
       </ScrollContainer>
