@@ -1,5 +1,6 @@
 import { ViewStyle } from 'react-native';
 import Color from '../constants/color';
+import * as MediaLibrary from 'expo-media-library';
 
 export interface Location {
   latitude: number;
@@ -117,3 +118,10 @@ export interface Room {
 }
 
 export type BlockStatus = 'Me' | 'Other' | 'None';
+
+export interface SaveImageType {
+  uri: string;
+  id: string;
+}
+
+export type ImageType = SaveImageType | MediaLibrary.Asset;
