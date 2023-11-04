@@ -3,20 +3,15 @@ import * as MediaLibrary from 'expo-media-library';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ScrollView, Pressable, Text, StyleSheet, Image } from 'react-native';
-import Color from '../../../constants/color';
-import { RootStackParamList } from '../../../types/navigation';
-import Close20 from '../../ui/icons/Close20';
-import TYPOS from '../../ui/typo';
-import Camera24 from '../../ui/icons/Camera24';
+import Color from '../../constants/color';
+import { RootStackParamList } from '../../types/navigation';
+import Close20 from './icons/Close20';
+import TYPOS from './typo';
+import Camera24 from './icons/Camera24';
+import { ImageType } from '../../types/interface';
 
 const LIMIT = 5;
 
-interface SaveImageType {
-  uri: string;
-  id: string;
-}
-
-export type ImageType = SaveImageType | MediaLibrary.Asset;
 interface Props {
   selectedPhotos: ImageType[];
   updatePhotos: (photos: ImageType[]) => void;
@@ -83,7 +78,7 @@ const PhotoSelector = ({
         >
           <Image
             source={{ uri: photo.uri }}
-            style={{ flex: 1, resizeMode: 'cover' }}
+            style={{ flex: 1, resizeMode: 'cover', borderRadius: 4 }}
           />
 
           <Pressable
