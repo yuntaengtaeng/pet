@@ -16,10 +16,11 @@ import InputField from '../ui/inputs/InputField';
 import TextArea from '../ui/inputs/TextArea';
 import TYPOS from '../ui/typo';
 import UiCheckbox from '../ui/UiCheckbox';
-import PhotoSelector, { ImageType } from './Product/PhotoSelector';
+import PhotoSelector from '../ui/PhotoSelector';
 import Button from '../ui/buttons/Button';
 import useModal from '../../hooks/useModal';
 import Dialog from '../ui/Dialog';
+import { ImageType } from '../../types/interface';
 
 export interface Data {
   petType: '강아지' | '고양이' | '전체';

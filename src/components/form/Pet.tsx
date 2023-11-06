@@ -11,8 +11,8 @@ import TextArea from '../ui/inputs/TextArea';
 import RadioButtonGroup from '../ui/radio/RadioButtonGroup';
 import RadioButtonItem from '../ui/radio/RadioButtonItem';
 import TYPOS from '../ui/typo';
-import PhotoSelector, { ImageType } from './Product/PhotoSelector';
-import { Date, PetType } from '../../types/interface';
+import PhotoSelector from '../ui/PhotoSelector';
+import { Date, ImageType, PetType } from '../../types/interface';
 import Button from '../ui/buttons/Button';
 
 type NeuteredStatus = '미완료' | '완료' | '모름';
