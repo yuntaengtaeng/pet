@@ -10,6 +10,7 @@ import Right24 from '../ui/icons/Right24';
 import TYPOS from '../ui/typo';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Plus16 from '../ui/icons/Plus16';
 
 interface Pet {
   id: string;
@@ -174,8 +175,12 @@ const PetInfo = () => {
               height: 16,
               borderRadius: 16,
               backgroundColor: Color.neutral4,
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-          />
+          >
+            <Plus16 color={Color.neutral2} />
+          </View>
           <Text style={[TYPOS.body3, { color: Color.neutral2 }]}>추가하기</Text>
         </Pressable>
       </ScrollView>
