@@ -260,13 +260,16 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
         case 'blocked':
           if (blockStatus === 'Me') {
             return [
-              '차단을 해제할까요?',
-              '해제하기',
+              null,
+              null,
               () => {
                 socket.emit('unblock', {
                   token: accessToken,
                   chatRoomId: roomId,
                 });
+                toastDispatch?.showToastMessage(
+                  `${headerData.nickname}님 차단을 해제했어요.`
+                );
               },
             ];
           } else {
@@ -278,6 +281,9 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                   token: accessToken,
                   chatRoomId: roomId,
                 });
+                toastDispatch?.showToastMessage(
+                  `${headerData.nickname}님을 차단을했어요.`
+                );
               },
             ];
           }
@@ -295,6 +301,11 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
           ];
       }
     })();
+
+    if (content === null && buttonLabel === null) {
+      buttonAction();
+      return;
+    }
 
     overlay.open(
       <Dialog isOpened={true}>
