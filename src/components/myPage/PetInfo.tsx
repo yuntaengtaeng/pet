@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Plus16 from '../ui/icons/Plus16';
 import { Pet } from '../../types/interface';
+import PetItem from '../ui/PetItem';
 
 const PetInfo = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -112,40 +113,7 @@ const PetInfo = () => {
         }}
       >
         {pets.map((pet) => (
-          <Pressable
-            key={pet.id}
-            style={{
-              width: 156,
-              height: 88,
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 16,
-              flexDirection: 'row',
-              borderWidth: 1,
-              borderColor: Color.primary700,
-              borderRadius: 5,
-            }}
-            onPress={() => {
-              navigation.navigate('PetDetail', { petId: pet.id });
-            }}
-          >
-            <Image
-              style={{ width: 56, height: 56, borderRadius: 56 }}
-              source={
-                pet.image
-                  ? { uri: pet.image }
-                  : require('../../../assets/img/placeholder.png')
-              }
-            />
-            <View>
-              <Text style={[TYPOS.headline4, { color: Color.black }]}>
-                {pet.name}
-              </Text>
-              <Text style={[TYPOS.body3, { color: Color.neutral2 }]}>
-                {pet.type}
-              </Text>
-            </View>
-          </Pressable>
+          <PetItem {...pet} key={pet.id} />
         ))}
         <Pressable
           style={{
