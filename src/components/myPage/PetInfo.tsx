@@ -11,13 +11,7 @@ import TYPOS from '../ui/typo';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Plus16 from '../ui/icons/Plus16';
-
-interface Pet {
-  id: string;
-  name: string;
-  type: '강아지' | '고양이';
-  image?: string;
-}
+import { Pet } from '../../types/interface';
 
 const PetInfo = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();

@@ -125,3 +125,10 @@ export interface SaveImageType {
 }
 
 export type ImageType = SaveImageType | MediaLibrary.Asset;
+
+export interface Pet {
+  id: string;
+  name: string;
+  type: '강아지' | '고양이';
+  image?: string;
+}
