@@ -19,7 +19,7 @@ interface InitValue extends Data {
 
 interface ModifyPetData extends Omit<InitValue, 'petImages' | 'birthday'> {
   birthday: string;
-  images: string[];
+  images?: string[];
 }
 
 export type ModifyPetProps = StackScreenProps<RootStackParamList, 'ModifyPet'>;
