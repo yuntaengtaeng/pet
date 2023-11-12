@@ -37,7 +37,7 @@ const ModifyPet = ({ navigation, route }: ModifyPetProps) => {
         `/my-page/pet/edit?id=${id}`
       );
 
-      const { images, birthday, weight, ...rest } = petInfo;
+      const { images = [], birthday, weight, ...rest } = petInfo;
       const [year, month, day] = dayjs(birthday).format('YYYY M D').split(' ');
 
       setInitValue({
