@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
 import Header from '../../components/ui/Header';
-import { Pressable, Text, Image, View } from 'react-native';
+import { Pressable, Text, Image, View, ScrollView } from 'react-native';
 import TYPOS from '../../components/ui/typo';
 import Color from '../../constants/color';
 import ScrollContainer from '../../components/layout/ScrollContainer';
@@ -14,6 +14,8 @@ import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
 import useOverlay from '../../hooks/overlay/useOverlay';
 import Dialog from '../../components/ui/Dialog';
+import { Pet } from '../../types/interface';
+import PetItem from '../../components/ui/PetItem';
 
 interface PetInfo {
   name: string;
@@ -25,6 +27,7 @@ interface PetInfo {
   helloMessage?: string;
   weight?: string;
   images?: string[];
+  otherPets?: Pet[];
 }
 
 export type PetDetailScreenProps = StackScreenProps<
@@ -216,6 +219,37 @@ const PetDetail = ({ navigation, route }: PetDetailScreenProps) => {
               </Text>
             </View>
           </View>
+          <View
+            style={{
+              width: '100%',
+              height: 1,
+              backgroundColor: Color.neutral4,
+              marginVertical: 24,
+            }}
+          />
+          {!!petInfo.otherPets && (
+            <>
+              <Text
+                style={[
+                  TYPOS.headline2,
+                  { color: Color.black, marginBottom: 16 },
+                ]}
+              >
+                더보기
+              </Text>
+              <ScrollView
+                showsHorizontalScrollIndicator={false}
+                horizontal={true}
+                contentContainerStyle={{
+                  gap: 16,
+                }}
+              >
+                {petInfo.otherPets.map((pet) => (
+                  <PetItem {...pet} key={pet.id} />
+                ))}
+              </ScrollView>
+            </>
+          )}
         </View>
       </ScrollContainer>
     </>
