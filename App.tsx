@@ -4,6 +4,7 @@ import { RecoilRoot } from 'recoil';
 import { ToastProvider } from './src/components/ui/toast/ToastProvider';
 import OverlayContext from './src/hooks/overlay/OverlayContext';
 import WebSocketContainer from './src/components/WebSocketContainer';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
   const [isFontsLoaded] = useFonts({
@@ -18,13 +19,15 @@ export default function App() {
 
   return (
     <RecoilRoot>
-      <WebSocketContainer>
-        <OverlayContext>
-          <ToastProvider>
-            <AppInner />
-          </ToastProvider>
-        </OverlayContext>
-      </WebSocketContainer>
+      <SafeAreaProvider>
+        <WebSocketContainer>
+          <OverlayContext>
+            <ToastProvider>
+              <AppInner />
+            </ToastProvider>
+          </OverlayContext>
+        </WebSocketContainer>
+      </SafeAreaProvider>
     </RecoilRoot>
   );
 }

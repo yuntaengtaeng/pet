@@ -159,7 +159,6 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
         onClose={() => {
           overlay.close();
         }}
-        height={280}
         title="상태 변경"
       >
         <View

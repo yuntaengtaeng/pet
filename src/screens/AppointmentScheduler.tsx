@@ -371,7 +371,6 @@ const AppointmentScheduler = ({
         onClose={() => {
           closeDateBottomSheet();
         }}
-        height={420}
         title="거래 날짜"
       >
         <Calendar
@@ -393,7 +392,6 @@ const AppointmentScheduler = ({
         onClose={() => {
           closeTimeBottomSheet();
         }}
-        height={300}
         title="거래 날짜"
       >
         <TimePicker

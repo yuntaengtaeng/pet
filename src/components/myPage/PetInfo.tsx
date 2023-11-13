@@ -51,7 +51,6 @@ const PetInfo = () => {
         onClose={() => {
           overlay.close();
         }}
-        height={225}
         title="반려동물 추가"
       >
         <View

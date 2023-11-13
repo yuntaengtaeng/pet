@@ -44,7 +44,6 @@ const BirthdaySelector = ({ value, onChangeHandler }: Props) => {
         onClose={() => {
           closeModal();
         }}
-        height={300}
         title="생년월일"
       >
         <BirthdayPicker

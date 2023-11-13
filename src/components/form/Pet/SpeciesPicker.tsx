@@ -44,7 +44,6 @@ const DOG_LIST = [
 const SpeciesPicker = ({ value, onChangeHandler, type, petType }: Props) => {
   const overlay = useOverlay();
   const list = petType === 'dog' ? DOG_LIST : CAT_LIST;
-  const defaultHeader = 80 + list.length * 56 + 40;
 
   useDidUpdate(() => {
     onChangeHandler('');
@@ -69,7 +68,6 @@ const SpeciesPicker = ({ value, onChangeHandler, type, petType }: Props) => {
         onClose={() => {
           overlay.close();
         }}
-        height={defaultHeader}
         title={`${petType === 'cat' ? '묘종' : '견종'} 선택`}
       >
         <View

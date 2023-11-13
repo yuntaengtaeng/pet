@@ -11,13 +11,14 @@ import {
 } from 'react-native';
 import Color from '../../constants/color';
 import TYPOS from './typo';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface BottomSheetProps {
   isOpened: boolean;
   title: string;
   onClose: () => void;
   children: React.ReactNode;
-  height: number;
+  height?: number;
 }
 
 const BottomSheet = ({
@@ -27,6 +28,7 @@ const BottomSheet = ({
   children,
   height,
 }: BottomSheetProps) => {
+  const insets = useSafeAreaInsets();
   const screenHeight = Dimensions.get('screen').height;
   const panY = useRef(new Animated.Value(screenHeight)).current;
   const translateY = panY.interpolate({
@@ -92,6 +94,7 @@ const BottomSheet = ({
           {
             height,
             transform: [{ translateY: translateY }],
+            paddingBottom: insets.bottom,
           },
         ]}
       >
