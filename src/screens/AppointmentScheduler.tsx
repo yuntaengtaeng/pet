@@ -253,7 +253,10 @@ const AppointmentScheduler = ({
               거래날짜
             </Text>
           )}
-          <TextIconButton label="변경" onPressHandler={openDateBottomSheet} />
+          <TextIconButton
+            label={scheduleData.date ? '변경' : '선택'}
+            onPressHandler={openDateBottomSheet}
+          />
         </View>
         <View
           style={{
@@ -277,7 +280,10 @@ const AppointmentScheduler = ({
               거래시간
             </Text>
           )}
-          <TextIconButton label="변경" onPressHandler={openTimeBottomSheet} />
+          <TextIconButton
+            label={scheduleData.time.ampm ? '변경' : '선택'}
+            onPressHandler={openTimeBottomSheet}
+          />
         </View>
         <View
           style={{
