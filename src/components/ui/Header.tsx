@@ -8,10 +8,11 @@ import { useNavigation } from '@react-navigation/native';
 interface Props {
   title?: string;
   rightContent?: React.ReactNode;
+  onCustomBackButtonHandler?: () => void;
 }
 
 const Header = (props: Props) => {
-  const { title } = props;
+  const { title, onCustomBackButtonHandler } = props;
   const navigation = useNavigation();
 
   const onCloseHandler = () => {
@@ -20,7 +21,11 @@ const Header = (props: Props) => {
 
   return (
     <View style={styles.header}>
-      <Pressable onPress={onCloseHandler}>
+      <Pressable
+        onPress={
+          onCustomBackButtonHandler ? onCustomBackButtonHandler : onCloseHandler
+        }
+      >
         <Close24 color={Color.black} />
       </Pressable>
       <Text style={[TYPOS.headline3, styles.title]}>{title}</Text>
