@@ -254,15 +254,17 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
           address={data.address}
           sellerNickname={data.sellerNickname}
         />
-        <Carousel
-          data={data.images}
-          renderItem={(item: string) => (
-            <Image
-              source={{ uri: item }}
-              style={{ flex: 1, resizeMode: 'cover' }}
-            />
-          )}
-        />
+        {!!data.images.length && (
+          <Carousel
+            data={data.images}
+            renderItem={(item: string) => (
+              <Image
+                source={{ uri: item }}
+                style={{ flex: 1, resizeMode: 'cover' }}
+              />
+            )}
+          />
+        )}
         <View style={{ paddingHorizontal: 16 }}>
           <View style={{ marginTop: 16 }} />
           <ProductInfo
