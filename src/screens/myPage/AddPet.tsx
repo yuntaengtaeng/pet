@@ -7,12 +7,15 @@ import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
 import axios from 'axios';
 import Pet, { Data } from '../../components/form/Pet';
+import useOverlay from '../../hooks/overlay/useOverlay';
+import Dialog from '../../components/ui/Dialog';
 
 export type AddPetScreenProps = StackScreenProps<RootStackParamList, 'AddPet'>;
 
 const AddPet = ({ navigation, route }: AddPetScreenProps) => {
   const { type } = route.params;
   const setIsLoading = useSetRecoilState(LoadingState);
+  const overlay = useOverlay();
 
   const onSubmit = async (data: Data, tap: Tap) => {
     const formData = new FormData();
@@ -57,9 +60,38 @@ const AddPet = ({ navigation, route }: AddPetScreenProps) => {
     }
   };
 
+  const onHeaderBackButtonHandler = () => {
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Title title="작성을 그만할까요?" />
+        <Dialog.Content content="지금 닫으면 내용이 사라져요." />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '네',
+              onPressHandler: () => {
+                overlay.close();
+                navigation.pop();
+              },
+            },
+            {
+              label: '아니요',
+              onPressHandler: () => {
+                overlay.close();
+              },
+            },
+          ]}
+        />
+      </Dialog>
+    );
+  };
+
   return (
     <>
-      <Header title="반려동물 정보" />
+      <Header
+        title="반려동물 정보"
+        onCustomBackButtonHandler={onHeaderBackButtonHandler}
+      />
       <Pet type={type} onSubmitHandler={onSubmit} />
     </>
   );

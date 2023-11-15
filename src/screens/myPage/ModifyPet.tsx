@@ -11,6 +11,8 @@ import * as MediaLibrary from 'expo-media-library';
 import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
 import { generateImageIds } from '../../utils';
+import useOverlay from '../../hooks/overlay/useOverlay';
+import Dialog from '../../components/ui/Dialog';
 
 interface InitValue extends Data {
   speciesInputType: 'select' | 'input';
@@ -28,6 +30,7 @@ const ModifyPet = ({ navigation, route }: ModifyPetProps) => {
   const { id } = route.params;
   const [initValue, setInitValue] = useState<InitValue | null>(null);
   const setIsLoading = useSetRecoilState(LoadingState);
+  const overlay = useOverlay();
 
   useEffect(() => {
     const fetch = async () => {
@@ -125,9 +128,38 @@ const ModifyPet = ({ navigation, route }: ModifyPetProps) => {
     }
   };
 
+  const onHeaderBackButtonHandler = () => {
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Title title="작성을 그만할까요?" />
+        <Dialog.Content content="지금 닫으면 내용이 사라져요." />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '네',
+              onPressHandler: () => {
+                overlay.close();
+                navigation.pop();
+              },
+            },
+            {
+              label: '아니요',
+              onPressHandler: () => {
+                overlay.close();
+              },
+            },
+          ]}
+        />
+      </Dialog>
+    );
+  };
+
   return (
     <>
-      <Header title="반려동물 정보" />
+      <Header
+        title="반려동물 정보"
+        onCustomBackButtonHandler={onHeaderBackButtonHandler}
+      />
       <Pet
         type={type}
         onSubmitHandler={onSubmit}
