@@ -1,13 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
 import BottomSheet from './BottomSheet';
 import { View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const meta = {
   title: 'Design System/BottomSheet',
   component: BottomSheet,
   tags: ['autodocs'],
   argTypes: {},
+  decorators: [
+    (Story) => (
+      <SafeAreaProvider>
+        <Story />
+      </SafeAreaProvider>
+    ),
+  ],
 } satisfies Meta<typeof BottomSheet>;
 
 export default meta;
