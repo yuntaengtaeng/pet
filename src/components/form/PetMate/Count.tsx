@@ -23,30 +23,47 @@ const Count = ({
   containerStyle,
 }: Props) => {
   return (
-    <View style={[styles.wrap, containerStyle]}>
-      <View style={styles.child}>
-        <Dog24 color={Color.black} style={{ marginRight: 8 }} />
-        <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>모집견수</Text>
+    <View style={[containerStyle, { gap: 12 }]}>
+      <View style={[styles.wrap]}>
+        <View style={styles.child}>
+          <Dog24 color={Color.black} style={{ marginRight: 8 }} />
+          <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>모집견수</Text>
+        </View>
+        <View style={styles.child}>
+          <Pressable
+            style={[
+              styles.button,
+              {
+                borderColor: max === count ? Color.neutral3 : Color.neutral2,
+              },
+            ]}
+            onPress={onMinusHandler}
+            disabled={min === count}
+          >
+            <Minus24 color={min === count ? Color.neutral3 : Color.neutral1} />
+          </Pressable>
+          <Text style={[TYPOS.body1, { color: Color.neutral1 }, styles.count]}>
+            {count}
+          </Text>
+          <Pressable
+            style={[
+              styles.button,
+              {
+                borderColor: max === count ? Color.neutral3 : Color.neutral2,
+              },
+            ]}
+            onPress={onPlusHandler}
+            disabled={max === count}
+          >
+            <Plus24 color={max === count ? Color.neutral3 : Color.neutral1} />
+          </Pressable>
+        </View>
       </View>
-      <View style={styles.child}>
-        <Pressable
-          style={styles.button}
-          onPress={onMinusHandler}
-          disabled={min === count}
-        >
-          <Minus24 color={Color.neutral1} />
-        </Pressable>
-        <Text style={[TYPOS.body1, { color: Color.neutral1 }, styles.count]}>
-          {count}
-        </Text>
-        <Pressable
-          style={styles.button}
-          onPress={onPlusHandler}
-          disabled={max === count}
-        >
-          <Plus24 color={Color.neutral1} />
-        </Pressable>
-      </View>
+      <Text
+        style={[TYPOS.body3, { color: Color.neutral2, textAlign: 'right' }]}
+      >
+        *함께할 반려동물 수 제외
+      </Text>
     </View>
   );
 };
@@ -59,7 +76,6 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 32,
     borderWidth: 1,
-    borderColor: Color.neutral2,
     alignItems: 'center',
     justifyContent: 'center',
   },
