@@ -7,8 +7,6 @@ type ModalController = {
 
 export type HomeDispatch = {
   bottomSheetController: ModalController;
-  locationVerificationPopup: ModalController;
-  locationVerificationRequested: ModalController;
   togglePetType: () => void;
   verifyNeighborhood: () => void;
 };
