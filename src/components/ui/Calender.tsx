@@ -16,11 +16,19 @@ interface Props {
   selectedDate?: string;
   //date : YYYYMMDD
   onSelectDateChangeHandler?: (date: string) => void;
+  endDateData: {
+    value: number;
+    unit: dayjs.ManipulateType;
+  };
 }
 
 const WEEK_DAYS = ['일', '월', '화', '수', '목', '금', '토'];
 
-const Calendar = ({ selectedDate, onSelectDateChangeHandler }: Props) => {
+const Calendar = ({
+  selectedDate,
+  onSelectDateChangeHandler,
+  endDateData,
+}: Props) => {
   const getWeeksOfMonth = (month: number): Dayjs[][] => {
     const weeks: Dayjs[][] = [];
     const firstDayOfMonth = dayjs()
@@ -58,7 +66,7 @@ const Calendar = ({ selectedDate, onSelectDateChangeHandler }: Props) => {
   };
 
   const now = dayjs();
-  const endDate = dayjs().add(4, 'week');
+  const endDate = dayjs().add(endDateData.value, endDateData.unit);
 
   //Dayjs get month start = 0;
   const [selectedMonth, setSelectedMonth] = useState(now.get('month') + 1);
