@@ -15,5 +15,9 @@ type Story = StoryObj<typeof meta>;
 export const CalendarExample: Story = {
   args: {
     selectedDate: '',
+    endDateData: {
+      value: 4,
+      unit: 'week',
+    },
   },
 };
