@@ -387,6 +387,10 @@ const AppointmentScheduler = ({
             });
           }}
           selectedDate={scheduleData.date}
+          endDateData={{
+            value: 4,
+            unit: 'week',
+          }}
         />
         <View style={{ marginHorizontal: 16, marginTop: 24 }}>
           <Button label="선택" onPressHandler={closeDateBottomSheet} />
