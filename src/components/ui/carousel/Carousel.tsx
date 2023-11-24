@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Dimensions, View, FlatList, Image } from 'react-native';
+import {
+  Dimensions,
+  View,
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from 'react-native';
 import Dots from './Dots';
 
 interface Props<T> {
@@ -12,7 +18,7 @@ const Carousel = <T extends {}>({ data, renderItem }: Props<T>) => {
 
   const [page, setPage] = useState(0);
 
-  const onScroll = (e: any) => {
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.x / pageWidth);
     setPage(newPage);
   };
