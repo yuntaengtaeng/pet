@@ -8,6 +8,7 @@ import {
   Text,
 } from 'react-native';
 import Color from '../../constants/color';
+import useDidUpdate from '../../hooks/useDidUpdate';
 import Down24 from './icons/Down24';
 import TYPOS from './typo';
 
@@ -17,6 +18,7 @@ interface Props {
   titleActive?: boolean;
   collapseOnStart?: boolean;
   children: React.ReactNode;
+  onToggleHandler?: (collapsed: boolean) => void;
 }
 
 const Accordion = ({
@@ -25,6 +27,7 @@ const Accordion = ({
   children,
   title,
   titleIcon,
+  onToggleHandler,
 }: Props): JSX.Element => {
   const dropDownAnimValueRef = useRef(new Animated.Value(0));
   const rotateAnimValueRef = useRef(new Animated.Value(0));
@@ -54,6 +57,12 @@ const Accordion = ({
       Animated.timing(rotateAnimValueRef.current, config),
       Animated.timing(dropDownAnimValueRef.current, config),
     ]).start();
+  }, [collapsed]);
+
+  useDidUpdate(() => {
+    if (onToggleHandler) {
+      onToggleHandler(collapsed);
+    }
   }, [collapsed]);
 
   const toggleElContainer = (
