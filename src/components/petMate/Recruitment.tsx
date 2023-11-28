@@ -113,9 +113,9 @@ const Recruitment = () => {
         renderItem={({ item }) => (
           <RecruitmentCard
             onPressHandler={() => {
-              // navigation.push('PetMateDetail', {
-              //   id: item.id,
-              // });
+              navigation.push('PetMateDetail', {
+                id: item.id,
+              });
             }}
             key={item.id}
             status={item.status}
