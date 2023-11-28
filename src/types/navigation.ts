@@ -54,6 +54,9 @@ export type RootStackParamList = {
     id: string;
   };
   AddPetMate: undefined;
+  PetMateDetail: {
+    id: string;
+  };
 };
 
 export type TabNavigatorParamList = {
