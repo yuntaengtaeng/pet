@@ -14,11 +14,21 @@ interface Props {
   title: string;
   description: string;
   limit: Limit;
+  onPressHandler: () => void;
 }
 
-const RecruitmentCard = ({ status, title, description, limit }: Props) => {
+const RecruitmentCard = ({
+  status,
+  title,
+  description,
+  limit,
+  onPressHandler,
+}: Props) => {
   return (
-    <Pressable style={{ gap: 4, backgroundColor: Color.white }}>
+    <Pressable
+      style={{ gap: 4, backgroundColor: Color.white }}
+      onPress={onPressHandler}
+    >
       <View>
         <Tag
           label={status}
