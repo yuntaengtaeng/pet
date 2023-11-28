@@ -27,7 +27,14 @@ const Count = ({
       <View style={[styles.wrap]}>
         <View style={styles.child}>
           <Dog24 color={Color.black} style={{ marginRight: 8 }} />
-          <Text style={[TYPOS.body1, { color: Color.neutral2 }]}>모집견수</Text>
+          <Text
+            style={[
+              count === 0 ? TYPOS.body1 : TYPOS.headline4,
+              { color: count === 0 ? Color.neutral2 : Color.neutral1 },
+            ]}
+          >
+            {count === 0 ? '모집견수' : `${count}마리`}
+          </Text>
         </View>
         <View style={styles.child}>
           <Pressable
