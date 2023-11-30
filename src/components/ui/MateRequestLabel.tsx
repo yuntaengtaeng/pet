@@ -50,7 +50,7 @@ const MateRequestLabel = ({ image, name, isHost, petCount }: Props) => {
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Dog16 color={Color.neutral1} />
         <Text style={[TYPOS.body1, { color: Color.neutral1, marginLeft: 2 }]}>
-          {petCount}
+          {petCount}마리
         </Text>
       </View>
     </View>
