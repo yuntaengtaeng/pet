@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { getRegisteredDogsList } from '../../lib/api';
 import { Pet } from '../../types/interface';
 import BottomSheet from './BottomSheet';
 import Button from './buttons/Button';
@@ -26,8 +27,8 @@ const PetSelectBottomSheet = ({
 
   useEffect(() => {
     const fetch = async () => {
-      const result = await axios.get<{ pets: Pet[] }>('/my-page/pets');
-      setPets(result.data.pets);
+      const result = await getRegisteredDogsList();
+      setPets(result);
     };
 
     fetch();
