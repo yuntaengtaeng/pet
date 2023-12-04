@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios';
+import { Pet } from '../types/interface';
 
 export const checkDuplicateNickname = async (nickname: string) => {
   try {
@@ -14,4 +15,11 @@ export const checkDuplicateNickname = async (nickname: string) => {
 
     throw error;
   }
+};
+
+export const getRegisteredDogsList = async () => {
+  const result = await axios.get<{ pets: Pet[] }>('/my-page/pets');
+  const dogs = result.data.pets.filter((v) => v.type === '강아지');
+
+  return dogs;
 };
