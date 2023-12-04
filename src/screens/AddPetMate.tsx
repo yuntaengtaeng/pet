@@ -28,6 +28,7 @@ import TimePicker from '../components/ui/TimePicker';
 import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../store/atoms';
 import PetSelectBottomSheet from '../components/ui/PetSelectBottomSheet';
+import useDogCheckOrRegisterRedirect from '../hooks/useDogCheckOrRegisterRedirect';
 
 export type AddPetMateScreenProps = StackScreenProps<
   RootStackParamList,
@@ -59,9 +60,9 @@ const AddPetMate = ({ navigation, route }: AddPetMateScreenProps) => {
     openModal: openTimeBottomSheet,
     closeModal: closeTimeBottomSheet,
   } = useModal();
-  const overlay = useOverlay();
   const shouldSetInitialCalenderValue = useRef(true);
   const setIsLoading = useSetRecoilState(LoadingState);
+  useDogCheckOrRegisterRedirect({ immediateStart: true });
 
   const [data, updateData] = useReducer(
     (prev: Data, next: Partial<Data>) => {
@@ -83,42 +84,6 @@ const AddPetMate = ({ navigation, route }: AddPetMateScreenProps) => {
       maxPet: 0,
     }
   );
-
-  useEffect(() => {
-    const getPetList = async () => {
-      const result = await axios.get<{ pets: Pet[] }>('/my-page/pets');
-      const findDog = result.data.pets.find((v) => v.type === '강아지');
-
-      if (!findDog) {
-        overlay.open(
-          <Dialog isOpened={true}>
-            <Dialog.Title title="등록된 반려동물 정보가 없습니다." />
-            <Dialog.Content content="함께할 반려동물 정보를 등록하고 산책 메이트를 모집해보세요." />
-            <Dialog.Buttons
-              buttons={[
-                {
-                  label: '닫기',
-                  onPressHandler: () => {
-                    overlay.close();
-                    navigation.pop();
-                  },
-                },
-                {
-                  label: '정보 등록',
-                  onPressHandler: () => {
-                    overlay.close();
-                    navigation.push('AddPet', { type: 'dog' });
-                  },
-                },
-              ]}
-            />
-          </Dialog>
-        );
-      }
-    };
-
-    getPetList();
-  }, []);
 
   const selectedPetName = data.pets.map((pet) => pet.name).join(', ');
 
