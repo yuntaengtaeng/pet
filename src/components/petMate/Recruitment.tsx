@@ -11,6 +11,9 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
+import useAddressVerification from '../../hooks/useAddressVerification';
+import useModal from '../../hooks/useModal';
+import AddressBottomSheet from '../ui/AddressBottomSheet';
 
 interface PetMateBoard {
   id: string;
@@ -29,6 +32,33 @@ const Recruitment = () => {
   const [isOnlyRecruiting, setIsOnlyRecruiting] = useState(false);
   const flatListRef = useRef<FlatList | null>(null);
   const setIsLoading = useSetRecoilState(LoadingState);
+
+  const {
+    isVisible: isVisibleBottomSheet,
+    openModal: openBottomSheet,
+    closeModal: closeBottomSheet,
+  } = useModal();
+
+  const timerRef = useRef<NodeJS.Timeout | undefined>();
+
+  const { verifyNeighborhood } = useAddressVerification({
+    successCallback: () => {
+      navigation.navigate('AddPetMate');
+    },
+    onNeighborhoodChangeHandler: () => {
+      timerRef.current = setTimeout(() => {
+        openBottomSheet();
+      }, 300);
+    },
+    locationVerificationPopupContent:
+      '모집 글을 게시하려면 동네인증이 필요해요.',
+  });
+
+  useEffect(() => {
+    return () => {
+      clearInterval(timerRef.current);
+    };
+  }, []);
 
   const fetch = async (isNewRequest?: boolean) => {
     setIsLoading(true);
@@ -133,8 +163,12 @@ const Recruitment = () => {
       />
       <FixedWriteButton
         onPressHandler={() => {
-          navigation.navigate('AddPetMate');
+          verifyNeighborhood();
         }}
+      />
+      <AddressBottomSheet
+        isVisibleBottomSheet={isVisibleBottomSheet}
+        onCloseHandler={closeBottomSheet}
       />
     </>
   );
