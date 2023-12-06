@@ -5,11 +5,15 @@ import Header from '../components/ui/Header';
 import { View, Text } from 'react-native';
 import Color from '../constants/color';
 import Button from '../components/ui/buttons/Button';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import MateRequestLabel from '../components/ui/MateRequestLabel';
 import Tag from '../components/ui/Tag';
 import TYPOS from '../components/ui/typo';
+import useAddressVerification from '../hooks/useAddressVerification';
+import useModal from '../hooks/useModal';
+import AddressBottomSheet from '../components/ui/AddressBottomSheet';
+import useDogCheckOrRegisterRedirect from '../hooks/useDogCheckOrRegisterRedirect';
 
 export type PetMateDetailScreenProps = StackScreenProps<
   RootStackParamList,
@@ -39,7 +43,33 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
     []
   );
 
+  const {
+    isVisible: isVisibleBottomSheet,
+    openModal: openBottomSheet,
+    closeModal: closeBottomSheet,
+  } = useModal();
+
+  const timerRef = useRef<NodeJS.Timeout | undefined>();
+
   const { id } = route.params;
+
+  const { validate } = useDogCheckOrRegisterRedirect({
+    onValidAction: () => {
+      navigation.navigate('ApplyPetMate', { id: id, selectedPets: [] });
+    },
+  });
+
+  const { verifyNeighborhood } = useAddressVerification({
+    locationVerificationPopupContent: '참여 신청하려면 동네인증이 필요해요.',
+    successCallback: () => {
+      validate();
+    },
+    onNeighborhoodChangeHandler: () => {
+      timerRef.current = setTimeout(() => {
+        openBottomSheet();
+      }, 300);
+    },
+  });
 
   useEffect(() => {
     const fetch = async () => {
@@ -60,6 +90,10 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
   if (!petMateBoardInfo) {
     return null;
   }
+
+  const applyForParticipation = () => {
+    verifyNeighborhood();
+  };
 
   return (
     <>
@@ -120,14 +154,18 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
               name={item.nickname}
               isHost={item.isHost}
               petCount={item.petCount}
-              key={item.petCount}
+              key={item.nickname}
             />
           ))}
         </View>
       </ScrollContainer>
       <View style={{ paddingHorizontal: 16, paddingVertical: 24 }}>
-        <Button label="참여 신청" />
+        <Button label="참여 신청" onPressHandler={applyForParticipation} />
       </View>
+      <AddressBottomSheet
+        isVisibleBottomSheet={isVisibleBottomSheet}
+        onCloseHandler={closeBottomSheet}
+      />
     </>
   );
 };
