@@ -1,5 +1,5 @@
-import { useState, useReducer, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import React, { useState, useReducer, useEffect } from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { useRecoilValue } from 'recoil';
 import {
   DOG_CATEGORY,
@@ -21,6 +21,9 @@ import Button from '../ui/buttons/Button';
 import useModal from '../../hooks/useModal';
 import Dialog from '../ui/Dialog';
 import { ImageType } from '../../types/interface';
+import Selectable from '../ui/Selectable';
+import useOverlay from '../../hooks/overlay/useOverlay';
+import BottomSheet from '../ui/BottomSheet';
 
 export interface Data {
   petType: '강아지' | '고양이' | '전체';
@@ -42,6 +45,7 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
   const [category, setCategory] = useState<string[]>([]);
   const [unfilledItems, setUnfilledItems] = useState<string[]>([]);
   const { isVisible, openModal, closeModal } = useModal();
+  const overlay = useOverlay();
 
   const [data, updateData] = useReducer(
     (prev: Data, next: Partial<Data>) => {
@@ -136,6 +140,48 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
     onSubmitHandler(data);
   };
 
+  const openCategoryBottomSheet = () => {
+    overlay.open(
+      <BottomSheet isOpened={true} title="카테고리" onClose={overlay.close}>
+        {category.map((c, index) => (
+          <React.Fragment key={c}>
+            <Pressable
+              style={{
+                height: 56,
+                paddingHorizontal: 16,
+                justifyContent: 'center',
+              }}
+              onPress={() => {
+                updateData({ category: c });
+                overlay.close();
+              }}
+            >
+              <Text
+                style={[
+                  TYPOS.body1,
+                  {
+                    color: data.category === c ? Color.primary700 : Color.black,
+                  },
+                ]}
+              >
+                {c}
+              </Text>
+            </Pressable>
+            {category.length !== index + 1 && (
+              <View
+                style={{
+                  marginHorizontal: 24,
+                  height: 1,
+                  backgroundColor: Color.neutral5,
+                }}
+              />
+            )}
+          </React.Fragment>
+        ))}
+      </BottomSheet>
+    );
+  };
+
   return (
     <>
       <ScrollContainer style={{ paddingHorizontal: 16 }}>
@@ -152,14 +198,11 @@ const Product = ({ initValue, onSubmitHandler }: Props) => {
             }}
             type="single"
           />
-          <Dropdown
-            list={category}
-            layoutStyle={{ marginTop: 24 }}
-            selectedLabel={data.category}
+          <Selectable
             placeholder="카테고리"
-            onLabelClickHandler={(label) => {
-              updateData({ category: label });
-            }}
+            layoutStyle={{ marginTop: 24 }}
+            value={data.category}
+            onPressHandler={openCategoryBottomSheet}
           />
           <InputField
             placeholder="상품명"
