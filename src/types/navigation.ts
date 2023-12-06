@@ -1,4 +1,5 @@
-import { Location, PetType, ProductInfo } from './interface';
+import { ApplyPetMateScreenProps } from './../screens/ApplyPetMate';
+import { Location, Pet, PetType, ProductInfo } from './interface';
 import * as MediaLibrary from 'expo-media-library';
 
 export type RootStackParamList = {
@@ -56,6 +57,10 @@ export type RootStackParamList = {
   AddPetMate: undefined;
   PetMateDetail: {
     id: string;
+  };
+  ApplyPetMate: {
+    id: string;
+    selectedPets: Pet[];
   };
 };
 
