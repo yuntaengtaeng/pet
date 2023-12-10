@@ -14,6 +14,9 @@ import useAddressVerification from '../hooks/useAddressVerification';
 import useModal from '../hooks/useModal';
 import AddressBottomSheet from '../components/ui/AddressBottomSheet';
 import useDogCheckOrRegisterRedirect from '../hooks/useDogCheckOrRegisterRedirect';
+import { Pet } from '../types/interface';
+import HeaderDropdownMenu from '../components/ui/HeaderDropdownMenu';
+import Burger24 from '../components/ui/icons/Burger24';
 
 export type PetMateDetailScreenProps = StackScreenProps<
   RootStackParamList,
@@ -28,10 +31,11 @@ interface PetMateBoardInfo {
   totalPets: number;
   participatingPetsCount: number;
   status: '모집중' | '모집마감';
+  isHost: boolean;
 }
 interface Participating {
   nickname: string;
-  petCount: number;
+  pets: Pet[];
   isHost: boolean;
   profileImage: string;
 }
@@ -97,7 +101,18 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
 
   return (
     <>
-      <Header />
+      <Header
+        rightContent={
+          petMateBoardInfo.isHost ? (
+            <HeaderDropdownMenu
+              icon={<Burger24 color={Color.black} />}
+              menus={[{ label: '글 수정하기' }, { label: '삭제' }]}
+            />
+          ) : (
+            <></>
+          )
+        }
+      />
       <ScrollContainer>
         <View style={{ gap: 24, marginHorizontal: 16 }}>
           <View style={{ flexDirection: 'row', gap: 8 }}>
@@ -153,14 +168,36 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
               image={item.profileImage}
               name={item.nickname}
               isHost={item.isHost}
-              petCount={item.petCount}
+              pets={item.pets}
               key={item.nickname}
             />
           ))}
         </View>
       </ScrollContainer>
-      <View style={{ paddingHorizontal: 16, paddingVertical: 24 }}>
-        <Button label="참여 신청" onPressHandler={applyForParticipation} />
+      <View
+        style={{
+          paddingHorizontal: 16,
+          paddingVertical: 24,
+          ...(petMateBoardInfo.isHost && {
+            flexDirection: 'row',
+            gap: 16,
+          }),
+        }}
+      >
+        {petMateBoardInfo.isHost ? (
+          <>
+            <View style={{ flex: 1 }}>
+              <Button label="모집 마감하기" buttonType="secondary" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button label={`신청한 메이트 ${participatingList.length}명`} />
+            </View>
+          </>
+        ) : (
+          <>
+            <Button label="참여 신청" onPressHandler={applyForParticipation} />
+          </>
+        )}
       </View>
       <AddressBottomSheet
         isVisibleBottomSheet={isVisibleBottomSheet}
