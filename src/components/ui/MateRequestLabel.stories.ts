@@ -14,14 +14,31 @@ type Story = StoryObj<typeof meta>;
 export const MateRequestLabelExample: Story = {
   args: {
     name: '기영맘',
-    petCount: 3,
+    pets: [
+      {
+        id: 'id',
+        name: 'name',
+        type: '강아지',
+      },
+    ],
   },
 };
 
 export const MateRequestLabelHostExample: Story = {
   args: {
     name: '기영맘',
-    petCount: 3,
+    pets: [
+      {
+        id: 'id',
+        name: 'name',
+        type: '강아지',
+      },
+      {
+        id: 'id2',
+        name: 'name2',
+        type: '강아지',
+      },
+    ],
     isHost: true,
   },
 };

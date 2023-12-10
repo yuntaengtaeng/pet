@@ -1,5 +1,7 @@
+import { useMemo } from 'react';
 import { View, Image, Text } from 'react-native';
 import Color from '../../constants/color';
+import { Pet } from '../../types/interface';
 import Crown16 from './icons/Crown16';
 import Dog16 from './icons/Dog16';
 import TYPOS from './typo';
@@ -8,10 +10,16 @@ interface Props {
   image?: string;
   name: string;
   isHost?: boolean;
-  petCount: number;
+  pets: Pet[];
 }
 
-const MateRequestLabel = ({ image, name, isHost, petCount }: Props) => {
+const MateRequestLabel = ({ image, name, isHost, pets }: Props) => {
+  const [petNames, petImages] = useMemo(() => {
+    const petNames = pets.map((pet) => pet.name).join(', ');
+    const petImages = pets.map((pet) => pet.image);
+    return [petNames, petImages];
+  }, [pets]);
+
   return (
     <View
       style={{
@@ -47,11 +55,42 @@ const MateRequestLabel = ({ image, name, isHost, petCount }: Props) => {
         </Text>
         {isHost && <Crown16 />}
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Dog16 color={Color.neutral1} />
-        <Text style={[TYPOS.body1, { color: Color.neutral1, marginLeft: 2 }]}>
-          {petCount}마리
-        </Text>
+      <View
+        style={{
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginBottom: 8,
+          overflow: 'hidden',
+        }}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingRight: (petImages.length - 1) * 6,
+          }}
+        >
+          {petImages.map((i, index) => {
+            return (
+              <Image
+                key={i}
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 32,
+                  left: (petImages.length - (index + 1)) * 6,
+                }}
+                source={
+                  image
+                    ? { uri: i }
+                    : require('../../../assets/img/pet-placeholder.png')
+                }
+              />
+            );
+          })}
+        </View>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={[TYPOS.body3, { color: Color.black }]}>{petNames}</Text>
+        </View>
       </View>
     </View>
   );
