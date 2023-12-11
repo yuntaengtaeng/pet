@@ -46,7 +46,7 @@ const TextButton = (props: Props) => {
     >
       <Text
         style={[
-          TYPOS.small,
+          TYPOS.medium,
           disabled ? styles.disabledLabel : styles[`${buttonType}Label`],
         ]}
       >
@@ -60,10 +60,11 @@ export default TextButton;
 
 const styles = StyleSheet.create({
   button: {
-    height: 32,
+    height: 36,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,
+    paddingHorizontal: 8,
   },
   primaryLabel: {
     color: Color.primary900,
