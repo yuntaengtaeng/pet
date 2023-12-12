@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 export const WheelPickerExample: Story = {
   args: {
     items: ['apple', 'banana', 'orange'],
-    onIndexChange: () => {},
+    onItemChange: () => {},
     itemHeight: 44,
   },
 };
