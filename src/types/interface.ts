@@ -132,3 +132,5 @@ export interface Pet {
   type: '강아지' | '고양이';
   image?: string;
 }
+
+export type PetMateStatus = '모집중' | '모집마감';
