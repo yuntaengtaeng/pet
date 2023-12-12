@@ -1,19 +1,26 @@
 import { useMemo } from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text, ViewStyle } from 'react-native';
 import Color from '../../constants/color';
 import { Pet } from '../../types/interface';
 import Crown16 from './icons/Crown16';
 import Dog16 from './icons/Dog16';
 import TYPOS from './typo';
 
-interface Props {
+export interface Props {
   image?: string;
   name: string;
   isHost?: boolean;
   pets: Pet[];
+  containerStyle?: ViewStyle;
 }
 
-const MateRequestLabel = ({ image, name, isHost, pets }: Props) => {
+const MateRequestLabel = ({
+  image,
+  name,
+  isHost,
+  pets,
+  containerStyle,
+}: Props) => {
   const [petNames, petImages] = useMemo(() => {
     const petNames = pets.map((pet) => pet.name).join(', ');
     const petImages = pets.map((pet) => pet.image);
@@ -22,13 +29,14 @@ const MateRequestLabel = ({ image, name, isHost, pets }: Props) => {
 
   return (
     <View
-      style={{
-        flexDirection: 'row',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        alignItems: 'center',
-        gap: 8,
-      }}
+      style={[
+        {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 8,
+        },
+        containerStyle,
+      ]}
     >
       <Image
         style={{ width: 40, height: 40, borderRadius: 40 }}
@@ -80,7 +88,7 @@ const MateRequestLabel = ({ image, name, isHost, pets }: Props) => {
                   left: (petImages.length - (index + 1)) * 6,
                 }}
                 source={
-                  image
+                  !!i
                     ? { uri: i }
                     : require('../../../assets/img/pet-placeholder.png')
                 }
