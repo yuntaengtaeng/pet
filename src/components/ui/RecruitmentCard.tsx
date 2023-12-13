@@ -3,6 +3,7 @@ import Color from '../../constants/color';
 import Tag from './Tag';
 import TYPOS from './typo';
 import Dog16 from './icons/Dog16';
+import { PetMateStatus } from '../../types/interface';
 
 interface Limit {
   current: number;
@@ -10,7 +11,7 @@ interface Limit {
 }
 
 interface Props {
-  status: '모집중' | '모집마감';
+  status: PetMateStatus;
   title: string;
   description: string;
   limit: Limit;
