@@ -14,6 +14,7 @@ import { LoadingState } from '../../store/atoms';
 import useAddressVerification from '../../hooks/useAddressVerification';
 import useModal from '../../hooks/useModal';
 import AddressBottomSheet from '../ui/AddressBottomSheet';
+import { PetMateStatus } from '../../types/interface';
 
 interface PetMateBoard {
   id: string;
@@ -22,7 +23,7 @@ interface PetMateBoard {
   date: string;
   totalPets: number;
   participatingPetsCount: number;
-  status: '모집중' | '모집마감';
+  status: PetMateStatus;
 }
 
 const Recruitment = () => {
