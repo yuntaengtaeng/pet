@@ -62,6 +62,9 @@ export type RootStackParamList = {
     id: string;
     selectedPets: Pet[];
   };
+  PetMateRequestList: {
+    id: string;
+  };
 };
 
 export type TabNavigatorParamList = {
