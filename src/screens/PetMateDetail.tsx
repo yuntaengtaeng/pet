@@ -14,9 +14,15 @@ import useAddressVerification from '../hooks/useAddressVerification';
 import useModal from '../hooks/useModal';
 import AddressBottomSheet from '../components/ui/AddressBottomSheet';
 import useDogCheckOrRegisterRedirect from '../hooks/useDogCheckOrRegisterRedirect';
-import { Pet } from '../types/interface';
+import { Pet, PetMateStatus } from '../types/interface';
 import HeaderDropdownMenu from '../components/ui/HeaderDropdownMenu';
 import Burger24 from '../components/ui/icons/Burger24';
+import Schedule16 from '../components/ui/icons/Schedule16';
+import Location16 from '../components/ui/icons/Location16';
+import { useSetRecoilState } from 'recoil';
+import { LoadingState } from '../store/atoms';
+import useOverlay from '../hooks/overlay/useOverlay';
+import Dialog from '../components/ui/Dialog';
 
 export type PetMateDetailScreenProps = StackScreenProps<
   RootStackParamList,
@@ -30,7 +36,7 @@ interface PetMateBoardInfo {
   place: string;
   totalPets: number;
   participatingPetsCount: number;
-  status: '모집중' | '모집마감';
+  status: PetMateStatus;
   isHost: boolean;
 }
 interface Participating {
@@ -46,6 +52,8 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
   const [participatingList, setParticipatingList] = useState<Participating[]>(
     []
   );
+  const setIsLoading = useSetRecoilState(LoadingState);
+  const overlay = useOverlay();
 
   const {
     isVisible: isVisibleBottomSheet,
@@ -82,14 +90,16 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
         participatingList: Participating[];
       }>(`/board/pet-mate/${id}`);
 
-      console.log(result.data.participatingList);
-
       setPetMateBoardInfo(result.data.petMateBoardInfo);
       setParticipatingList(result.data.participatingList);
     };
 
-    fetch();
-  }, [id]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetch();
+    });
+
+    return unsubscribe;
+  }, [navigation, id]);
 
   if (!petMateBoardInfo) {
     return null;
@@ -99,6 +109,60 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
     verifyNeighborhood();
   };
 
+  const removePost = async () => {
+    setIsLoading(true);
+    try {
+      await axios.delete(`/board/pet-mate/${id}`);
+      navigation.pop();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const openDeleteDialog = () => {
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Content content="게시글을 삭제할까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '삭제',
+              onPressHandler: () => {
+                overlay.close();
+                removePost();
+              },
+            },
+            {
+              label: '닫기',
+              onPressHandler: overlay.close,
+            },
+          ]}
+        />
+      </Dialog>
+    );
+  };
+
+  const onDeleteHandler = (closeMenu: () => void) => {
+    closeMenu();
+    openDeleteDialog();
+  };
+
+  const onStatusChangeHandler = async (status: PetMateStatus) => {
+    setIsLoading(true);
+    try {
+      const result = await axios.patch<{ status: PetMateStatus }>(
+        `/board/pet-mate/status/${id}`,
+        {
+          status,
+        }
+      );
+
+      setPetMateBoardInfo({ ...petMateBoardInfo, status: result.data.status });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <Header
@@ -106,7 +170,10 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
           petMateBoardInfo.isHost ? (
             <HeaderDropdownMenu
               icon={<Burger24 color={Color.black} />}
-              menus={[{ label: '글 수정하기' }, { label: '삭제' }]}
+              menus={[
+                { label: '글 수정하기' },
+                { label: '삭제', onClickHandler: onDeleteHandler },
+              ]}
             />
           ) : (
             <></>
@@ -127,12 +194,18 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
             </Text>
           </View>
           <View style={{ gap: 16 }}>
-            <View>
+            <View
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}
+            >
+              <Schedule16 color={Color.neutral1} />
               <Text style={[TYPOS.body2, { color: Color.neutral1 }]}>
                 {petMateBoardInfo.date}
               </Text>
             </View>
-            <View>
+            <View
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}
+            >
+              <Location16 color={Color.neutral1} />
               <Text style={[TYPOS.body2, { color: Color.neutral1 }]}>
                 {petMateBoardInfo.place}
               </Text>
@@ -165,6 +238,10 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
         <View style={{ marginTop: 16 }}>
           {participatingList.map((item) => (
             <MateRequestLabel
+              containerStyle={{
+                paddingVertical: 8,
+                paddingHorizontal: 16,
+              }}
               image={item.profileImage}
               name={item.nickname}
               isHost={item.isHost}
@@ -187,10 +264,21 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
         {petMateBoardInfo.isHost ? (
           <>
             <View style={{ flex: 1 }}>
-              <Button label="모집 마감하기" buttonType="secondary" />
+              <Button
+                label="모집 마감하기"
+                buttonType="secondary"
+                onPressHandler={() => {
+                  onStatusChangeHandler('모집마감');
+                }}
+              />
             </View>
             <View style={{ flex: 1 }}>
-              <Button label={`신청한 메이트 ${participatingList.length}명`} />
+              <Button
+                label={`신청한 메이트 ${participatingList.length - 1}명`}
+                onPressHandler={() => {
+                  navigation.navigate('PetMateRequestList', { id: id });
+                }}
+              />
             </View>
           </>
         ) : (
