@@ -6,7 +6,7 @@ import MenuBackdrop from './dropdown/MenuBackdrop';
 
 interface Menu {
   label: string;
-  onClickHandler?: (label: string) => void;
+  onClickHandler?: (closeMenu: () => void) => void;
 }
 
 interface Props {
@@ -41,7 +41,11 @@ const HeaderDropdownMenu = ({ iconContainerStyle, icon, menus }: Props) => {
           <ListValue
             key={m.label}
             label={m.label}
-            onClickHandler={m.onClickHandler}
+            onClickHandler={() => {
+              if (m.onClickHandler) {
+                m.onClickHandler(closeMenu);
+              }
+            }}
           />
         ))}
       </MenuBackdrop>
