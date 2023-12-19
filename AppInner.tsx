@@ -44,22 +44,21 @@ const AppInner = () => {
   const [user, setUser] = useRecoilState(UserState);
 
   useEffect(() => {
-    axios.interceptors.request.use((config) => {
-      if (user.accessToken) {
+    const requestInterceptor = axios.interceptors.request.use((config) => {
+      if (user.accessToken && config.url !== '/token/refresh-token') {
         config.headers.Authorization = `${user.accessToken}`;
       }
       return config;
     });
 
-    axios.interceptors.response.use(
-      (response) => {
-        return response;
-      },
+    const responseInterceptor = axios.interceptors.response.use(
+      (response) => response,
       async (error) => {
         const {
           config,
           response: { status },
         } = error;
+
         if (status === 419) {
           if (error.response.data.code === 'expired') {
             const type = error.response.data.type;
@@ -73,12 +72,12 @@ const AppInner = () => {
                 accessToken: '',
                 refreshToken: '',
               });
-
               //onBoarding 이동 로직 처리 추가
               return;
             } else if (type === 'access') {
               const originalRequest = config;
               const refreshToken = user.refreshToken;
+
               const {
                 data: { data },
               } = await axios.post(
@@ -86,22 +85,27 @@ const AppInner = () => {
                 {},
                 {
                   headers: {
-                    authorization: `${process.env.REACT_APP_JWT_KEY} ${refreshToken}`,
+                    authorization: `${refreshToken}`,
                   },
                 }
               );
-              //새로운 토큰 저장
-
               setUser((prev) => ({ ...prev, accessToken: data.accessToken }));
               //419 요청에 실패했던 요청 새로운 토큰으로 재요청
-              originalRequest.headers.authorization = `${process.env.REACT_APP_JWT_KEY} ${data.accessToken}`;
+              originalRequest.headers.authorization = `${data.accessToken}`;
               return axios(originalRequest);
             }
           }
         }
+
         return Promise.reject(error);
       }
     );
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 인터셉터 제거
+      axios.interceptors.request.eject(requestInterceptor);
+      axios.interceptors.response.eject(responseInterceptor);
+    };
   }, [user]);
 
   return (
