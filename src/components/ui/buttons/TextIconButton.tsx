@@ -32,7 +32,7 @@ const TextIconButton = (props: Props) => {
 
     if (buttonType === 'primary') {
       return Color.primary900;
-    } else if (buttonType === 'secondary') {
+    } else {
       return Color.neutral2;
     }
   })();
@@ -47,7 +47,7 @@ const TextIconButton = (props: Props) => {
     } else if (pressed) {
       return Color.primary50;
     } else {
-      return Color.white;
+      return 'transparent';
     }
   };
 
@@ -83,7 +83,7 @@ const TextIconButton = (props: Props) => {
       >
         {label}
       </Text>
-      <Right16 color={color as Color} />
+      <Right16 color={color} />
     </Pressable>
   );
 };
