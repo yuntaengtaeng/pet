@@ -8,9 +8,15 @@ interface Props {
   pet: Pet;
   onPressHandler?: () => void;
   isChecked: boolean;
+  disabled?: boolean;
 }
 
-const PetLabel = ({ pet, onPressHandler, isChecked }: Props) => {
+const PetLabel = ({
+  pet,
+  onPressHandler,
+  isChecked,
+  disabled = false,
+}: Props) => {
   const { id, image, name, type } = pet;
   return (
     <Pressable
@@ -32,7 +38,7 @@ const PetLabel = ({ pet, onPressHandler, isChecked }: Props) => {
         }
       />
       <Text style={[TYPOS.body1, { color: Color.black, flex: 1 }]}>{name}</Text>
-      <UiCheckbox size="small" isChecked={isChecked} />
+      <UiCheckbox size="small" isChecked={isChecked} disabled={disabled} />
     </Pressable>
   );
 };
