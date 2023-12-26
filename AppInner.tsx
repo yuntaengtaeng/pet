@@ -34,6 +34,7 @@ import ModifyPet from './src/screens/myPage/ModifyPet';
 import AddPetMate from './src/screens/AddPetMate';
 import PetMateDetail from './src/screens/PetMateDetail';
 import ApplyPetMate from './src/screens/ApplyPetMate';
+import MyMate from './src/screens/MyMate';
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -158,6 +159,7 @@ const AppInner = () => {
             <Stack.Screen name="AddPetMate" component={AddPetMate} />
             <Stack.Screen name="PetMateDetail" component={PetMateDetail} />
             <Stack.Screen name="ApplyPetMate" component={ApplyPetMate} />
+            <Stack.Screen name="MyMate" component={MyMate} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>
