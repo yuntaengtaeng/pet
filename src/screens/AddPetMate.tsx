@@ -87,6 +87,22 @@ const AddPetMate = ({ navigation, route }: AddPetMateScreenProps) => {
 
   const selectedPetName = data.pets.map((pet) => pet.name).join(', ');
 
+  const isButtonActive = (() => {
+    const clone = { ...data };
+
+    return [
+      !!clone.pets.length,
+      !!clone.title,
+      !!clone.content,
+      !!clone.walkDate.date,
+      !!clone.walkDate.time.ampm,
+      !!clone.place,
+      !!clone.maxPet,
+    ].every((boolean) => !!boolean);
+  })();
+
+  console.log(isButtonActive);
+
   const createDate = (): Date => {
     const { date, time } = { ...data.walkDate };
     const { ampm, hour, minute } = time;
@@ -231,7 +247,11 @@ const AddPetMate = ({ navigation, route }: AddPetMateScreenProps) => {
         </View>
       </ScrollContainer>
       <View style={{ paddingHorizontal: 16, paddingVertical: 24 }}>
-        <Button label="등록" onPressHandler={onSubmit} />
+        <Button
+          label="등록"
+          onPressHandler={onSubmit}
+          disabled={!isButtonActive}
+        />
       </View>
       <PetSelectBottomSheet
         isVisible={isVisible}
