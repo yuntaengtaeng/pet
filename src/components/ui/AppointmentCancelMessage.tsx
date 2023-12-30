@@ -3,10 +3,10 @@ import Color from '../../constants/color';
 import TYPOS from './typo';
 
 interface Props {
-  nickname: string;
+  content: string;
 }
 
-const AppointmentCancelMessage = ({ nickname }: Props) => {
+const AppointmentCancelMessage = ({ content }: Props) => {
   return (
     <View
       style={{
@@ -21,9 +21,7 @@ const AppointmentCancelMessage = ({ nickname }: Props) => {
           backgroundColor: Color.errorBg,
         }}
       >
-        <Text style={[TYPOS.body2, { color: Color.error }]}>
-          {nickname}님이 약속을 삭제했어요.
-        </Text>
+        <Text style={[TYPOS.body2, { color: Color.error }]}>{content}</Text>
       </View>
     </View>
   );
