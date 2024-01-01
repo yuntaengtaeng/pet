@@ -198,7 +198,7 @@ const ChatRoomItem = ({
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text
                 numberOfLines={1}
-                style={[{ color: Color.neutral1, flex: 1 }, TYPOS.body2]}
+                style={[{ color: Color.neutral1 }, TYPOS.body2]}
               >
                 {content}
               </Text>

@@ -104,6 +104,7 @@ const ChatList = ({
           content={item.lastChat}
           isPinned={item.isPinned}
           isNotificationEnabled={item.isAlarm}
+          productImage={item.productImage}
           onPinPressHandler={() => {
             onPinPressHandler(item.id);
             closeRow();
