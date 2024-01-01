@@ -67,7 +67,15 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
 
   const { validate } = useDogCheckOrRegisterRedirect({
     onValidAction: () => {
-      navigation.navigate('ApplyPetMate', { id: id, selectedPets: [] });
+      const limit =
+        (petMateBoardInfo?.totalPets || 0) -
+        (petMateBoardInfo?.participatingPetsCount || 0);
+
+      navigation.navigate('ApplyPetMate', {
+        id: id,
+        selectedPets: [],
+        limit: limit,
+      });
     },
   });
 
@@ -122,7 +130,8 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
   const openDeleteDialog = () => {
     overlay.open(
       <Dialog isOpened={true}>
-        <Dialog.Content content="게시글을 삭제할까요?" />
+        <Dialog.Title title="모임을 삭제할까요?" />
+        <Dialog.Content content="글이 삭제되고 모임도 취소돼요." />
         <Dialog.Buttons
           buttons={[
             {
@@ -145,6 +154,30 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
   const onDeleteHandler = (closeMenu: () => void) => {
     closeMenu();
     openDeleteDialog();
+  };
+
+  const openRecruitmentDeadlineModal = () => {
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Title title="모집을 마감할까요?" />
+        <Dialog.Content content="더 이상 메이트를 모집하지 않고, 수정 할 수 없어요." />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '마감',
+              onPressHandler: () => {
+                overlay.close();
+                onStatusChangeHandler('모집마감');
+              },
+            },
+            {
+              label: '닫기',
+              onPressHandler: overlay.close,
+            },
+          ]}
+        />
+      </Dialog>
+    );
   };
 
   const onStatusChangeHandler = async (status: PetMateStatus) => {
@@ -268,7 +301,7 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
                 label="모집 마감하기"
                 buttonType="secondary"
                 onPressHandler={() => {
-                  onStatusChangeHandler('모집마감');
+                  openRecruitmentDeadlineModal();
                 }}
               />
             </View>
@@ -283,7 +316,15 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
           </>
         ) : (
           <>
-            <Button label="참여 신청" onPressHandler={applyForParticipation} />
+            <Button
+              label={
+                petMateBoardInfo.status === '모집중'
+                  ? '참여 신청'
+                  : '모집이 마감되었어요.'
+              }
+              disabled={petMateBoardInfo.status === '모집마감'}
+              onPressHandler={applyForParticipation}
+            />
           </>
         )}
       </View>
