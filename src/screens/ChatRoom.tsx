@@ -23,34 +23,42 @@ import { ToastDispatchContext } from '../components/ui/toast/ToastProvider';
 import Dialog from '../components/ui/Dialog';
 import useOverlay from '../hooks/overlay/useOverlay';
 import { BlockStatus, ProductInfo } from '../types/interface';
+import ComingAndGoingMessage from '../components/chat/room/ComingAndGoindMessage';
+import AppointmentCancelMessage from '../components/ui/AppointmentCancelMessage';
 
 export type OnboardingScreenProps = StackScreenProps<
   RootStackParamList,
   'ChatRoom'
 >;
 
-type Message = {
-  id: string;
-  content: string;
-  isMe?: boolean;
-};
+interface User {
+  nickname: string;
+  profileImage?: string;
+  isHost?: boolean;
+}
 
-type UserMessage = Message & {
+interface MessageDetails {
+  type:
+    | 'usedTrade'
+    | 'petMate'
+    | 'schedule'
+    | 'scheduleCancel'
+    | 'comingAndGoing'
+    | 'mateCancel';
+  content: string;
   timestamp?: string;
-  timeOfDay?: string;
-};
+  isMe?: boolean;
+  user?: User;
+}
 
-type System = Message & {
+interface Message {
   id: string;
-  content: string;
-  promiseAt: string;
-  isPromise: boolean;
-};
-
-type ObjectArray = Array<UserMessage | System>;
+  type: 'message' | 'action';
+  details: MessageDetails;
+}
 
 type ChatData = {
-  [key: string]: ObjectArray;
+  [key: string]: Message[];
 };
 
 const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
@@ -393,57 +401,88 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
         ref={scrollViewRef}
       >
         {Object.entries(chatData).map(([date, children], i) => {
+          console.log(children);
+
           const contents = children.map((child, index) => {
-            if ('isPromise' in child) {
-              const systemChild = child as System;
-
-              return (
-                <React.Fragment key={systemChild.id + index + 'Fragment'}>
-                  <View
-                    style={{ paddingTop: 16 }}
-                    key={systemChild.id + index + 'up'}
-                  />
-                  <AppointmentNotification
-                    key={systemChild.id}
-                    timestamp={systemChild.promiseAt}
-                    content={systemChild.content}
-                    onModifyHandler={() => {
-                      navigation.navigate('AppointmentScheduler', {
-                        roomId,
-                        type: 'MODIFY',
-                        scheduleId: systemChild.id,
-                      });
-                    }}
-                    isEditButtonVisible={systemChild.isMe}
-                  />
-                  <View
-                    style={{ paddingBottom: 16 }}
-                    key={systemChild.id + index + 'down'}
-                  />
-                </React.Fragment>
-              );
-            } else {
-              const messageChild = child as UserMessage;
-
-              return (
-                <React.Fragment key={messageChild.id + index + 'Fragment'}>
-                  <ChatBubble
-                    key={messageChild.id}
-                    message={messageChild.content}
-                    isSentByMe={!!messageChild.isMe}
-                    {...(!!messageChild.timeOfDay &&
-                      !!messageChild.timestamp && {
-                        timeStamp: `${messageChild.timeOfDay} ${messageChild.timestamp}`,
+            switch (child.details.type) {
+              case 'usedTrade': {
+                return (
+                  <React.Fragment key={child.id + index + 'Fragment'}>
+                    <ChatBubble
+                      key={child.id}
+                      message={child.details.content}
+                      isSentByMe={!!child.details.isMe}
+                      {...(!!child.details.timestamp && {
+                        timeStamp: `${child.details.timestamp}`,
                       })}
-                  />
-                  <View
-                    style={{ paddingBottom: 4 }}
-                    key={messageChild.id + index}
-                  />
-                </React.Fragment>
-              );
+                    />
+                    <View style={{ paddingBottom: 4 }} key={child.id + index} />
+                  </React.Fragment>
+                );
+              }
+
+              case 'schedule': {
+                return (
+                  <React.Fragment key={child.id + index + 'Fragment'}>
+                    <View
+                      style={{ paddingTop: 16 }}
+                      key={child.id + index + 'up'}
+                    />
+                    <AppointmentNotification
+                      key={child.id}
+                      timestamp={child.details.timestamp || ''}
+                      content={child.details.content}
+                      onModifyHandler={() => {
+                        navigation.navigate('AppointmentScheduler', {
+                          roomId,
+                          type: 'MODIFY',
+                          scheduleId: child.id,
+                        });
+                      }}
+                      isEditButtonVisible={child.details.isMe}
+                    />
+                    <View
+                      style={{ paddingBottom: 16 }}
+                      key={child.id + index + 'down'}
+                    />
+                  </React.Fragment>
+                );
+              }
+
+              case 'comingAndGoing': {
+                return (
+                  <React.Fragment key={child.id + index + 'Fragment'}>
+                    <View
+                      style={{ paddingTop: 24 }}
+                      key={child.id + index + 'up'}
+                    />
+                    <ComingAndGoingMessage contents={child.details.content} />
+                    <View
+                      style={{ paddingBottom: 16 }}
+                      key={child.id + index + 'down'}
+                    />
+                  </React.Fragment>
+                );
+              }
+
+              case 'scheduleCancel': {
+                return (
+                  <React.Fragment key={child.id + index + 'Fragment'}>
+                    <View
+                      style={{ paddingTop: 24 }}
+                      key={child.id + index + 'up'}
+                    />
+                    <AppointmentCancelMessage content={child.details.content} />
+                    <View
+                      style={{ paddingBottom: 16 }}
+                      key={child.id + index + 'down'}
+                    />
+                  </React.Fragment>
+                );
+              }
             }
           });
+
           return (
             <React.Fragment key={date + i + 'Fragment'}>
               <View style={{ paddingTop: 16 }} key={date + i + 'up'} />
