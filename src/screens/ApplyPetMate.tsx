@@ -89,6 +89,7 @@ const ApplyPetMate = ({ navigation, route }: ApplyPetMateScreenProps) => {
           setSelectedPets(pets);
         }}
         selectedPets={selectedPets}
+        limit={route.params.limit}
       />
     </>
   );

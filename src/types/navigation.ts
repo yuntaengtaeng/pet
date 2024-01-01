@@ -61,6 +61,7 @@ export type RootStackParamList = {
   ApplyPetMate: {
     id: string;
     selectedPets: Pet[];
+    limit: number;
   };
   PetMateRequestList: {
     id: string;
