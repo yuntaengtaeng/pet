@@ -10,6 +10,8 @@ import Color from '../constants/color';
 import { LoadingState } from '../store/atoms';
 import { Pet } from '../types/interface';
 import { RootStackParamList } from '../types/navigation';
+import useOverlay from '../hooks/overlay/useOverlay';
+import Dialog from '../components/ui/Dialog';
 
 interface Application {
   id: string;
@@ -29,18 +31,22 @@ const PetMateRequestList = ({
   navigation,
 }: PetMateRequestListScreenProps) => {
   const [list, setList] = useState<Application[]>([]);
+  const [availableSlots, setAvailableSlots] = useState(0);
   const { id } = route.params;
   const setIsLoading = useSetRecoilState(LoadingState);
+  const overlay = useOverlay();
 
   useEffect(() => {
     const fetch = async () => {
       setIsLoading(true);
       try {
-        const result = await axios.get<{ applicationList: Application[] }>(
-          `/board/pet-mate/participants/${id}`
-        );
+        const result = await axios.get<{
+          applicationList: Application[];
+          availableSlots: number;
+        }>(`/board/pet-mate/participants/${id}`);
 
         setList([...result.data.applicationList]);
+        setAvailableSlots(result.data.availableSlots);
       } finally {
         setIsLoading(false);
       }
@@ -61,7 +67,28 @@ const PetMateRequestList = ({
     );
   };
 
-  const onAcceptHandler = async (applicationId: string) => {
+  const openNotifyAcceptanceUnavailable = () => {
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Content content="모집 견수를 초과하여 수락할 수 없어요." />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '확인',
+              onPressHandler: overlay.close,
+            },
+          ]}
+        />
+      </Dialog>
+    );
+  };
+
+  const onAcceptHandler = async (applicationId: string, petCount: number) => {
+    if (availableSlots < petCount) {
+      openNotifyAcceptanceUnavailable();
+      return;
+    }
+
     setIsLoading(true);
     try {
       const result = await axios.post<{ applicationList: Application[] }>(
@@ -79,16 +106,27 @@ const PetMateRequestList = ({
   const RenderList = () => {
     return (
       <>
-        <View style={{ marginTop: 24, marginBottom: 16, marginHorizontal: 16 }}>
+        <View
+          style={{
+            marginTop: 24,
+            marginBottom: 16,
+            marginHorizontal: 16,
+            flexDirection: 'row',
+          }}
+        >
           <Text style={[TYPOS.headline4, { color: Color.neutral1 }]}>
-            신청한 메이트 {list.length}명
+            수락 가능 견수{' '}
           </Text>
+          <Text style={[TYPOS.headline4, { color: Color.primary900 }]}>
+            {availableSlots}
+          </Text>
+          <Text style={[TYPOS.headline4, { color: Color.neutral1 }]}>마리</Text>
         </View>
         <View style={{ marginHorizontal: 16, gap: 16 }}>
           {list.map((application) => (
             <MateRequestCard
               onAcceptHandler={() => {
-                onAcceptHandler(application.id);
+                onAcceptHandler(application.id, application.pets.length);
               }}
               name={application.nickname}
               pets={application.pets}
