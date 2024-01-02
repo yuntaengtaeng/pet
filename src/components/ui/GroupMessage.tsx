@@ -19,33 +19,37 @@ const GroupMessage = ({
 }: Props) => {
   return (
     <View style={{ flexDirection: 'row' }}>
-      <View style={{ marginRight: 4 }}>
-        <Image
-          style={{ width: 24, height: 24, borderRadius: 24 }}
-          source={
-            profileImage
-              ? { uri: profileImage }
-              : require('../../../assets/img/placeholder.png')
-          }
-        />
-      </View>
-      <View style={{ flex: 1 }}>
-        <View style={{ marginBottom: 4, flexDirection: 'row' }}>
-          <Text
-            style={[
-              {
-                lineHeight: 16,
-                fontWeight: '600',
-                fontSize: 12,
-                fontFamily: 'Pretendard_Regular',
-                marginRight: 2,
-              },
-            ]}
-          >
-            {nickname}
-          </Text>
-          {isHost && <Crown16 />}
+      {!isSentByMe && (
+        <View style={{ marginRight: 4 }}>
+          <Image
+            style={{ width: 24, height: 24, borderRadius: 24 }}
+            source={
+              profileImage
+                ? { uri: profileImage }
+                : require('../../../assets/img/placeholder.png')
+            }
+          />
         </View>
+      )}
+      <View style={{ flex: 1 }}>
+        {!isSentByMe && (
+          <View style={{ marginBottom: 4, flexDirection: 'row' }}>
+            <Text
+              style={[
+                {
+                  lineHeight: 16,
+                  fontWeight: '600',
+                  fontSize: 12,
+                  fontFamily: 'Pretendard_Regular',
+                  marginRight: 2,
+                },
+              ]}
+            >
+              {nickname}
+            </Text>
+            {isHost && <Crown16 />}
+          </View>
+        )}
         <ChatBubble
           message={message}
           isSentByMe={isSentByMe}
