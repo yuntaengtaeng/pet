@@ -104,6 +104,8 @@ export interface Date {
   d: string;
 }
 
+export type RoomType = 'usedTrade' | 'petMate';
+
 export interface Room {
   id: string;
   title: string;
@@ -115,6 +117,7 @@ export interface Room {
   image?: string;
   region: string;
   productImage?: string;
+  type: RoomType;
 }
 
 export type BlockStatus = 'Me' | 'Other' | 'None';

@@ -96,6 +96,7 @@ const ChatList = ({
       renderItem={({ item }) => (
         <ChatRoomItem
           isSwipable={isSwipable}
+          type={item.type}
           roomId={item.id}
           image={item.image}
           roomName={item.title}

@@ -10,6 +10,7 @@ import PinIndicator from './icons/PinIndicator';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
+import { RoomType } from '../../types/interface';
 
 interface Props {
   roomId: string;
@@ -26,6 +27,7 @@ interface Props {
   onToggleNotificationHandler?: () => void;
   setSwipeable?: (ref: Swipeable | null) => void;
   isSwipable?: boolean;
+  type: RoomType;
 }
 
 const ChatRoomItem = ({
@@ -43,6 +45,7 @@ const ChatRoomItem = ({
   onToggleNotificationHandler,
   setSwipeable,
   isSwipable = true,
+  type,
 }: Props) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const swipeableRef = useRef<Swipeable | null>(null);
@@ -164,22 +167,38 @@ const ChatRoomItem = ({
               }}
             />
           )}
-          <Image
-            style={[
-              {
-                width: 48,
-                height: 48,
-                resizeMode: 'cover',
-                borderRadius: 48,
-                marginRight: 16,
-              },
-            ]}
-            source={
-              image
-                ? { uri: image }
-                : require('../../../assets/img/placeholder.png')
-            }
-          />
+          {type === 'usedTrade' ? (
+            <Image
+              style={[
+                {
+                  width: 48,
+                  height: 48,
+                  resizeMode: 'cover',
+                  borderRadius: 48,
+                  marginRight: 16,
+                },
+              ]}
+              source={
+                image
+                  ? { uri: image }
+                  : require('../../../assets/img/placeholder.png')
+              }
+            />
+          ) : (
+            <Image
+              style={[
+                {
+                  width: 48,
+                  height: 48,
+                  resizeMode: 'cover',
+                  borderRadius: 48,
+                  marginRight: 16,
+                },
+              ]}
+              source={require('../../../assets/img/pet-mate-room.png')}
+            />
+          )}
+
           <View style={{ flex: 1, gap: 4 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Text style={[{ color: Color.black }, TYPOS.headline4]}>
