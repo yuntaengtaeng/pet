@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import TYPOS from './typo';
 import Color from '../../constants/color';
 
-interface ChatBubbleProps {
+export interface ChatBubbleProps {
   message: string;
   isSentByMe: boolean;
   timeStamp?: string;
