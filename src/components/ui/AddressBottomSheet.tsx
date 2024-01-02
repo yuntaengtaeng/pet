@@ -78,7 +78,6 @@ const AddressBottomSheet = ({
     }
 
     if (address.isLastSelected) {
-      console.log(213);
       bottomSheetRef.current?.showToastMessage(
         '선택된 동네는 삭제가 불가합니다.'
       );

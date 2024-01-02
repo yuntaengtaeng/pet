@@ -402,8 +402,6 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
         ref={scrollViewRef}
       >
         {Object.entries(chatData).map(([date, children], i) => {
-          console.log(children);
-
           const contents = children.map((child, index) => {
             switch (child.details.type) {
               case 'usedTrade': {
@@ -483,8 +481,6 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
               }
 
               case 'petMate': {
-                console.log(child);
-
                 return (
                   <React.Fragment key={child.id + index + 'Fragment'}>
                     <GroupMessage

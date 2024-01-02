@@ -101,8 +101,6 @@ const AddPetMate = ({ navigation, route }: AddPetMateScreenProps) => {
     ].every((boolean) => !!boolean);
   })();
 
-  console.log(isButtonActive);
-
   const createDate = (): Date => {
     const { date, time } = { ...data.walkDate };
     const { ampm, hour, minute } = time;
