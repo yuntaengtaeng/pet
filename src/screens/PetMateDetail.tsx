@@ -38,6 +38,7 @@ interface PetMateBoardInfo {
   participatingPetsCount: number;
   status: PetMateStatus;
   isHost: boolean;
+  requestedMateCount: number;
 }
 interface Participating {
   nickname: string;
@@ -307,7 +308,7 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
             </View>
             <View style={{ flex: 1 }}>
               <Button
-                label={`신청한 메이트 ${participatingList.length - 1}명`}
+                label={`신청한 메이트 ${petMateBoardInfo.requestedMateCount}명`}
                 onPressHandler={() => {
                   navigation.navigate('PetMateRequestList', { id: id });
                 }}
