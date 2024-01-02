@@ -25,6 +25,7 @@ import useOverlay from '../hooks/overlay/useOverlay';
 import { BlockStatus, ProductInfo } from '../types/interface';
 import ComingAndGoingMessage from '../components/chat/room/ComingAndGoindMessage';
 import AppointmentCancelMessage from '../components/ui/AppointmentCancelMessage';
+import GroupMessage from '../components/ui/GroupMessage';
 
 export type OnboardingScreenProps = StackScreenProps<
   RootStackParamList,
@@ -477,6 +478,27 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                       style={{ paddingBottom: 16 }}
                       key={child.id + index + 'down'}
                     />
+                  </React.Fragment>
+                );
+              }
+
+              case 'petMate': {
+                console.log(child);
+
+                return (
+                  <React.Fragment key={child.id + index + 'Fragment'}>
+                    <GroupMessage
+                      nickname={child.details.user?.nickname || ''}
+                      profileImage={child.details.user?.profileImage}
+                      isHost={child.details.user?.isHost}
+                      key={child.id}
+                      message={child.details.content}
+                      isSentByMe={!!child.details.isMe}
+                      {...(!!child.details.timestamp && {
+                        timeStamp: `${child.details.timestamp}`,
+                      })}
+                    />
+                    <View style={{ paddingBottom: 4 }} key={child.id + index} />
                   </React.Fragment>
                 );
               }
