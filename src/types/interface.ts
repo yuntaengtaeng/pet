@@ -137,3 +137,10 @@ export interface Pet {
 }
 
 export type PetMateStatus = '모집중' | '모집마감';
+
+export interface MyMatePost {
+  id: string;
+  address: string;
+  date: string;
+  title: string;
+}
