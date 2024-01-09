@@ -158,7 +158,9 @@ const Calendar = ({
           <View key={index} style={{ flexDirection: 'row', minHeight: 32 }}>
             {week.map((day, dayIndex) => {
               const isInDateRange =
-                day && day.isSameOrAfter(now) && day.isSameOrBefore(endDate);
+                day &&
+                day.isSameOrAfter(now, 'day') &&
+                day.isSameOrBefore(endDate, 'day');
 
               const isSelectedDate = day.format('YYYYMMDD') === selectedDate;
 
