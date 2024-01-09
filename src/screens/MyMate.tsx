@@ -6,8 +6,12 @@ import Color from '../constants/color';
 import MateCard from '../components/ui/MateCard';
 import Tabs from '../components/ui/Tabs';
 import Line from '../components/form/PetMate/Line';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import UpcomingWalkList from '../components/petMate/UpcomingWalkList';
+import { MyMatePost } from '../types/interface';
+import { useSetRecoilState } from 'recoil';
+import { LoadingState } from '../store/atoms';
+import axios from 'axios';
 
 export type AddPetMateScreenProps = StackScreenProps<
   RootStackParamList,
@@ -15,6 +19,43 @@ export type AddPetMateScreenProps = StackScreenProps<
 >;
 
 const MyMate = ({ navigation, route }: AddPetMateScreenProps) => {
+  const setIsLoading = useSetRecoilState(LoadingState);
+  const [list, setList] = useState<MyMatePost[]>([]);
+  const [tab, setTab] = useState(0);
+
+  const getParticipationWalkScheduleList = () => {
+    return axios.get<{ participationWalkScheduleList: MyMatePost[] }>(
+      '/board/pet-mate/participants'
+    );
+  };
+
+  const getWrittenPosts = () => {
+    return axios.get<{ writtenPosts: MyMatePost[] }>('/board/pet-mate/posts');
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      setIsLoading(true);
+      try {
+        let tempList: MyMatePost[] = [];
+
+        if (tab === 0) {
+          const result = await getParticipationWalkScheduleList();
+          tempList = result.data.participationWalkScheduleList;
+        } else {
+          const result = await getWrittenPosts();
+          tempList = result.data.writtenPosts;
+        }
+
+        setList(tempList);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetch();
+  }, [tab]);
+
   return (
     <>
       <AppBar title="나의 메이트" />
@@ -32,17 +73,19 @@ const MyMate = ({ navigation, route }: AddPetMateScreenProps) => {
           hasMoreButton={true}
         />
         <Tabs
-          selectedIndex={0}
-          onSelectHandler={(index) => {}}
+          selectedIndex={tab}
+          onSelectHandler={(index) => {
+            setTab(index);
+          }}
           menu={['참여한 산책', '작성한 글']}
         />
         <View>
-          {[...new Array(30)].map((v, index) => (
-            <React.Fragment key={index}>
+          {list.map((item) => (
+            <React.Fragment key={item.id}>
               <MateCard
                 gap={4}
-                title={'중계 근린 공원 산책하실 분~'}
-                description={'공릉동 · 10/21(토), 오후 10시'}
+                title={item.title}
+                description={`${item.address} · ${item.date}`}
                 descriptionSize={3}
               />
               <Line />
