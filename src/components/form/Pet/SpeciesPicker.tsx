@@ -52,7 +52,7 @@ const SpeciesPicker = ({ value, onChangeHandler, type, petType }: Props) => {
   const inputForm = () => {
     return (
       <InputField
-        placeholder={`${petType === 'cat' ? '묘종' : '견종'}을 선택하세요.`}
+        placeholder={`${petType === 'cat' ? '묘종' : '견종'}명을 입력해주세요.`}
         value={value}
         onChangeHandler={(text) => {
           onChangeHandler(text);
