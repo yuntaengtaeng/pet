@@ -123,11 +123,10 @@ const Recruitment = () => {
         style={{
           height: '100%',
           backgroundColor: Color.white,
-          paddingTop: 24,
           paddingHorizontal: 16,
         }}
         ref={flatListRef}
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingTop: 24 }}
         data={list}
         onEndReachedThreshold={0.8}
         showsVerticalScrollIndicator={false}
