@@ -71,6 +71,9 @@ const MyMate = ({ navigation, route }: AddPetMateScreenProps) => {
             marginHorizontal: 16,
           }}
           hasMoreButton={true}
+          onMoreButtonPressHandler={() => {
+            navigation.navigate('UpcomingWalk');
+          }}
         />
         <Tabs
           selectedIndex={tab}
