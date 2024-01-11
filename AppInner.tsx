@@ -36,6 +36,7 @@ import PetMateDetail from './src/screens/PetMateDetail';
 import ApplyPetMate from './src/screens/ApplyPetMate';
 import MyMate from './src/screens/MyMate';
 import PetMateRequestList from './src/screens/PetMateRequestList';
+import UpcomingWalk from './src/screens/UpcomingWalk';
 
 axios.defaults.baseURL = process.env.API_URL;
 
