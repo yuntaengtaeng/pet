@@ -67,6 +67,7 @@ export type RootStackParamList = {
     id: string;
   };
   MyMate: undefined;
+  UpcomingWalk: undefined;
 };
 
 export type TabNavigatorParamList = {

@@ -165,6 +165,7 @@ const AppInner = () => {
             />
             <Stack.Screen name="ApplyPetMate" component={ApplyPetMate} />
             <Stack.Screen name="MyMate" component={MyMate} />
+            <Stack.Screen name="UpcomingWalk" component={UpcomingWalk} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>
