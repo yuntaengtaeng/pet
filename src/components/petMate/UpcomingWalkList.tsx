@@ -1,7 +1,11 @@
+import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { ViewStyle } from 'react-native';
 import { View, Text } from 'react-native';
+import { useSetRecoilState } from 'recoil';
 import Color from '../../constants/color';
+import { LoadingState } from '../../store/atoms';
+import { MyMatePost } from '../../types/interface';
 import TextIconButton from '../ui/buttons/TextIconButton';
 import MateCard from '../ui/MateCard';
 import TYPOS from '../ui/typo';
@@ -14,22 +18,17 @@ interface Props {
 
 const LIMIT = 2;
 
-const promise = (): Promise<number[]> => {
-  return new Promise((r) => {
-    r([...new Array(10).fill(1)]);
-  });
-};
-
 const UpcomingWalkList = ({
   containerStyle,
   hasMoreButton = false,
   onMoreButtonPressHandler,
 }: Props) => {
-  const [list, setList] = useState<any[]>([]);
+  const [list, setList] = useState<MyMatePost[]>([]);
+  const setIsLoading = useSetRecoilState(LoadingState);
 
   const renderedList = useMemo(() => {
     if (hasMoreButton) {
-      return [...list].slice(0, 2);
+      return [...list].slice(0, LIMIT);
     } else {
       return [...list];
     }
@@ -37,8 +36,17 @@ const UpcomingWalkList = ({
 
   useEffect(() => {
     const fetch = async () => {
-      const result = await promise();
-      setList(result);
+      setIsLoading(true);
+
+      try {
+        const result = await axios.get<{ scheduledWalkInfo: MyMatePost[] }>(
+          '/board/pet-mate/walking-schedules'
+        );
+
+        setList(result.data.scheduledWalkInfo);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetch();
@@ -56,9 +64,10 @@ const UpcomingWalkList = ({
       </Text>
       {renderedList.map((v) => (
         <MateCard
+          key={v.id}
           gap={16}
-          title={'공릉동 · 10/21(토), 오후 10시'}
-          description={'과기대에서 중형견 산책 하실 분~'}
+          title={`${v.address} · ${v.date}`}
+          description={v.title}
           descriptionSize={2}
         />
       ))}
