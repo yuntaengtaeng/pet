@@ -197,6 +197,21 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
     }
   };
 
+  const exitPetMate = async () => {
+    setIsLoading(true);
+    try {
+      const result = await axios.patch<{
+        petMateBoardInfo: PetMateBoardInfo;
+        participatingList: Participating[];
+      }>(`/board/pet-mate/${id}`);
+
+      setPetMateBoardInfo(result.data.petMateBoardInfo);
+      setParticipatingList(result.data.participatingList);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const headerRightContent = useMemo(() => {
     switch (petMateBoardInfo.role) {
       case 'host':
@@ -213,7 +228,7 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
         return (
           <HeaderDropdownMenu
             icon={<Burger24 color={Color.black} />}
-            menus={[{ label: '나가기' }]}
+            menus={[{ label: '나가기', onClickHandler: exitPetMate }]}
           />
         );
       case 'visitor':
