@@ -212,7 +212,7 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
     }
   };
 
-  const headerRightContent = useMemo(() => {
+  const headerRightContent = (() => {
     switch (petMateBoardInfo.role) {
       case 'host':
         return (
@@ -234,9 +234,9 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
       case 'visitor':
         return <></>;
     }
-  }, [petMateBoardInfo.role]);
+  })();
 
-  const footerButton = useMemo(() => {
+  const footerButton = (() => {
     switch (petMateBoardInfo.role) {
       case 'host':
         return (
@@ -277,7 +277,7 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
           />
         );
     }
-  }, [petMateBoardInfo.role]);
+  })();
 
   return (
     <>
