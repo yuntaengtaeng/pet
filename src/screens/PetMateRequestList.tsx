@@ -123,7 +123,10 @@ const PetMateRequestList = ({
           <Text style={[TYPOS.headline4, { color: Color.neutral1 }]}>마리</Text>
         </View>
         <ScrollView
-          style={{ marginHorizontal: 16, gap: 16 }}
+          style={{ marginHorizontal: 16 }}
+          contentContainerStyle={{
+            gap: 16,
+          }}
           showsVerticalScrollIndicator={false}
         >
           {list.map((application) => (
