@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useSetRecoilState } from 'recoil';
 import Header from '../components/ui/Header';
 import MateRequestCard from '../components/ui/MateRequestCard';
@@ -122,7 +122,10 @@ const PetMateRequestList = ({
           </Text>
           <Text style={[TYPOS.headline4, { color: Color.neutral1 }]}>마리</Text>
         </View>
-        <View style={{ marginHorizontal: 16, gap: 16 }}>
+        <ScrollView
+          style={{ marginHorizontal: 16, gap: 16 }}
+          showsVerticalScrollIndicator={false}
+        >
           {list.map((application) => (
             <MateRequestCard
               onAcceptHandler={() => {
@@ -135,7 +138,7 @@ const PetMateRequestList = ({
               key={application.id}
             />
           ))}
-        </View>
+        </ScrollView>
       </>
     );
   };
