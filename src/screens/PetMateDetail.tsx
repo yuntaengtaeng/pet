@@ -5,7 +5,7 @@ import Header from '../components/ui/Header';
 import { View, Text } from 'react-native';
 import Color from '../constants/color';
 import Button from '../components/ui/buttons/Button';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import axios from 'axios';
 import MateRequestLabel from '../components/ui/MateRequestLabel';
 import Tag from '../components/ui/Tag';
@@ -37,7 +37,7 @@ interface PetMateBoardInfo {
   totalPets: number;
   participatingPetsCount: number;
   status: PetMateStatus;
-  isHost: boolean;
+  role: 'host' | 'participants' | 'visitor';
   requestedMateCount: number;
 }
 interface Participating {
@@ -197,23 +197,76 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
     }
   };
 
+  const headerRightContent = useMemo(() => {
+    switch (petMateBoardInfo.role) {
+      case 'host':
+        return (
+          <HeaderDropdownMenu
+            icon={<Burger24 color={Color.black} />}
+            menus={[
+              { label: '글 수정하기' },
+              { label: '삭제', onClickHandler: onDeleteHandler },
+            ]}
+          />
+        );
+      case 'participants':
+        return (
+          <HeaderDropdownMenu
+            icon={<Burger24 color={Color.black} />}
+            menus={[{ label: '나가기' }]}
+          />
+        );
+      case 'visitor':
+        return <></>;
+    }
+  }, [petMateBoardInfo.role]);
+
+  const footerButton = useMemo(() => {
+    switch (petMateBoardInfo.role) {
+      case 'host':
+        return (
+          <>
+            <View style={{ flex: 1 }}>
+              <Button
+                label="모집 마감하기"
+                buttonType="secondary"
+                onPressHandler={() => {
+                  openRecruitmentDeadlineModal();
+                }}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Button
+                label={`신청한 메이트 ${petMateBoardInfo.requestedMateCount}명`}
+                onPressHandler={() => {
+                  navigation.navigate('PetMateRequestList', { id: id });
+                }}
+              />
+            </View>
+          </>
+        );
+
+      case 'participants':
+        return <Button label={'신청완료'} disabled={true} />;
+
+      case 'visitor':
+        return (
+          <Button
+            label={
+              petMateBoardInfo.status === '모집중'
+                ? '참여 신청'
+                : '모집이 마감되었어요.'
+            }
+            disabled={petMateBoardInfo.status === '모집마감'}
+            onPressHandler={applyForParticipation}
+          />
+        );
+    }
+  }, [petMateBoardInfo.role]);
+
   return (
     <>
-      <Header
-        rightContent={
-          petMateBoardInfo.isHost ? (
-            <HeaderDropdownMenu
-              icon={<Burger24 color={Color.black} />}
-              menus={[
-                { label: '글 수정하기' },
-                { label: '삭제', onClickHandler: onDeleteHandler },
-              ]}
-            />
-          ) : (
-            <></>
-          )
-        }
-      />
+      <Header rightContent={headerRightContent} />
       <ScrollContainer>
         <View style={{ gap: 24, marginHorizontal: 16 }}>
           <View style={{ flexDirection: 'row', gap: 8 }}>
@@ -289,45 +342,13 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
         style={{
           paddingHorizontal: 16,
           paddingVertical: 24,
-          ...(petMateBoardInfo.isHost && {
+          ...(petMateBoardInfo.role === 'host' && {
             flexDirection: 'row',
             gap: 16,
           }),
         }}
       >
-        {petMateBoardInfo.isHost ? (
-          <>
-            <View style={{ flex: 1 }}>
-              <Button
-                label="모집 마감하기"
-                buttonType="secondary"
-                onPressHandler={() => {
-                  openRecruitmentDeadlineModal();
-                }}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Button
-                label={`신청한 메이트 ${petMateBoardInfo.requestedMateCount}명`}
-                onPressHandler={() => {
-                  navigation.navigate('PetMateRequestList', { id: id });
-                }}
-              />
-            </View>
-          </>
-        ) : (
-          <>
-            <Button
-              label={
-                petMateBoardInfo.status === '모집중'
-                  ? '참여 신청'
-                  : '모집이 마감되었어요.'
-              }
-              disabled={petMateBoardInfo.status === '모집마감'}
-              onPressHandler={applyForParticipation}
-            />
-          </>
-        )}
+        {footerButton}
       </View>
       <AddressBottomSheet
         isVisibleBottomSheet={isVisibleBottomSheet}
