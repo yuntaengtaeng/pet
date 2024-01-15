@@ -228,7 +228,15 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
         return (
           <HeaderDropdownMenu
             icon={<Burger24 color={Color.black} />}
-            menus={[{ label: '나가기', onClickHandler: exitPetMate }]}
+            menus={[
+              {
+                label: '나가기',
+                onClickHandler: (closeMenu) => {
+                  closeMenu();
+                  exitPetMate();
+                },
+              },
+            ]}
           />
         );
       case 'visitor':
