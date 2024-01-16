@@ -2,7 +2,14 @@ import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
 import Container from '../components/layout/Container';
-import { Image, Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import {
+  Image,
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import TYPOS from '../components/ui/typo';
 
 export type OnboardingScreenProps = StackScreenProps<
@@ -40,11 +47,10 @@ export default Onboarding;
 
 const styles = StyleSheet.create({
   img: {
-    marginTop: 100,
-    alignSelf: 'center',
+    width: Dimensions.get('window').width,
   },
   guide: {
-    marginTop: 88,
+    marginTop: 64,
     marginBottom: 48,
     alignItems: 'center',
   },
