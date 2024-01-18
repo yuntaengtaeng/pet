@@ -198,18 +198,37 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
   };
 
   const exitPetMate = async () => {
-    setIsLoading(true);
-    try {
-      const result = await axios.patch<{
-        petMateBoardInfo: PetMateBoardInfo;
-        participatingList: Participating[];
-      }>(`/board/pet-mate/${id}`);
+    overlay.open(
+      <Dialog isOpened={true}>
+        <Dialog.Content content="산책모임 참여를 취소하고 나갈까요?" />
+        <Dialog.Buttons
+          buttons={[
+            {
+              label: '나가기',
+              onPressHandler: async () => {
+                overlay.close();
+                setIsLoading(true);
+                try {
+                  const result = await axios.patch<{
+                    petMateBoardInfo: PetMateBoardInfo;
+                    participatingList: Participating[];
+                  }>(`/board/pet-mate/${id}`);
 
-      setPetMateBoardInfo(result.data.petMateBoardInfo);
-      setParticipatingList(result.data.participatingList);
-    } finally {
-      setIsLoading(false);
-    }
+                  setPetMateBoardInfo(result.data.petMateBoardInfo);
+                  setParticipatingList(result.data.participatingList);
+                } finally {
+                  setIsLoading(false);
+                }
+              },
+            },
+            {
+              label: '닫기',
+              onPressHandler: overlay.close,
+            },
+          ]}
+        />
+      </Dialog>
+    );
   };
 
   const headerRightContent = (() => {
