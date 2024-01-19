@@ -62,6 +62,14 @@ type ChatData = {
   [key: string]: Message[];
 };
 
+interface HeaderData {
+  title: string;
+  region: string;
+  isAlarm: boolean;
+  id: string;
+  type: 'usedTrade' | 'petMate';
+}
+
 const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
   const overlay = useOverlay();
   const toastDispatch = useContext(ToastDispatchContext);
@@ -69,16 +77,12 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
   const { accessToken } = useRecoilValue(UserState);
   const { roomId } = route.params;
   const [chatData, setChatData] = useState<ChatData>({});
-  const [headerData, setHeaderData] = useState<{
-    nickname: string;
-    region: string;
-    isAlarm: boolean;
-    id: string;
-  }>({
-    nickname: '',
+  const [headerData, setHeaderData] = useState<HeaderData>({
+    title: '',
     region: '',
     isAlarm: true,
     id: '',
+    type: 'usedTrade',
   });
   const [productInfo, setProductInfo] = useState<ProductInfo | null>(null);
   const [blockStatus, setBlockStatus] = useState<BlockStatus>('None');
@@ -209,7 +213,9 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
       try {
         const {
           data: { chatRoomHeaderInfo },
-        } = await axios.get(`/chat/room/header?chatRoomId=${roomId}`);
+        } = await axios.get<{ chatRoomHeaderInfo: HeaderData }>(
+          `/chat/room/header?chatRoomId=${roomId}`
+        );
 
         setHeaderData(chatRoomHeaderInfo);
       } catch (error) {}
@@ -277,7 +283,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                   chatRoomId: roomId,
                 });
                 toastDispatch?.showToastMessage(
-                  `${headerData.nickname}님 차단을 해제했어요.`
+                  `${headerData.title}님 차단을 해제했어요.`
                 );
               },
             ];
@@ -291,7 +297,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                   chatRoomId: roomId,
                 });
                 toastDispatch?.showToastMessage(
-                  `${headerData.nickname}님을 차단을했어요.`
+                  `${headerData.title}님을 차단을했어요.`
                 );
               },
             ];
@@ -344,7 +350,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
         leftContent={
           <View>
             <Text style={[TYPOS.headline3, { color: Color.black }]}>
-              {headerData.nickname}
+              {headerData.title}
               {!headerData.isAlarm && (
                 <Bell16 color={Color.neutral2} style={{ marginLeft: 4 }} />
               )}
@@ -372,14 +378,19 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                 }}
                 menuStyle={{ top: menuTop, width: 146, right: 16 }}
               >
+                {headerData.type === 'petMate' && (
+                  <ListValue label={`모임글 보기`} />
+                )}
                 <ListValue
                   label={`알림${headerData.isAlarm ? '끄기' : '켜기'}`}
                   onClickHandler={onToggleAlarm}
                 />
-                <ListValue
-                  label={`차단${blockStatus !== 'Me' ? '하기' : ' 해제하기'}`}
-                  onClickHandler={onBlock}
-                />
+                {headerData.type === 'usedTrade' && (
+                  <ListValue
+                    label={`차단${blockStatus !== 'Me' ? '하기' : ' 해제하기'}`}
+                    onClickHandler={onBlock}
+                  />
+                )}
                 <ListValue label="나가기" onClickHandler={onExit} />
               </MenuBackdrop>
             </View>
