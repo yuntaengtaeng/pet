@@ -1,35 +1,28 @@
-import React, { useRef } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import TYPOS from '../ui/typo';
 import Color from '../../constants/color';
 import Settings24 from '../ui/icons/Settings24';
-import useMenuControl from '../../hooks/useMenuControl';
-import ListValue from '../ui/dropdown/ListValue';
-import MenuBackdrop from '../ui/dropdown/MenuBackdrop';
+import HeaderDropdownMenu from '../ui/HeaderDropdownMenu';
 
 const Header = () => {
-  const settingRef = useRef<View | null>(null);
-  const { isVisibleMenu, closeMenu, openMenu, menuTop } = useMenuControl({
-    targetRef: settingRef,
-  });
-
   return (
     <View style={styles.header}>
       <Text style={[TYPOS.headline3, { color: Color.black }]}>마이페이지</Text>
-      <Pressable ref={settingRef} onPress={openMenu}>
-        <Settings24 color={Color.neutral1} />
-      </Pressable>
-      <MenuBackdrop
-        isVisible={isVisibleMenu && !!menuTop}
-        close={() => {
-          closeMenu();
-        }}
-        menuStyle={{ top: menuTop, width: 146, right: 16 }}
-      >
-        <ListValue label="알림설정" />
-        <ListValue label="로그아웃" />
-        <ListValue label="탈퇴하기" />
-      </MenuBackdrop>
+      <HeaderDropdownMenu
+        icon={<Settings24 color={Color.neutral1} />}
+        menus={[
+          {
+            label: '알림성정',
+          },
+          {
+            label: '로그아웃',
+          },
+          {
+            label: '탈퇴하기',
+          },
+        ]}
+      />
     </View>
   );
 };

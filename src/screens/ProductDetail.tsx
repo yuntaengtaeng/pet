@@ -19,14 +19,12 @@ import TYPOS from '../components/ui/typo';
 import { ProductStatus } from '../types/interface';
 import EtcProductList from '../components/productDetail/EtcProductList';
 import Dialog from '../components/ui/Dialog';
-import ListValue from '../components/ui/dropdown/ListValue';
 import { ToastDispatchContext } from '../components/ui/toast/ToastProvider';
 import Home24 from '../components/ui/icons/Home24';
 import Share24 from '../components/ui/icons/Share24';
 import Burger24 from '../components/ui/icons/Burger24';
-import useMenuControl from '../hooks/useMenuControl';
-import MenuBackdrop from '../components/ui/dropdown/MenuBackdrop';
 import useOverlay from '../hooks/overlay/useOverlay';
+import HeaderDropdownMenu from '../components/ui/HeaderDropdownMenu';
 
 export type ProductDetailProps = StackScreenProps<
   RootStackParamList,
@@ -36,10 +34,6 @@ export type ProductDetailProps = StackScreenProps<
 const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
   const { id } = route.params;
   const [data, setData] = useState<ProductDetailType | null>(null);
-  const burgerRef = useRef<View | null>(null);
-  const { isVisibleMenu, closeMenu, openMenu, menuTop } = useMenuControl({
-    targetRef: burgerRef,
-  });
 
   const toastDispatch = useContext(ToastDispatchContext);
   const overlay = useOverlay();
@@ -210,39 +204,28 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
                 <Share24 color={Color.black} />
               </Pressable>
               {data.isMe && (
-                <>
-                  <Pressable
-                    onPress={openMenu}
-                    ref={burgerRef}
-                    style={{ marginLeft: 8 }}
-                  >
-                    <Burger24 color={Color.black} />
-                  </Pressable>
-                  <MenuBackdrop
-                    isVisible={isVisibleMenu && !!menuTop}
-                    close={() => {
-                      closeMenu();
-                    }}
-                    menuStyle={{ top: menuTop, width: 146, right: 16 }}
-                  >
-                    <ListValue
-                      label="글 수정하기"
-                      onClickHandler={() => {
+                <HeaderDropdownMenu
+                  iconContainerStyle={{ marginLeft: 8 }}
+                  icon={<Burger24 color={Color.black} />}
+                  menus={[
+                    {
+                      label: '글 수정하기',
+                      onClickHandler: (closeMenu) => {
                         closeMenu();
                         navigation.navigate('ModifyProduct', {
                           id,
                         });
-                      }}
-                    />
-                    <ListValue
-                      label="삭제"
-                      onClickHandler={() => {
+                      },
+                    },
+                    {
+                      label: '삭제',
+                      onClickHandler: (closeMenu) => {
                         closeMenu();
                         openDeleteDialog();
-                      }}
-                    />
-                  </MenuBackdrop>
-                </>
+                      },
+                    },
+                  ]}
+                />
               )}
             </View>
           </>
