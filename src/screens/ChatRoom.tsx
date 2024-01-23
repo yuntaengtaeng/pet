@@ -68,6 +68,7 @@ interface HeaderData {
   isAlarm: boolean;
   id: string;
   type: 'usedTrade' | 'petMate';
+  isDeleted?: boolean;
 }
 
 const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
@@ -83,6 +84,7 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
     isAlarm: true,
     id: '',
     type: 'usedTrade',
+    isDeleted: false,
   });
   const [productInfo, setProductInfo] = useState<ProductInfo | null>(null);
   const [blockStatus, setBlockStatus] = useState<BlockStatus>('None');
@@ -347,18 +349,34 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
   return (
     <>
       <AppBar
+        leftContentStyle={{ flex: 1, flexDirection: 'column' }}
         leftContent={
-          <View>
-            <Text style={[TYPOS.headline3, { color: Color.black }]}>
-              {headerData.title}
+          <>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                numberOfLines={1}
+                style={[TYPOS.headline3, { color: Color.black, flex: 1 }]}
+              >
+                {headerData.title}
+              </Text>
+              {headerData.isDeleted && (
+                <Text style={[TYPOS.headline4, { color: Color.neutral3 }]}>
+                  (삭제됨)
+                </Text>
+              )}
               {!headerData.isAlarm && (
                 <Bell16 color={Color.neutral2} style={{ marginLeft: 4 }} />
               )}
-            </Text>
+            </View>
             <Text style={[TYPOS.body3, { color: Color.neutral1 }]}>
               {headerData.region}
             </Text>
-          </View>
+          </>
         }
         rightContent={
           <>
@@ -379,7 +397,14 @@ const ChatRoom = ({ navigation, route }: OnboardingScreenProps) => {
                 menuStyle={{ top: menuTop, width: 146, right: 16 }}
               >
                 {headerData.type === 'petMate' && (
-                  <ListValue label={`모임글 보기`} />
+                  <ListValue
+                    label={`모임글 보기`}
+                    onClickHandler={() => {
+                      navigation.navigate('PetMateDetail', {
+                        id: headerData.id,
+                      });
+                    }}
+                  />
                 )}
                 <ListValue
                   label={`알림${headerData.isAlarm ? '끄기' : '켜기'}`}
