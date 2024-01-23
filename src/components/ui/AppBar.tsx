@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ViewStyle } from 'react-native';
 import TYPOS from './typo';
 import Left24 from './icons/Left24';
 import Color from '../../constants/color';
@@ -8,12 +8,19 @@ import { useNavigation } from '@react-navigation/native';
 interface Props {
   title?: string;
   leftContent?: React.ReactNode;
+  leftContentStyle?: ViewStyle;
   rightContent?: React.ReactNode;
+  rightContentStyle?: ViewStyle;
   onCustomBackButtonHandler?: () => void;
 }
 
 const AppBar = (props: Props) => {
-  const { title, onCustomBackButtonHandler } = props;
+  const {
+    title,
+    onCustomBackButtonHandler,
+    leftContentStyle,
+    rightContentStyle,
+  } = props;
 
   const navigation = useNavigation();
 
@@ -33,10 +40,14 @@ const AppBar = (props: Props) => {
         <Left24 color={Color.black} />
       </Pressable>
       {props.leftContent && (
-        <View style={styles.leftContent}>{props.leftContent}</View>
+        <View style={[styles.leftContent, leftContentStyle]}>
+          {props.leftContent}
+        </View>
       )}
       <Text style={[TYPOS.headline3, styles.title]}>{title}</Text>
-      <View style={styles.rightContent}>{props.rightContent}</View>
+      <View style={[styles.rightContent, rightContentStyle]}>
+        {props.rightContent}
+      </View>
     </View>
   );
 };
