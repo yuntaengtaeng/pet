@@ -238,7 +238,15 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
           <HeaderDropdownMenu
             icon={<Burger24 color={Color.black} />}
             menus={[
-              { label: '글 수정하기' },
+              {
+                label: '글 수정하기',
+                onClickHandler: (closeMenu) => {
+                  closeMenu();
+                  navigation.navigate('ModifyPetMate', {
+                    id: id,
+                  });
+                },
+              },
               { label: '삭제', onClickHandler: onDeleteHandler },
             ]}
           />
