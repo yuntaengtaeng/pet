@@ -68,6 +68,9 @@ export type RootStackParamList = {
   };
   MyMate: undefined;
   UpcomingWalk: undefined;
+  ModifyPetMate: {
+    id: string;
+  };
 };
 
 export type TabNavigatorParamList = {
