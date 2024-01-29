@@ -38,6 +38,9 @@ import MyMate from './src/screens/MyMate';
 import PetMateRequestList from './src/screens/PetMateRequestList';
 import UpcomingWalk from './src/screens/UpcomingWalk';
 import ModifyPetMate from './src/screens/ModifyPetMate';
+import FavoriteProducts from './src/screens/myPage/FavoriteProducts';
+import BlockManagement from './src/screens/myPage/BlockManagement';
+import TransactionHistory from './src/screens/myPage/TransactionHistory';
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -169,6 +172,15 @@ const AppInner = () => {
             <Stack.Screen name="MyMate" component={MyMate} />
             <Stack.Screen name="UpcomingWalk" component={UpcomingWalk} />
             <Stack.Screen name="ModifyPetMate" component={ModifyPetMate} />
+            <Stack.Screen
+              name="FavoriteProducts"
+              component={FavoriteProducts}
+            />
+            <Stack.Screen
+              name="TransactionHistory"
+              component={TransactionHistory}
+            />
+            <Stack.Screen name="BlockManagement" component={BlockManagement} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>

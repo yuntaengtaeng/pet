@@ -71,6 +71,9 @@ export type RootStackParamList = {
   ModifyPetMate: {
     id: string;
   };
+  FavoriteProducts: undefined;
+  TransactionHistory: undefined;
+  BlockManagement: undefined;
 };
 
 export type TabNavigatorParamList = {
