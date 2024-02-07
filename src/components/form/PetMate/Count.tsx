@@ -41,7 +41,7 @@ const Count = ({
             style={[
               styles.button,
               {
-                borderColor: max === count ? Color.neutral3 : Color.neutral2,
+                borderColor: min === count ? Color.neutral3 : Color.neutral2,
               },
             ]}
             onPress={onMinusHandler}
