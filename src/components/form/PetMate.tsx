@@ -173,18 +173,20 @@ const PetMate = ({ onSubmitHandler, initData }: Props) => {
             }
           }}
         >
-          <Calendar
-            endDateData={{ value: 1, unit: 'month' }}
-            selectedDate={data.walkDate.date}
-            onSelectDateChangeHandler={(date) => {
-              updateData({
-                walkDate: {
-                  ...data.walkDate,
-                  date,
-                },
-              });
-            }}
-          />
+          <View style={{ paddingVertical: 16 }}>
+            <Calendar
+              endDateData={{ value: 1, unit: 'month' }}
+              selectedDate={data.walkDate.date}
+              onSelectDateChangeHandler={(date) => {
+                updateData({
+                  walkDate: {
+                    ...data.walkDate,
+                    date,
+                  },
+                });
+              }}
+            />
+          </View>
         </Accordion>
         <Line marginHorizontal={16} />
         <NonCollapsibleAccordion
