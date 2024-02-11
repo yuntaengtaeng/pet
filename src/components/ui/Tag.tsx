@@ -22,6 +22,7 @@ const Tag = ({ label, theme }: Props) => {
       style={{
         backgroundColor: bgColor,
         alignSelf: 'flex-start',
+        borderRadius: 6,
       }}
     >
       <Text
