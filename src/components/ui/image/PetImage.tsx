@@ -18,7 +18,7 @@ const PetImage = ({ size, url, style }: Props) => {
       source={
         !!url
           ? { uri: url }
-          : require('../../../assets/img/pet-placeholder.png')
+          : require('../../../../assets/img/pet-placeholder.png')
       }
     />
   );
