@@ -3,6 +3,7 @@ import Color from '../../constants/color';
 import { Pet } from '../../types/interface';
 import TYPOS from './typo';
 import UiCheckbox from './UiCheckbox';
+import PetImage from './image/PetImage';
 
 interface Props {
   pet: Pet;
@@ -29,14 +30,7 @@ const PetLabel = ({
       }}
       onPress={onPressHandler}
     >
-      <Image
-        style={{ width: 40, height: 40, borderRadius: 40 }}
-        source={
-          !!image
-            ? { uri: image }
-            : require('../../../assets/img/pet-placeholder.png')
-        }
-      />
+      <PetImage size={40} url={image} />
       <Text style={[TYPOS.body1, { color: Color.black, flex: 1 }]}>{name}</Text>
       <UiCheckbox size="small" isChecked={isChecked} disabled={disabled} />
     </Pressable>

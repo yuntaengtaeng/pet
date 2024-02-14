@@ -5,6 +5,7 @@ import { Pet } from '../../types/interface';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../types/navigation';
+import PetImage from './image/PetImage';
 
 interface Props extends Pet {}
 
@@ -29,14 +30,7 @@ const PetItem = ({ id, image, name, type }: Props) => {
         navigation.push('PetDetail', { petId: id });
       }}
     >
-      <Image
-        style={{ width: 56, height: 56, borderRadius: 56 }}
-        source={
-          image
-            ? { uri: image }
-            : require('../../../assets/img/pet-placeholder.png')
-        }
-      />
+      <PetImage size={56} url={image} />
       <View>
         <Text style={[TYPOS.headline4, { color: Color.black }]}>{name}</Text>
         <Text style={[TYPOS.body3, { color: Color.neutral2 }]}>{type}</Text>

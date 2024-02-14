@@ -5,6 +5,7 @@ import { Pet } from '../../types/interface';
 import Crown16 from './icons/Crown16';
 import Dog16 from './icons/Dog16';
 import TYPOS from './typo';
+import PetImage from './image/PetImage';
 
 export interface Props {
   image?: string;
@@ -79,19 +80,11 @@ const MateRequestLabel = ({
         >
           {petImages.map((i, index) => {
             return (
-              <Image
+              <PetImage
                 key={i}
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 32,
-                  left: (petImages.length - (index + 1)) * 6,
-                }}
-                source={
-                  !!i
-                    ? { uri: i }
-                    : require('../../../assets/img/pet-placeholder.png')
-                }
+                size={32}
+                style={{ left: (petImages.length - (index + 1)) * 6 }}
+                url={i}
               />
             );
           })}
