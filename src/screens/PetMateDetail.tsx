@@ -231,45 +231,42 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
     );
   };
 
-  const headerRightContent = (() => {
-    switch (petMateBoardInfo.role) {
-      case 'host':
-        return (
-          <HeaderDropdownMenu
-            icon={<Burger24 color={Color.black} />}
-            menus={[
-              {
-                label: '글 수정하기',
-                onClickHandler: (closeMenu) => {
-                  closeMenu();
-                  navigation.navigate('ModifyPetMate', {
-                    id: id,
-                  });
-                },
-              },
-              { label: '삭제', onClickHandler: onDeleteHandler },
-            ]}
-          />
-        );
-      case 'participants':
-        return (
-          <HeaderDropdownMenu
-            icon={<Burger24 color={Color.black} />}
-            menus={[
-              {
-                label: '나가기',
-                onClickHandler: (closeMenu) => {
-                  closeMenu();
-                  exitPetMate();
-                },
-              },
-            ]}
-          />
-        );
-      case 'visitor':
-        return <></>;
-    }
-  })();
+  const menuConfigs = {
+    host: [
+      {
+        label: '글 수정하기',
+        onClickHandler: (closeMenu: () => void) => {
+          closeMenu();
+          navigation.navigate('ModifyPetMate', { id: id });
+        },
+      },
+      { label: '삭제', onClickHandler: onDeleteHandler },
+    ],
+    participants: [
+      {
+        label: '나가기',
+        onClickHandler: (closeMenu: () => void) => {
+          closeMenu();
+          exitPetMate();
+        },
+      },
+    ],
+    visitor: [],
+  };
+
+  const getHeaderRightContent = () => {
+    const menus = menuConfigs[petMateBoardInfo.role] || [];
+    if (menus.length === 0) return <></>;
+
+    return (
+      <HeaderDropdownMenu
+        icon={<Burger24 color={Color.black} />}
+        menus={menus}
+      />
+    );
+  };
+
+  const headerRightContent = getHeaderRightContent();
 
   const footerButton = (() => {
     switch (petMateBoardInfo.role) {
