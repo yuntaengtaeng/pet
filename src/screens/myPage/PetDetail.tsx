@@ -12,10 +12,9 @@ import TextIconButton from '../../components/ui/buttons/TextIconButton';
 import dayjs from 'dayjs';
 import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../../store/atoms';
-import useOverlay from '../../hooks/overlay/useOverlay';
-import Dialog from '../../components/ui/Dialog';
 import { Pet } from '../../types/interface';
 import PetItem from '../../components/ui/PetItem';
+import useConfirmDeletion from '../../hooks/useConfirmDeletion';
 
 interface PetInfo {
   name: string;
@@ -39,7 +38,7 @@ const PetDetail = ({ navigation, route }: PetDetailScreenProps) => {
   const [petInfo, setPetInfo] = useState<PetInfo | null>(null);
   const setIsLoading = useSetRecoilState(LoadingState);
   const { petId } = route.params;
-  const overlay = useOverlay();
+  const confirmDeletion = useConfirmDeletion();
 
   useEffect(() => {
     const fetch = async () => {
@@ -76,37 +75,19 @@ const PetDetail = ({ navigation, route }: PetDetailScreenProps) => {
     }
   };
 
-  const onDelete = async () => {
-    overlay.open(
-      <Dialog isOpened={true}>
-        <Dialog.Content content="반려동물 정보를 삭제할까요?" />
-        <Dialog.Buttons
-          buttons={[
-            {
-              label: '삭제',
-              onPressHandler: () => {
-                overlay.close();
-                onRequestDelete();
-              },
-            },
-            {
-              label: '취소',
-              onPressHandler: () => {
-                overlay.close();
-              },
-            },
-          ]}
-        />
-      </Dialog>
-    );
-  };
-
   return (
     <>
       <Header
         title="반려동물 정보"
         rightContent={
-          <Pressable onPress={onDelete}>
+          <Pressable
+            onPress={() => {
+              confirmDeletion(
+                { content: '반려동물 정보를 삭제할까요?' },
+                onRequestDelete
+              );
+            }}
+          >
             <Text style={[TYPOS.medium, { color: Color.neutral2 }]}>
               삭제하기
             </Text>

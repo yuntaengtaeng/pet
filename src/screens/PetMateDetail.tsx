@@ -23,6 +23,7 @@ import { useSetRecoilState } from 'recoil';
 import { LoadingState } from '../store/atoms';
 import useOverlay from '../hooks/overlay/useOverlay';
 import Dialog from '../components/ui/Dialog';
+import useConfirmDeletion from '../hooks/useConfirmDeletion';
 
 export type PetMateDetailScreenProps = StackScreenProps<
   RootStackParamList,
@@ -55,6 +56,7 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
   );
   const setIsLoading = useSetRecoilState(LoadingState);
   const overlay = useOverlay();
+  const confirmDeletion = useConfirmDeletion();
 
   const {
     isVisible: isVisibleBottomSheet,
@@ -129,26 +131,12 @@ const PetMateDetail = ({ navigation, route }: PetMateDetailScreenProps) => {
   };
 
   const openDeleteDialog = () => {
-    overlay.open(
-      <Dialog isOpened={true}>
-        <Dialog.Title title="모임을 삭제할까요?" />
-        <Dialog.Content content="글이 삭제되고 모임도 취소돼요." />
-        <Dialog.Buttons
-          buttons={[
-            {
-              label: '삭제',
-              onPressHandler: () => {
-                overlay.close();
-                removePost();
-              },
-            },
-            {
-              label: '닫기',
-              onPressHandler: overlay.close,
-            },
-          ]}
-        />
-      </Dialog>
+    confirmDeletion(
+      {
+        title: '모임을 삭제할까요?',
+        content: '글이 삭제되고 모임도 취소돼요.',
+      },
+      removePost
     );
   };
 

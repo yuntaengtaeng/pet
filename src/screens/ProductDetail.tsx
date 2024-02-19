@@ -25,6 +25,7 @@ import Share24 from '../components/ui/icons/Share24';
 import Burger24 from '../components/ui/icons/Burger24';
 import useOverlay from '../hooks/overlay/useOverlay';
 import HeaderDropdownMenu from '../components/ui/HeaderDropdownMenu';
+import useConfirmDeletion from '../hooks/useConfirmDeletion';
 
 export type ProductDetailProps = StackScreenProps<
   RootStackParamList,
@@ -37,6 +38,7 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
 
   const toastDispatch = useContext(ToastDispatchContext);
   const overlay = useOverlay();
+  const confirmDeletion = useConfirmDeletion();
   const existingChatRoomId = useRef<string | null>(null);
 
   useEffect(() => {
@@ -124,26 +126,7 @@ const ProductDetail = ({ navigation, route }: ProductDetailProps) => {
   };
 
   const openDeleteDialog = () => {
-    overlay.open(
-      <Dialog isOpened={true}>
-        <Dialog.Content content="게시글을 삭제할까요?" />
-        <Dialog.Buttons
-          buttons={[
-            {
-              label: '삭제',
-              onPressHandler: () => {
-                overlay.close();
-                removePost();
-              },
-            },
-            {
-              label: '닫기',
-              onPressHandler: overlay.close,
-            },
-          ]}
-        />
-      </Dialog>
-    );
+    confirmDeletion({ content: '게시글을 삭제할까요?' }, removePost);
   };
 
   const openStatusChangeBottomSheet = () => {
