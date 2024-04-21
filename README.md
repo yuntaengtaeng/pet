@@ -47,3 +47,28 @@
   <img src="https://img.shields.io/badge/recoil-3578E5?style=for-the-badge&logo=recoil&logoColor=white">
   <img src="https://img.shields.io/badge/storybook-FF4785?style=for-the-badge&logo=storybook&logoColor=white">
 </div>
+
+## 프로젝트 시작하기
+> npm install
+
+앱 실행
+> npm run start
+
+스토리북 실행
+> npm run storybook
+
+## 서비스 사용해보기
+1. expo go 설치
+2. 해당 [링크](https://expo.dev/preview/update?message=%EB%B0%B0%ED%8F%AC&updateRuntimeVersion=1.0.0&createdAt=2024-01-29T19%3A02%3A54.962Z&slug=exp&projectId=220e9eb2-4351-46c5-98f2-21f0978ab71d&group=b9165d3f-d085-4842-bc08-e572429a1a5e)의 QR코드를 통해 실행
+
+## User Flow
+<img width="8513" alt="펫밀리_User Flow" src="https://github.com/yuntaengtaeng/pet/assets/94745651/3b6b7d10-5032-4144-a48f-d9c064cc0efd">
+
+## StoryBook(Component)
+[링크](https://649552e6b067c5b9af362c0f-zgqnshnbpp.chromatic.com/)
+
+## Team WorkSpace
+[링크](https://glass-metal-4a8.notion.site/c4b9280c319d49cdbf21e10739568655?pvs=4)
+
+## 회고록
+[링크](https://nervous-adjustment-25e.notion.site/37b2d7e2faf943019ad479d937c7b120?pvs=4)
